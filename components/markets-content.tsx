@@ -113,6 +113,17 @@ export function MarketsContent() {
   const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">("candle")
   const [activeIndicators, setActiveIndicators] = useState(technicalIndicators.filter((i) => i.active).map((i) => i.id))
 
+  // Map chartTimeframe to period
+  const periodMap: Record<string, string> = {
+    "1D": "daily",
+    "1W": "weekly",
+    "1M": "monthly",
+    "3M": "quarterly",
+    "1Y": "yearly",
+    "ALL": "all",
+  }
+  const selectedPeriod = periodMap[chartTimeframe] || "daily"
+
   // Find the selected stock details
   const selectedStock = allStocks.find((stock) => stock.symbol.toLowerCase() === selectedTicker) || allStocks[0]
 
@@ -303,7 +314,12 @@ export function MarketsContent() {
 
           {/* Chart */}
           <div className="flex-1 relative min-h-0">
-            <CandlestickChart ticker={selectedTicker} chartType={selectedChartType} containerClassName="h-full w-full" />
+            <CandlestickChart
+              ticker={selectedTicker}
+              period={selectedPeriod}
+              chartType={selectedChartType}
+              containerClassName="h-full w-full"
+            />
           </div>
 
           {/* Active indicators panel */}
