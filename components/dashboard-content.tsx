@@ -16,6 +16,7 @@ export function DashboardContent() {
   const [activeStock, setActiveStock] = useState(() => dashboardData[0] || null)
   const [filteredStocks, setFilteredStocks] = useState(dashboardData)
   const [activeFilter, setActiveFilter] = useState("All") // Track the active filter
+  const [selectedPeriod, setSelectedPeriod] = useState("daily") // Default period is daily
 
   // Update activeStock and filteredStocks when dashboardData changes
   useEffect(() => {
@@ -95,7 +96,22 @@ export function DashboardContent() {
               </div>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="1D" className="w-full">
+              <Tabs
+                defaultValue="1D"
+                className="w-full"
+                onValueChange={(value) => {
+                  // Map tab value to period
+                  const periodMap: Record<string, string> = {
+                    "1D": "daily",
+                    "1W": "weekly",
+                    "1M": "monthly",
+                    "3M": "quarterly",
+                    "1Y": "yearly",
+                    "ALL": "all",
+                  }
+                  setSelectedPeriod(periodMap[value] || "daily")
+                }}
+              >
                 <div className="flex justify-between items-center mb-4">
                   <TabsList>
                     <TabsTrigger value="1D">1D</TabsTrigger>
@@ -111,7 +127,12 @@ export function DashboardContent() {
                   </div>
                 </div>
                 <TabsContent value="1D" key={activeStock?.symbol}>
-                  <CandlestickChart ticker={activeStock?.symbol.toLowerCase()} chartType="candle" containerClassName="h-[300px] w-full" />
+                  <CandlestickChart
+                    ticker={activeStock?.symbol.toLowerCase()}
+                    period={selectedPeriod}
+                    chartType="candle"
+                    containerClassName="h-[300px] w-full"
+                  />
                 </TabsContent>
               </Tabs>
             </CardContent>
