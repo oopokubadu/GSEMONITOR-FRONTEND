@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   ArrowDown,
   ArrowUp,
@@ -25,93 +25,15 @@ import { CandlestickChart } from "@/components/candlestick-chart"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-
-// Sample market data
-const allStocks = [
-  {
-    symbol: "GCB",
-    name: "GCB Bank Ltd",
-    price: 5.25,
-    change: 0.15,
-    changePercent: 2.94,
-    isPositive: true,
-    sector: "Financial",
-    volume: "245K",
-  },
-  {
-    symbol: "MTNGH",
-    name: "MTN Ghana",
-    price: 1.12,
-    change: 0.04,
-    changePercent: 3.7,
-    isPositive: true,
-    sector: "Technology",
-    volume: "1.2M",
-  },
-  {
-    symbol: "SOGEGH",
-    name: "Societe Generale Ghana",
-    price: 1.05,
-    change: -0.02,
-    changePercent: 1.87,
-    isPositive: false,
-    sector: "Financial",
-    volume: "87K",
-  },
-  {
-    symbol: "EGH",
-    name: "Ecobank Ghana",
-    price: 7.5,
-    change: 0.2,
-    changePercent: 2.74,
-    isPositive: true,
-    sector: "Financial",
-    volume: "156K",
-  },
-  {
-    symbol: "TOTAL",
-    name: "Total Petroleum Ghana",
-    price: 4.3,
-    change: -0.1,
-    changePercent: 2.27,
-    isPositive: false,
-    sector: "Oil & Gas",
-    volume: "65K",
-  },
-  {
-    symbol: "GGBL",
-    name: "Guinness Ghana Breweries",
-    price: 2.15,
-    change: 0.05,
-    changePercent: 2.38,
-    isPositive: true,
-    sector: "Consumer Goods",
-    volume: "112K",
-  },
-]
-
-// Technical indicators
-const technicalIndicators = [
-  { id: "ma", name: "Moving Average", active: true },
-  { id: "ema", name: "Exponential Moving Average", active: false },
-  { id: "bb", name: "Bollinger Bands", active: false },
-  { id: "rsi", name: "Relative Strength Index", active: false },
-  { id: "macd", name: "MACD", active: false },
-  { id: "stoch", name: "Stochastic Oscillator", active: false },
-]
-
-// Chart types
-const chartTypes: { id: "candle" | "line"; name: string; icon: typeof BarChart2 }[] = [
-  { id: "candle", name: "Candlestick", icon: BarChart2 },
-  { id: "line", name: "Line", icon: LineChart },
-]
+import { useDashboardData } from "@/hooks/use-dashboard-data"
 
 export function MarketsContent() {
-  const [selectedTicker, setSelectedTicker] = useState("gcb")
+  const { data: dashboardData = [], isLoading, isError } = useDashboardData()
+  const [selectedTicker, setSelectedTicker] = useState("")
   const [chartTimeframe, setChartTimeframe] = useState("1D")
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">("candle")
-  const [activeIndicators, setActiveIndicators] = useState(technicalIndicators.filter((i) => i.active).map((i) => i.id))
+  const [activeIndicators, setActiveIndicators] = useState<string[]>([])
 
   // Map chartTimeframe to period
   const periodMap: Record<string, string> = {
@@ -124,8 +46,15 @@ export function MarketsContent() {
   }
   const selectedPeriod = periodMap[chartTimeframe] || "daily"
 
+  // Set the default selected ticker when data is loaded
+  useEffect(() => {
+    if (dashboardData.length > 0) {
+      setSelectedTicker(dashboardData[0].symbol.toLowerCase())
+    }
+  }, [dashboardData])
+
   // Find the selected stock details
-  const selectedStock = allStocks.find((stock) => stock.symbol.toLowerCase() === selectedTicker) || allStocks[0]
+  const selectedStock = dashboardData.find((stock) => stock.symbol.toLowerCase() === selectedTicker) || dashboardData[0]
 
   // Toggle indicator
   const toggleIndicator = (id: string) => {
@@ -134,6 +63,14 @@ export function MarketsContent() {
     } else {
       setActiveIndicators([...activeIndicators, id])
     }
+  }
+
+  if (isLoading) {
+    return <div>Loading market data...</div>
+  }
+
+  if (isError) {
+    return <div>Error loading market data.</div>
   }
 
   return (
@@ -148,7 +85,7 @@ export function MarketsContent() {
               <SelectValue placeholder="Select ticker" />
             </SelectTrigger>
             <SelectContent>
-              {allStocks.map((stock) => (
+              {dashboardData.map((stock) => (
                 <SelectItem key={stock.symbol.toLowerCase()} value={stock.symbol.toLowerCase()}>
                   {stock.symbol} - {stock.name}
                 </SelectItem>
@@ -157,13 +94,20 @@ export function MarketsContent() {
           </Select>
 
           <div className="flex items-center space-x-1">
-            <span className="text-lg font-bold">₵{selectedStock.price}</span>
+            <span className="text-lg font-bold">₵{selectedStock?.price}</span>
             <span
-              className={cn("flex items-center text-sm", selectedStock.isPositive ? "text-green-500" : "text-red-500")}
+              className={cn(
+                "flex items-center text-sm",
+                selectedStock?.isPositive ? "text-green-500" : "text-red-500"
+              )}
             >
-              {selectedStock.isPositive ? <ArrowUp className="h-3 w-3 mr-1" /> : <ArrowDown className="h-3 w-3 mr-1" />}
-              {selectedStock.isPositive ? "+" : ""}
-              {selectedStock.change} ({selectedStock.changePercent}%)
+              {selectedStock?.isPositive ? (
+                <ArrowUp className="h-3 w-3 mr-1" />
+              ) : (
+                <ArrowDown className="h-3 w-3 mr-1" />
+              )}
+              {selectedStock?.isPositive ? "+" : ""}
+              {selectedStock?.change} ({selectedStock?.changePercent}%)
             </span>
           </div>
         </div>
@@ -206,50 +150,6 @@ export function MarketsContent() {
 
       {/* Main content */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left sidebar - Chart tools */}
-        <div className="w-12 border-r flex flex-col items-center py-2 space-y-4">
-          {chartTypes.map((type) => (
-            <TooltipProvider key={type.id}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant={selectedChartType === type.id ? "default" : "ghost"}
-                    size="icon"
-                    onClick={() => setSelectedChartType(type.id)}
-                  >
-                    <type.icon className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">{type.name} Chart</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ))}
-
-          <div className="h-px w-8 bg-border" />
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Layers className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">Drawing Tools</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <SlidersHorizontal className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">Chart Settings</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-
         {/* Main chart area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Chart header */}
@@ -276,40 +176,6 @@ export function MarketsContent() {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-8 gap-1">
-                    <Plus className="h-4 w-4" />
-                    <span className="hidden sm:inline">Indicators</span>
-                    <ChevronDown className="h-3 w-3 opacity-50" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {technicalIndicators.map((indicator) => (
-                    <DropdownMenuItem
-                      key={indicator.id}
-                      onClick={() => toggleIndicator(indicator.id)}
-                      className={cn(activeIndicators.includes(indicator.id) && "bg-accent")}
-                    >
-                      {indicator.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Button variant="outline" size="sm" className="h-8 gap-1">
-                <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">Customize</span>
-              </Button>
-
-              <div className="flex items-center text-xs text-muted-foreground whitespace-nowrap">
-                <Clock className="h-3 w-3 mr-1" />
-                <span className="hidden sm:inline">Last updated:</span>{" "}
-                {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </div>
-            </div>
           </div>
 
           {/* Chart */}
@@ -321,26 +187,6 @@ export function MarketsContent() {
               containerClassName="h-full w-full"
             />
           </div>
-
-          {/* Active indicators panel */}
-          {activeIndicators.length > 0 && (
-            <div className="border-t p-2 bg-muted/20">
-              <div className="text-sm font-medium mb-1">Active Indicators</div>
-              <div className="flex flex-wrap gap-2">
-                {activeIndicators.map((id) => {
-                  const indicator = technicalIndicators.find((i) => i.id === id)
-                  return (
-                    <div key={id} className="flex items-center bg-background rounded-md px-2 py-1 text-xs">
-                      {indicator?.name}
-                      <Button variant="ghost" size="icon" className="h-4 w-4 ml-1" onClick={() => toggleIndicator(id)}>
-                        <ArrowDown className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Right sidebar - Market data */}
@@ -352,25 +198,25 @@ export function MarketsContent() {
           <div className="overflow-auto h-[calc(100%-44px)]">
             <div className="p-2 text-xs font-medium text-muted-foreground">MARKET MOVERS</div>
 
-            {allStocks.map((stock) => (
+            {dashboardData.map((stock) => (
               <div
                 key={stock.symbol}
                 className={cn(
                   "flex justify-between items-center p-2 hover:bg-accent/50 cursor-pointer",
-                  selectedTicker === stock.symbol.toLowerCase() && "bg-accent",
+                  selectedTicker === stock.symbol.toLowerCase() && "bg-accent"
                 )}
                 onClick={() => setSelectedTicker(stock.symbol.toLowerCase())}
               >
                 <div>
                   <div className="font-medium">{stock.symbol}</div>
-                  <div className="text-xs text-muted-foreground">{stock.sector}</div>
+                  <div className="text-xs text-muted-foreground">{stock.name}</div>
                 </div>
                 <div className="text-right">
                   <div>₵{stock.price}</div>
                   <div
                     className={cn(
                       "text-xs flex items-center justify-end",
-                      stock.isPositive ? "text-green-500" : "text-red-500",
+                      stock.isPositive ? "text-green-500" : "text-red-500"
                     )}
                   >
                     {stock.isPositive ? <ArrowUp className="h-3 w-3 mr-1" /> : <ArrowDown className="h-3 w-3 mr-1" />}
