@@ -2,31 +2,32 @@
 
 import { useQuery } from "@tanstack/react-query"
 
-// Type definition for the chart data
+// Updated type definition for the chart data
 export interface ChartData {
-  _id: { $oid: string }
-  close_offer_price: number
-  closing_price_vwap_gh: number
-  data_source: string
-  date: { $date: string }
+  close: number
+  date: string
   high: number
   last_transaction_price: number
   low: number
   open: number
+  period: string
   previous_closing_price: number
   price_change_gh: number
   ticker: string
-  timestamp: { $date: string }
+  timestamp: string
   total_shares_traded: number
+  total_value_traded: number
 }
 
 // Fallback data
 const fallbackData: ChartData[] = []
 
-// Function to fetch chart data by ticker
-async function fetchChartData(ticker: string): Promise<ChartData[]> {
+// Function to fetch chart data by ticker and period
+async function fetchChartData(ticker: string, period: string): Promise<ChartData[]> {
   try {
-    const response = await fetch(`https://gsemonitor.vercel.app/fetch_all_by_ticker?ticker=${ticker}`)
+    const response = await fetch(
+      `https://gsemonitor.vercel.app/fetch_all_by_ticker?ticker=${ticker}&period=${period}`
+    )
     if (!response.ok) {
       throw new Error(`Failed to fetch chart data: ${response.status}`)
     }
@@ -38,10 +39,10 @@ async function fetchChartData(ticker: string): Promise<ChartData[]> {
 }
 
 // Hook to use chart data
-export function useChartData(ticker: string) {
+export function useChartData(ticker: string, period: string) {
   return useQuery({
-    queryKey: ["chartData", ticker],
-    queryFn: () => fetchChartData(ticker),
+    queryKey: ["chartData", ticker, period],
+    queryFn: () => fetchChartData(ticker, period),
     refetchInterval: 60000, // Refetch every minute
     refetchOnWindowFocus: true,
     retry: 2,
