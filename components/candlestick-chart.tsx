@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { type IChartApi, type CandlestickData, CandlestickSeries } from "lightweight-charts"
+import { type IChartApi, type CandlestickData, CandlestickSeries, AreaSeries } from "lightweight-charts"
 import { useTheme } from "next-themes"
 import { useChartData } from "../hooks/use-chart-data"
 
@@ -80,15 +80,40 @@ export function CandlestickChart({
           .slice(start, end)
           .filter((item) => item.date && item.open && item.high && item.low && item.close)
           .map((item) => ({
-            time: item.date.split("T")[0], // Format date to YYYY-MM-DD
+            time: item.date, // Format date to YYYY-MM-DD
             open: item.open,
             high: item.high,
             low: item.low,
             close: item.close,
           }))
-        console.log("Paginated Data:", paginatedData)
-        candlestickSeries.setData(paginatedData)
-
+        
+        if (chartType === "candle") {
+          // Render candlestick chart
+          const candlestickSeries = chart.addSeries(CandlestickSeries, {
+            upColor: "#26a69a",
+            downColor: "#ef5350",
+            borderVisible: false,
+            wickUpColor: "#26a69a",
+            wickDownColor: "#ef5350",
+          })
+          seriesRef.current = candlestickSeries
+          candlestickSeries.setData(paginatedData)
+        } else if (chartType === "line") {
+          // Render line chart
+          const areaSeries = chart.addSeries(AreaSeries, {
+            lineColor: "#2962FF",
+            topColor: "rgba(41, 98, 255, 0.28)",
+            bottomColor: "rgba(41, 98, 255, 0.05)",
+          })
+          seriesRef.current = areaSeries
+          const areaData = paginatedData.map((item) => ({
+            time: item.time,
+            value: item.close,
+          }))
+          areaSeries.setData(areaData)
+        }
+        
+        // Set the chart data
         chart.timeScale().fitContent()
 
         // Handle scrolling
