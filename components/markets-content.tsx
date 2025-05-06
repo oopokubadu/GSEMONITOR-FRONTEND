@@ -57,6 +57,8 @@ export function MarketsContent() {
   const [showDrawingToolsMenu, setShowDrawingToolsMenu] = useState(false)
   const [showChartSettingsMenu, setShowChartSettingsMenu] = useState(false)
   const [activeDrawingTool, setActiveDrawingTool] = useState<string | null>(null) // Track active drawing tool
+  const [searchQuery, setSearchQuery] = useState("") // State to track the search input
+  const [filteredStocks, setFilteredStocks] = useState(dashboardData) // State for filtered stocks
   // Map chartTimeframe to period
   const periodMap: Record<string, string> = {
     "1D": "daily",
@@ -72,8 +74,18 @@ export function MarketsContent() {
   useEffect(() => {
     if (dashboardData.length > 0) {
       setSelectedTicker(dashboardData[0].symbol.toLowerCase())
+      setFilteredStocks(dashboardData) // Initialize filtered stocks
     }
   }, [dashboardData])
+
+  useEffect(() => {
+    const query = searchQuery.toLowerCase()
+    const filtered = dashboardData.filter(
+      (stock) =>
+        stock.symbol.toLowerCase().includes(query) || stock.name.toLowerCase().includes(query)
+    )
+    setFilteredStocks(filtered)
+  }, [searchQuery, dashboardData])
 
   // Find the selected stock details
   const selectedStock = dashboardData.find((stock) => stock.symbol.toLowerCase() === selectedTicker) || dashboardData[0]
@@ -378,13 +390,19 @@ export function MarketsContent() {
         {/* Right sidebar - Market data */}
         <div className="w-64 border-l hidden lg:block overflow-hidden">
           <div className="p-2 border-b">
-            <Input type="search" placeholder="Search stocks..." className="h-8" />
+            <Input 
+              type="search" 
+              placeholder="Search stocks..." 
+              className="h-8" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              />
           </div>
 
           <div className="overflow-auto h-[calc(100%-44px)]">
             <div className="p-2 text-xs font-medium text-muted-foreground">MARKET MOVERS</div>
 
-            {dashboardData.map((stock) => (
+            {filteredStocks.map((stock) => (
               <div
                 key={stock.symbol}
                 className={cn(
