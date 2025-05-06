@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import {
+  AlignHorizontalJustifyStart,
   ArrowDown,
   ArrowUp,
   BarChart2,
@@ -11,11 +12,13 @@ import {
   LineChart,
   Maximize2,
   Minimize2,
+  Minus,
   Plus,
   Save,
   Settings,
   Share2,
   SlidersHorizontal,
+  TrendingUp,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -51,7 +54,9 @@ export function MarketsContent() {
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">("candle")
   const [activeIndicators, setActiveIndicators] = useState(technicalIndicators.filter((i) => i.active).map((i) => i.id))
-
+  const [showDrawingToolsMenu, setShowDrawingToolsMenu] = useState(false)
+  const [showChartSettingsMenu, setShowChartSettingsMenu] = useState(false)
+  const [activeDrawingTool, setActiveDrawingTool] = useState<string | null>(null) // Track active drawing tool
   // Map chartTimeframe to period
   const periodMap: Record<string, string> = {
     "1D": "daily",
@@ -184,7 +189,11 @@ export function MarketsContent() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant={showDrawingToolsMenu ? "default" : "ghost"} 
+                  size="icon"
+                  onClick={() => setShowDrawingToolsMenu((prev) => !prev)}
+                  >
                   <Layers className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -192,16 +201,85 @@ export function MarketsContent() {
             </Tooltip>
           </TooltipProvider>
 
+          {showDrawingToolsMenu && (
+            <div className="flex flex-col items-center space-y-2 mt-4">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={activeDrawingTool === "trendline" ? "default" : "ghost"}
+                      size="icon"
+                      onClick={() =>
+                        setActiveDrawingTool((prev) => (prev === "trendline" ? null : "trendline"))
+                      }
+                    >
+                      <TrendingUp className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Trend Line</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={activeDrawingTool === "horizontalline" ? "default" : "ghost"}
+                      size="icon"
+                      onClick={() =>
+                        setActiveDrawingTool((prev) => (prev === "horizontalline" ? null : "horizontalline"))
+                      }
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Horizontal Line</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={activeDrawingTool === "verticalline" ? "default" : "ghost"}
+                      size="icon"
+                      onClick={() =>
+                        setActiveDrawingTool((prev) => (prev === "verticalline" ? null : "verticalline"))
+                      }
+                    >
+                      <AlignHorizontalJustifyStart className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Vertical Line</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          )}
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => setShowChartSettingsMenu((prev) => !prev)}>
                   <SlidersHorizontal className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">Chart Settings</TooltipContent>
             </Tooltip>
           </TooltipProvider>
+
+          {showChartSettingsMenu && (
+            <div className="relative left-14 top-20 bg-white shadow-md rounded-md p-2 z-50">
+              <div className="text-sm font-medium">Chart Settings</div>
+              <ul className="mt-2 space-y-1">
+                <li className="cursor-pointer hover:bg-gray-100 p-1 rounded">Change Theme</li>
+                <li className="cursor-pointer hover:bg-gray-100 p-1 rounded">Adjust Grid</li>
+                <li className="cursor-pointer hover:bg-gray-100 p-1 rounded">Reset Settings</li>
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Main chart area */}
