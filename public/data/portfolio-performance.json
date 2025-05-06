@@ -1,0 +1,14 @@
+[
+  { "month": "Jan", "value": 38500 },
+  { "month": "Feb", "value": 40200 },
+  { "month": "Mar", "value": 39800 },
+  { "month": "Apr", "value": 42300 },
+  { "month": "May", "value": 44100 },
+  { "month": "Jun", "value": 43500 },
+  { "month": "Jul", "value": 45800 },
+  { "month": "Aug", "value": 47200 },
+  { "month": "Sep", "value": 46500 },
+  { "month": "Oct", "value": 48900 },
+  { "month": "Nov", "value": 47800 },
+  { "month": "Dec", "value": 50200 }
+]
