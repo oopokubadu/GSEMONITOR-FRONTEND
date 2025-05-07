@@ -136,7 +136,11 @@ export function CandlestickChart({
       chartRef.current = null
       seriesRef.current = null
     }
-    chartContainerRef.current?.removeEventListener("click", handleMouseClick)
+    
+    if (chartContainerRef.current) {
+      chartContainerRef.current.innerHTML = "" // Clear the chart container
+      chartContainerRef.current.removeEventListener("click", handleMouseClick) // Remove event listener
+    }
   }
 
   useEffect(() => {
@@ -183,7 +187,7 @@ export function CandlestickChart({
         </div>
       )}
 
-      <div ref={chartContainerRef} className="w-full h-full" />
+      <div ref={chartContainerRef} className="w-full h-full overflow-hidden" />
     </div>
   )
 }
