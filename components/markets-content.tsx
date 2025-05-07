@@ -59,6 +59,9 @@ export function MarketsContent() {
   const [activeDrawingTool, setActiveDrawingTool] = useState<string | null>(null) // Track active drawing tool
   const [searchQuery, setSearchQuery] = useState("") // State to track the search input
   const [filteredStocks, setFilteredStocks] = useState(dashboardData) // State for filtered stocks
+  const [isHorizontalToolActive, setIsHorizontalToolActive] = useState(false)
+  const [isVerticalToolActive, setIsVerticalToolActive] = useState(false)
+
   // Map chartTimeframe to period
   const periodMap: Record<string, string> = {
     "1D": "daily",
@@ -242,7 +245,10 @@ export function MarketsContent() {
                       variant={activeDrawingTool === "horizontalline" ? "default" : "ghost"}
                       size="icon"
                       onClick={() =>
-                        setActiveDrawingTool((prev) => (prev === "horizontalline" ? null : "horizontalline"))
+                        {
+                          setIsHorizontalToolActive((prev) => !prev)
+                          setActiveDrawingTool((prev) => (prev === "horizontalline" ? null : "horizontalline"))
+                        }
                       }
                     >
                       <Minus className="h-4 w-4" />
@@ -259,7 +265,10 @@ export function MarketsContent() {
                       variant={activeDrawingTool === "verticalline" ? "default" : "ghost"}
                       size="icon"
                       onClick={() =>
+                        {
                         setActiveDrawingTool((prev) => (prev === "verticalline" ? null : "verticalline"))
+                        setIsVerticalToolActive((prev) => !prev)
+                        }
                       }
                     >
                       <AlignHorizontalJustifyStart className="h-4 w-4" />
@@ -371,6 +380,8 @@ export function MarketsContent() {
               period={selectedPeriod}
               chartType={selectedChartType}
               containerClassName="h-full w-full"
+              isHorizontalToolActive={isHorizontalToolActive}
+              isVerticalToolActive={isVerticalToolActive}
             />
           </div>
 

@@ -132,6 +132,8 @@ export function DashboardContent() {
                     period={selectedPeriod}
                     chartType="candle"
                     containerClassName="h-[300px] w-full"
+                    isHorizontalToolActive={false}
+                    isVerticalToolActive={false}
                   />
                 </TabsContent>
               </Tabs>
