@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { type IChartApi, type CandlestickData, CandlestickSeries, AreaSeries, LineSeries, UTCTimestamp } from "lightweight-charts"
+import { type IChartApi, type CandlestickData, CandlestickSeries, AreaSeries, LineSeries, UTCTimestamp, CrosshairMode } from "lightweight-charts"
 import { useTheme } from "next-themes"
 import { useChartData } from "../hooks/use-chart-data"
 
@@ -58,6 +58,23 @@ export function CandlestickChart({
         timeVisible: true,
         borderVisible: false,
         rightOffset: 5,
+      },
+      crosshair: {
+        mode: CrosshairMode.Normal, // Enable both vertical and horizontal lines
+        vertLine: {
+          color: "#2962FF",
+          width: 1,
+          style: 1, // Dashed line
+          visible: true,
+          labelVisible: true,
+        },
+        horzLine: {
+          color: "#2962FF",
+          width: 1,
+          style: 1, // Dashed line
+          visible: true,
+          labelVisible: true,
+        },
       },
     })
 
@@ -136,7 +153,7 @@ export function CandlestickChart({
       chartRef.current = null
       seriesRef.current = null
     }
-    
+
     if (chartContainerRef.current) {
       chartContainerRef.current.innerHTML = "" // Clear the chart container
       chartContainerRef.current.removeEventListener("click", handleMouseClick) // Remove event listener
