@@ -59,6 +59,7 @@ export function CandlestickChart({
           timeScale: {
             timeVisible: true,
             borderVisible: false,
+            rightOffset: 5, // Add space between the last candle and the right border
           },
         })
 
@@ -114,17 +115,17 @@ export function CandlestickChart({
         }
         
         // Set the chart data
-        chart.timeScale().fitContent()
+        chart.timeScale().setVisibleLogicalRange({ from: paginatedData.length - 40, to: paginatedData.length }) // Adjust the range
 
         // Handle scrolling
-        const handleVisibleTimeRangeChange = () => {
-          const visibleRange = chart.timeScale().getVisibleRange()
-          if (visibleRange && Number(visibleRange.to) >= chartData.length - 1) {
-            setCurrentPage((prevPage) => prevPage + 1) // Load the next page
-          }
-        }
+        // const handleVisibleTimeRangeChange = () => {
+        //   const visibleRange = chart.timeScale().getVisibleRange()
+        //   if (visibleRange && Number(visibleRange.to) >= chartData.length - 1) {
+        //     setCurrentPage((prevPage) => prevPage + 1) // Load the next page
+        //   }
+        // }
 
-        chart.timeScale().subscribeVisibleTimeRangeChange(handleVisibleTimeRangeChange)
+        // chart.timeScale().subscribeVisibleTimeRangeChange(handleVisibleTimeRangeChange)
       })
     } catch (error) {
       console.error("Error creating chart:", error)
