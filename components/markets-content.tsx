@@ -204,7 +204,10 @@ export function MarketsContent() {
                 <Button 
                   variant={showDrawingToolsMenu ? "default" : "ghost"} 
                   size="icon"
-                  onClick={() => setShowDrawingToolsMenu((prev) => !prev)}
+                  onClick={() => {
+                    setShowDrawingToolsMenu((prev) => !prev)
+                    setShowChartSettingsMenu(() => false)}
+                  }
                   >
                   <Layers className="h-4 w-4" />
                 </Button>
@@ -272,9 +275,14 @@ export function MarketsContent() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
-                  variant="ghost" 
+                  variant={showChartSettingsMenu ? "default" : "ghost"} 
                   size="icon"
-                  onClick={() => setShowChartSettingsMenu((prev) => !prev)}>
+                  onClick={() => 
+                      {
+                        setShowDrawingToolsMenu(() => false)
+                        setShowChartSettingsMenu((prev) => !prev)
+                      }
+                    }>
                   <SlidersHorizontal className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -282,7 +290,7 @@ export function MarketsContent() {
             </Tooltip>
           </TooltipProvider>
 
-          {showChartSettingsMenu && (
+          {/* {showChartSettingsMenu && (
             <div className="relative left-14 top-20 bg-white shadow-md rounded-md p-2 z-50">
               <div className="text-sm font-medium">Chart Settings</div>
               <ul className="mt-2 space-y-1">
@@ -291,7 +299,7 @@ export function MarketsContent() {
                 <li className="cursor-pointer hover:bg-gray-100 p-1 rounded">Reset Settings</li>
               </ul>
             </div>
-          )}
+          )} */}
         </div>
 
         {/* Main chart area */}
