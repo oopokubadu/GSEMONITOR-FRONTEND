@@ -206,7 +206,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <UserNav />
         </header>
         <main className="flex-1">
-          {pathname === "/" && <MarketSummary />}
+          {/* {pathname === "/" && <MarketSummary />} */}
           {children}
         </main>
       </div>
