@@ -325,9 +325,9 @@ export function WatchlistContent() {
                 }}
                 className="w-full"
               >
-                <TabsList className="grid grid-cols-3 mb-4">
-                  {watchlists.slice(0, 3).map((list) => (
-                    <TabsTrigger key={list.id} value={list.id.toString()}>
+                <TabsList className="flex overflow-x-auto overflow-y-hidden pl-10 mb-4 space-4">
+                  {watchlists.map((list) => (
+                    <TabsTrigger key={list.id} value={list.id.toString()} className="flex-shrink-0">
                       {list.name}
                     </TabsTrigger>
                   ))}
