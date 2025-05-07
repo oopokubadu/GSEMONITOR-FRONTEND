@@ -130,7 +130,7 @@ export function DashboardContent() {
                   <CandlestickChart
                     ticker={activeStock?.symbol.toLowerCase()}
                     period={selectedPeriod}
-                    chartType="candle"
+                    chartType="line"
                     containerClassName="h-[300px] w-full"
                     isHorizontalToolActive={false}
                     isVerticalToolActive={false}
