@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils"
 import { MarketSummary } from "@/components/market-summary"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { UserNav } from "@/components/user-nav"
+import { DialogTitle } from "@radix-ui/react-dialog"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -175,11 +176,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       ) : (
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="absolute left-4 top-4 lg:hidden">
+            <Button variant="outline" size="icon" className="absolute left-4 top-16 lg:hidden">
               <ChevronRight className="h-4 w-4" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0">
+            <div className="sr-only">
+              <DialogTitle>Sidebar Navigation</DialogTitle>
+            </div>
             <Sidebar />
           </SheetContent>
         </Sheet>
