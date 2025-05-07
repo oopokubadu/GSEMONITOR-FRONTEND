@@ -382,6 +382,7 @@ export function MarketsContent() {
               containerClassName="h-full w-full"
               isHorizontalToolActive={isHorizontalToolActive}
               isVerticalToolActive={isVerticalToolActive}
+              isFullScreen={isFullScreen}
             />
           </div>
 

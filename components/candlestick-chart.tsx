@@ -13,16 +13,18 @@ interface CandlestickChartProps {
   readonly candlesPerPage?: number // Number of candles to display per page
   readonly isHorizontalToolActive: boolean // Add this prop
   readonly isVerticalToolActive: boolean // Add this prop
+  readonly isFullScreen?: boolean
 }
 
 export function CandlestickChart({
   ticker,
   period,
   chartType,
-  containerClassName = "h-[400px] w-full",
-  candlesPerPage = 50, // Default to 50 candles per page
+  containerClassName = "h-400 w-auto",
+  candlesPerPage = 100, // Default to 50 candles per page
   isHorizontalToolActive,
   isVerticalToolActive,
+  isFullScreen = false,
 }: CandlestickChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<IChartApi | null>(null)
@@ -165,19 +167,19 @@ export function CandlestickChart({
     setupChart()
 
     return cleanupChart
-  }, [chartData, theme, chartType, currentPage, candlesPerPage, isHorizontalToolActive, isVerticalToolActive])
+  }, [chartData, theme, chartType, currentPage, candlesPerPage, isHorizontalToolActive, isVerticalToolActive, isFullScreen])
 
   return (
     <div className={`relative ${containerClassName}`}>
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/50 z-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      {isError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-destructive text-destructive-foreground px-3 py-1 rounded-md text-sm z-10">
+          Failed to load chart data.
         </div>
       )}
 
-      {isError && (
-        <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-3 py-1 rounded-md text-sm z-10">
-          Failed to load chart data.
+      {isLoading || (Array.isArray(chartData) && chartData.length === 0) && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background/50 z-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
       )}
 
