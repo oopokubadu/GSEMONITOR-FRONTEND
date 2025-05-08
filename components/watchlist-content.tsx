@@ -325,7 +325,7 @@ export function WatchlistContent() {
                 }}
                 className="w-full"
               >
-                <TabsList className="flex overflow-x-auto overflow-y-hidden pl-10 mb-4 space-4">
+                <TabsList className="flex overflow-x-auto overflow-y-hidden lg:pl-10 mb-4 space-4">
                   {watchlists.map((list) => (
                     <TabsTrigger key={list.id} value={list.id.toString()} className="flex-shrink-0">
                       {list.name}
@@ -492,14 +492,14 @@ export function WatchlistContent() {
               <CardContent>
                 <Tabs defaultValue="1D" className="w-full">
                   <div className="flex justify-between items-center mb-4">
-                    <TabsList>
+                    {/* <TabsList>
                       <TabsTrigger value="1D">1D</TabsTrigger>
                       <TabsTrigger value="1W">1W</TabsTrigger>
                       <TabsTrigger value="1M">1M</TabsTrigger>
                       <TabsTrigger value="3M">3M</TabsTrigger>
                       <TabsTrigger value="1Y">1Y</TabsTrigger>
                       <TabsTrigger value="ALL">ALL</TabsTrigger>
-                    </TabsList>
+                    </TabsList> */}
                     <div className="flex items-center text-xs text-muted-foreground">
                       <Clock className="h-3 w-3 mr-1" />
                       Last updated: 15:30 GMT
