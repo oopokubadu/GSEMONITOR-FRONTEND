@@ -14,17 +14,19 @@ interface CandlestickChartProps {
   readonly isHorizontalToolActive: boolean // Add this prop
   readonly isVerticalToolActive: boolean // Add this prop
   readonly isFullScreen?: boolean
+  readonly isTrendLineToolActive?: boolean // Add this prop
 }
 
 export function CandlestickChart({
   ticker,
   period,
   chartType,
-  containerClassName = "h-400 w-auto",
+  containerClassName = "h-400 w-full",
   candlesPerPage = 100, // Default to 50 candles per page
-  isHorizontalToolActive,
-  isVerticalToolActive,
+  isHorizontalToolActive = false, // Add this prop
+  isVerticalToolActive = false,
   isFullScreen = false,
+  isTrendLineToolActive = false, // Add this prop
 }: CandlestickChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<IChartApi | null>(null)
@@ -126,23 +128,15 @@ export function CandlestickChart({
       })
     }
 
-    if (isVerticalToolActive && chart) {
-      const time = timeScale.coordinateToTime(x);
-    
-      if (time !== null) {
-        const verticalLineSeries = chart.addSeries( LineSeries, {
-          color: 'blue',
-          lineWidth: 1,
-          priceLineVisible: false,
-          lastValueVisible: false,
-          crosshairMarkerVisible: false,
-        });
-    
-        verticalLineSeries.setData([
-          { time: time as UTCTimestamp, value: 6.7 },
-          { time: (time as UTCTimestamp) + 1 as UTCTimestamp, value: 7.0 },
-        ]);        
-      }
+    if (isTrendLineToolActive) {
+      const time = timeScale.coordinateToTime(x)
+      const price = series.coordinateToPrice(y)
+      series.createLine({ 
+        points: [{ time, price }],
+        color: "red",
+        lineWidth: 2,
+        lineStyle: 0,
+      })
     }
   }
 
@@ -166,6 +160,7 @@ export function CandlestickChart({
       const chart = await initializeChart()
       if (!chart) return
 
+      {console.log("Period", period)}
       const start = currentPage * candlesPerPage
       const end = start + candlesPerPage
       const paginatedData = (chartData ?? [])
