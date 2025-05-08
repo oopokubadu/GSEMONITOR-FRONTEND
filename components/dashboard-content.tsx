@@ -16,7 +16,7 @@ export function DashboardContent() {
   const [activeStock, setActiveStock] = useState(() => dashboardData[0] || null)
   const [filteredStocks, setFilteredStocks] = useState(dashboardData)
   const [activeFilter, setActiveFilter] = useState("All") // Track the active filter
-  const [selectedPeriod, setSelectedPeriod] = useState("daily") // Default period is daily
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("ID") // Default period is ID
 
   // Update activeStock and filteredStocks when dashboardData changes
   useEffect(() => {
@@ -58,6 +58,15 @@ export function DashboardContent() {
     return <div>Error loading dashboard data.</div>
   }
 
+  const periodMap: Record<string, string> = {
+    "1D": "daily",
+    "1W": "weekly",
+    "1M": "monthly",
+    "3M": "quarterly",
+    "1Y": "yearly"
+  }
+  const selectedPeriod = periodMap[selectedTimePeriod] || "daily"
+
   return (
     <div className="flex flex-col space-y-4 p-4 lg:p-6 lg:space-y-6">
       <div className="flex flex-col md:flex-row gap-4 lg:gap-6">
@@ -83,7 +92,7 @@ export function DashboardContent() {
                   </span>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <Button variant="outline" size="icon">
                   <RefreshCw className="h-4 w-4" />
                 </Button>
@@ -93,24 +102,13 @@ export function DashboardContent() {
                 <Button variant="outline" size="icon">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
-              </div>
+              </div> */}
             </CardHeader>
             <CardContent>
               <Tabs
                 defaultValue="1D"
                 className="w-full"
-                onValueChange={(value) => {
-                  // Map tab value to period
-                  const periodMap: Record<string, string> = {
-                    "1D": "daily",
-                    "1W": "weekly",
-                    "1M": "monthly",
-                    "3M": "quarterly",
-                    "1Y": "yearly",
-                    "ALL": "all",
-                  }
-                  setSelectedPeriod(periodMap[value] || "daily")
-                }}
+                onValueChange={setSelectedTimePeriod}
               >
                 <div className="flex justify-between items-center mb-4">
                   <TabsList>
@@ -119,14 +117,13 @@ export function DashboardContent() {
                     <TabsTrigger value="1M">1M</TabsTrigger>
                     <TabsTrigger value="3M">3M</TabsTrigger>
                     <TabsTrigger value="1Y">1Y</TabsTrigger>
-                    <TabsTrigger value="ALL">ALL</TabsTrigger>
                   </TabsList>
                   <div className="flex items-center text-xs text-muted-foreground">
                     <Clock className="h-3 w-3 mr-1" />
                     Last updated: 15:30 GMT
                   </div>
                 </div>
-                <TabsContent value="1D" key={activeStock?.symbol}>
+                <TabsContent value={selectedTimePeriod} key={activeStock?.symbol}>
                   <CandlestickChart
                     ticker={activeStock?.symbol.toLowerCase()}
                     period={selectedPeriod}
@@ -143,7 +140,7 @@ export function DashboardContent() {
         <div className="w-full md:w-80 lg:w-96 flex flex-col gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Trade</CardTitle>
+              <CardTitle className="text-lg">Coming Soon (Trade)</CardTitle>
               <CardDescription>Execute trades for {activeStock?.symbol}</CardDescription>
             </CardHeader>
             <CardContent>
