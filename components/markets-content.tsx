@@ -60,6 +60,7 @@ export function MarketsContent() {
   const [searchQuery, setSearchQuery] = useState("") // State to track the search input
   const [filteredStocks, setFilteredStocks] = useState(dashboardData) // State for filtered stocks
   const [isHorizontalToolActive, setIsHorizontalToolActive] = useState(false)
+  const [isTrendingToolActive, setIsTrendingToolActive] = useState(false)
   const [isVerticalToolActive, setIsVerticalToolActive] = useState(false)
 
   // Map chartTimeframe to period
@@ -228,8 +229,13 @@ export function MarketsContent() {
                       variant={activeDrawingTool === "trendline" ? "default" : "ghost"}
                       size="icon"
                       onClick={() =>
+                      {
+                        setIsTrendingToolActive((prev) => !prev)
+                        setIsHorizontalToolActive(false)
+                        setIsVerticalToolActive(false)
                         setActiveDrawingTool((prev) => (prev === "trendline" ? null : "trendline"))
                       }
+                    }
                     >
                       <TrendingUp className="h-4 w-4" />
                     </Button>
@@ -247,6 +253,8 @@ export function MarketsContent() {
                       onClick={() =>
                         {
                           setIsHorizontalToolActive((prev) => !prev)
+                          setIsTrendingToolActive(false)
+                          setIsVerticalToolActive(false)
                           setActiveDrawingTool((prev) => (prev === "horizontalline" ? null : "horizontalline"))
                         }
                       }
@@ -266,8 +274,10 @@ export function MarketsContent() {
                       size="icon"
                       onClick={() =>
                         {
-                        setActiveDrawingTool((prev) => (prev === "verticalline" ? null : "verticalline"))
-                        setIsVerticalToolActive((prev) => !prev)
+                          setActiveDrawingTool((prev) => (prev === "verticalline" ? null : "verticalline"))
+                          setIsVerticalToolActive((prev) => !prev)
+                          setIsHorizontalToolActive(false)
+                          setIsTrendingToolActive(false)
                         }
                       }
                     >
@@ -332,9 +342,6 @@ export function MarketsContent() {
                 <TabsTrigger value="1Y" className="text-xs px-2 h-6">
                   1Y
                 </TabsTrigger>
-                <TabsTrigger value="ALL" className="text-xs px-2 h-6">
-                  ALL
-                </TabsTrigger>
               </TabsList>
             </Tabs>
 
@@ -383,6 +390,7 @@ export function MarketsContent() {
               isHorizontalToolActive={isHorizontalToolActive}
               isVerticalToolActive={isVerticalToolActive}
               isFullScreen={isFullScreen}
+              isTrendLineToolActive={isTrendingToolActive}
             />
           </div>
 
