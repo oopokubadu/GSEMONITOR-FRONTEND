@@ -19,6 +19,7 @@ import {
   Share2,
   SlidersHorizontal,
   TrendingUp,
+  X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -63,6 +64,7 @@ export function MarketsContent() {
   const [isTrendingToolActive, setIsTrendingToolActive] = useState(false)
   const [isVerticalToolActive, setIsVerticalToolActive] = useState(false)
   const [isSaveChart, setIsSaveChart] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   // Map chartTimeframe to period
   const periodMap: Record<string, string> = {
@@ -112,10 +114,30 @@ export function MarketsContent() {
     return <div>Error loading market data.</div>
   }
 
+  const handleShareChart = (platform?: string) => {
+    const baseUrl = window.location.origin
+    const shareUrl = `${baseUrl}/markets?ticker=${selectedTicker}&period=${selectedPeriod}&type=${selectedChartType}`
+  
+    if (platform === "clipboard") {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        setToastMessage("Chart URL copied to clipboard!") // Show toast message 
+      }).catch((err) => {
+        console.error("Failed to copy URL: ", err)
+      })
+    } else if (platform === "twitter") {
+      window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=Check out this chart!`, "_blank")
+    } else if (platform === "facebook") {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, "_blank")
+    } else if (platform === "linkedin") {
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, "_blank")
+    }
+  }
+
   return (
     <div
       className={cn("flex flex-col h-[calc(100vh-8rem)] bg-background", isFullScreen && "fixed inset-0 z-50 h-screen")}
     >
+      
       {/* Top toolbar */}
       <div className="flex flex-wrap items-center justify-between border-b p-2 gap-2">
         <div className="flex flex-wrap items-center gap-2">
@@ -143,7 +165,6 @@ export function MarketsContent() {
             </span>
           </div>
         </div>
-
         <div className="flex items-center gap-2">
           <TooltipProvider>
             <Tooltip>
@@ -174,9 +195,27 @@ export function MarketsContent() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Share2 className="h-4 w-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon">
+                      <Share2 className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleShareChart("clipboard")}>
+                      Copy to Clipboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleShareChart("twitter")}>
+                      Share on Twitter
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleShareChart("facebook")}>
+                      Share on Facebook
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleShareChart("linkedin")}>
+                      Share on LinkedIn
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TooltipTrigger>
               <TooltipContent>Share Chart</TooltipContent>
             </Tooltip>
@@ -467,5 +506,6 @@ export function MarketsContent() {
         </div>
       </div>
     </div>
+    
   )
 }
