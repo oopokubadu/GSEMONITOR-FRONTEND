@@ -62,6 +62,7 @@ export function MarketsContent() {
   const [isHorizontalToolActive, setIsHorizontalToolActive] = useState(false)
   const [isTrendingToolActive, setIsTrendingToolActive] = useState(false)
   const [isVerticalToolActive, setIsVerticalToolActive] = useState(false)
+  const [isSaveChart, setIsSaveChart] = useState(false)
 
   // Map chartTimeframe to period
   const periodMap: Record<string, string> = {
@@ -158,7 +159,11 @@ export function MarketsContent() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setIsSaveChart(!isSaveChart)}
+                  >
                   <Save className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -391,6 +396,7 @@ export function MarketsContent() {
               isVerticalToolActive={isVerticalToolActive}
               isFullScreen={isFullScreen}
               isTrendLineToolActive={isTrendingToolActive}
+              isSaveChart={isSaveChart}
             />
           </div>
 

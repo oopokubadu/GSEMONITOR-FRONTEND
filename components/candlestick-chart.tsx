@@ -15,6 +15,7 @@ interface CandlestickChartProps {
   readonly isVerticalToolActive: boolean // Add this prop
   readonly isFullScreen?: boolean
   readonly isTrendLineToolActive?: boolean // Add this prop
+  readonly isSaveChart?: boolean // Add this prop
 }
 
 export function CandlestickChart({
@@ -27,6 +28,7 @@ export function CandlestickChart({
   isVerticalToolActive = false,
   isFullScreen = false,
   isTrendLineToolActive = false, // Add this prop
+  isSaveChart = false,
 }: CandlestickChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<IChartApi | null>(null)
@@ -154,13 +156,29 @@ export function CandlestickChart({
     }
   }
 
+  const saveChart = () => {
+    const canvas = chartRef.current?.takeScreenshot()
+    if (canvas) {
+      const image = canvas.toDataURL("image/png")
+      const link = document.createElement("a") // Create a temporary link element
+      link.href = image
+      link.download = "gsemonitor-" + ticker + "-" + period + "-" + `chart.png` // Set the download filename
+      link.click() // Trigger the download
+    }
+  }
+
+  useEffect(() => {
+    if(isSaveChart){
+      saveChart()
+    }
+  }, [isSaveChart])
+
   useEffect(() => {
     const setupChart = async () => {
       cleanupChart()
       const chart = await initializeChart()
       if (!chart) return
 
-      {console.log("Period", period)}
       const start = currentPage * candlesPerPage
       const end = start + candlesPerPage
       const paginatedData = (chartData ?? [])
