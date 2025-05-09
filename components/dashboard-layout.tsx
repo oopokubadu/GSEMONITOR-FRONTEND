@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -30,6 +30,8 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { UserNav } from "@/components/user-nav"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { SearchInput } from "./search-input"
+import { useAuth } from "@/hooks/use-auth"
+import { useRouter } from "next/navigation"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -46,10 +48,30 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)")
   const pathname = usePathname()
 
+  const { isSignedIn, isLoading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isSignedIn && !isLoading) {
+      router.push("/"); // Redirect unauthenticated users
+    }
+  }, [isSignedIn, isLoading]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary border-solid"></div>
+          <span className="text-primary font-medium">Getting things ready...</span>
+        </div>
+      </div>
+    )
+  }
+
   // Navigation items
   const mainNavItems: NavItem[] = [
     {
-      href: "/",
+      href: "/dashboard",
       label: "Dashboard",
       icon: LayoutDashboard,
     },
@@ -97,6 +119,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: Settings,
     },
   ]
+
+  const handleLogout = () => {
+    console.log("Logging out...")
+    // Clear authentication token or user data
+    localStorage.removeItem("authToken") // Remove token from localStorage
+    sessionStorage.clear() // Optional: Clear session storage
+    // document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;" // Clear cookies if used
+  
+    // Redirect to the login or landing page
+    router.push("/");
+  }
 
   const Sidebar = () => (
     <div className={cn("flex flex-col h-full bg-card border-r overflow-hidden", collapsed ? "items-center" : "w-64")}>
@@ -160,9 +193,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 "flex h-9 items-center rounded-md px-2 gap-2 text-sm font-medium transition-colors justify-start text-red-500 hover:bg-accent hover:text-red-500",
                 collapsed ? "justify-center w-10 px-0" : "",
               )}
+              onClick={handleLogout}
             >
               <LogOut className="h-4 w-4" />
-              {!collapsed && <span>Logout</span>}
+              {!collapsed && <span>Log out</span>}
             </Button>
           </nav>
         </div>
@@ -171,6 +205,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   )
 
   return (
+    isSignedIn &&
     <div className="flex min-h-screen bg-background">
       {isDesktop ? (
         <Sidebar />
