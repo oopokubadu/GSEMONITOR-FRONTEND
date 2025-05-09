@@ -9,8 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Ghana Stock Exchange Platform",
-  description: "Trading platform for the Ghana Stock Exchange",
-    generator: 'v0.dev'
+  description: "Trading platform for the Ghana Stock Exchange"
 }
 
 export default function RootLayout({
