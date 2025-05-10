@@ -249,6 +249,20 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               </div>
             </div>
           )}
+
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              className="text-sm text-primary hover:underline"
+              onClick={() => 
+                currentStep <= 1 
+                ? setIsForgotPassword(false)
+                : setCurrentStep(currentStep-1 || 1 )
+              } // Switch back to login
+            >
+              Back
+            </button>
+          </div>
         </div>
           ) : (
             // Login Content
