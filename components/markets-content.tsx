@@ -44,8 +44,9 @@ const technicalIndicators = [
 
 // Chart types
 const chartTypes: { id: "candle" | "line"; name: string; icon: typeof BarChart2 }[] = [
-  { id: "candle", name: "Candlestick", icon: BarChart2 },
   { id: "line", name: "Line", icon: LineChart },
+  { id: "candle", name: "Candlestick", icon: BarChart2 },
+  
 ]
 
 export function MarketsContent() {
@@ -53,7 +54,7 @@ export function MarketsContent() {
   const [selectedTicker, setSelectedTicker] = useState("gcb")
   const [chartTimeframe, setChartTimeframe] = useState("1D")
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">("candle")
+  const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">("line")
   const [activeIndicators, setActiveIndicators] = useState(technicalIndicators.filter((i) => i.active).map((i) => i.id))
   const [showDrawingToolsMenu, setShowDrawingToolsMenu] = useState(false)
   const [showChartSettingsMenu, setShowChartSettingsMenu] = useState(false)
