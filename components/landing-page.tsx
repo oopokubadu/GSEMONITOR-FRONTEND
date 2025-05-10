@@ -42,6 +42,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import OnboardingModal from "@/components/onboarding-modal"
 import { useAuth } from "@/hooks/use-auth"
 import LoginModal from "./login-modal"
+import { useQueryClient } from "@tanstack/react-query"
 
 export default function LandingPage() {
   const { theme, setTheme } = useTheme()
@@ -52,6 +53,7 @@ export default function LandingPage() {
   const [onboardingOpen, setOnboardingOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const { isSignedIn, isLoading } = useAuth()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,6 +66,16 @@ export default function LandingPage() {
   const handleTabChange = (value: SetStateAction<string>) => {
     setActiveTab(value)
   }
+
+  const handleLogout = () => {
+      console.log("Logging out...")
+      localStorage.removeItem("authToken")
+      sessionStorage.clear()
+      document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+      queryClient.invalidateQueries({queryKey: ["authState"]})
+      // Redirect to the login or landing page
+      window.location.href = "/"
+    }
 
   const handleEmailSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -248,13 +260,21 @@ export default function LandingPage() {
               
               {
                 isSignedIn ?
-                <Button
-                  variant="outline"
-                  className="border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
-                  onClick={() => window.location.href = "/dashboard"} 
-                >
-                Go to My Dashboard
-              </Button>
+                <>
+                  <Button className="bg-primary hover:bg-primary/90" 
+                  onClick={() => window.location.href = "/dashboard"}
+                    >
+                    Go to My Dashboard
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
+                    onClick={handleLogout} 
+                  >
+                    Logout
+                  </Button>
+                  
+                </>
               : 
               <>
                 <Button
@@ -375,11 +395,11 @@ export default function LandingPage() {
             <div className="flex flex-col gap-2">
             {
               isSignedIn ?
-              <Button
-                  variant="outline"
-                  className="w-full border-gray-700 hover:bg-gray-800 text-white"
-                  onClick={() => window.location.href = "/dashboard"}
-                >
+                <Button
+                    variant="outline"
+                    className="w-full border-gray-700 hover:bg-gray-800 text-white"
+                    onClick={() => window.location.href = "/dashboard"}
+                  >
                   Go to My Dashboard
                 </Button>
                 :
@@ -444,7 +464,7 @@ export default function LandingPage() {
                         Watch demo
                       </Button>
                     </>
-                  : <Button size="lg" className="gap-1 bg-primary hover:bg-primary/90 text-lg" onClick={openOnboarding}>
+                  : <Button size="lg" className="gap-1 bg-primary hover:bg-primary/90 text-lg" onClick={() => window.location.href = "/markets"}>
                       View Market Trends
                       <ArrowRight className="h-4 w-4" />
                     </Button>
@@ -1208,7 +1228,7 @@ export default function LandingPage() {
                 {
                 isSignedIn
                 ?
-                  <Button type="submit" className="bg-primary hover:bg-primary/90">
+                  <Button type="submit" className="bg-primary hover:bg-primary/90" onClick={() => window.location.href = "/trade"}>
                     Start Trading
                   </Button>
                 :

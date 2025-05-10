@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { X } from "lucide-react"
 import { useSignIn } from "@/hooks/use-sign-in"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -25,7 +26,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { mutate: signIn } = useSignIn()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isForgotPassword, setIsForgotPassword] = useState(false) // State to toggle modal content
-
+  const queryClient = useQueryClient()
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -81,12 +82,18 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleLogin = async () => {
     setIsSubmitting(true)
     setErrorMessage(null)
-    signIn(formData)
-  }
-
-  const handleForgotPassword = () => {
-    // Logic for forgot password (e.g., API call to send reset email)
-    alert("Password reset link sent to your email!")
+    signIn(formData, {
+      onSuccess: () => {
+        queryClient.refetchQueries({queryKey: ["authState"]}) // Invalidate user data
+        onClose()
+      },
+      onError: () => {
+        setErrorMessage("Invalid email or password. Please try again.")
+      },
+      onSettled: () => {
+        setIsSubmitting(false) // Ensure isSubmitting is reset
+      },
+    })
   }
 
   if (!isOpen) return null
@@ -257,7 +264,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               onClick={() => 
                 currentStep <= 1 
                 ? setIsForgotPassword(false)
-                : setCurrentStep(currentStep-1 || 1 )
+                : setCurrentStep(currentStep-1 || 1 )// Switch back to login
               } // Switch back to login
             >
               Back

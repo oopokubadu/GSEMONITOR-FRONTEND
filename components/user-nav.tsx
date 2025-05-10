@@ -10,8 +10,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useQueryClient } from "@tanstack/react-query"
 
 export function UserNav() {
+  // Refetch the authState query
+  const queryClient = useQueryClient()
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken")
+    sessionStorage.clear()
+    document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    queryClient.invalidateQueries({queryKey: ["authState"]})
+    
+    // Redirect to the login or landing page
+    window.location.href = "/"
+  }
+
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -45,8 +60,8 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-500">
-          <LogOut className="mr-2 h-4 w-4" />
+        <DropdownMenuItem className="text-red-500" onClick={handleLogout} >
+          <LogOut className="mr-2 h-4 w-4"/>
           <span>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

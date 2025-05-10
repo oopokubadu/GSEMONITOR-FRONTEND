@@ -32,6 +32,7 @@ import { DialogTitle } from "@radix-ui/react-dialog"
 import { SearchInput } from "./search-input"
 import { useAuth } from "@/hooks/use-auth"
 import { useRouter } from "next/navigation"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -50,7 +51,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const { isSignedIn, isLoading } = useAuth()
   const router = useRouter()
-
+  const queryClient = useQueryClient()
+  
+  const handleLogout = () => {
+    console.log("Logging out...")
+    localStorage.removeItem("authToken")
+    sessionStorage.clear()
+    document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    queryClient.invalidateQueries({queryKey: ["authState"]})
+    // Redirect to the login or landing page
+    window.location.href = "/"
+  }
+  
   useEffect(() => {
     if (!isSignedIn && !isLoading) {
       router.push("/"); // Redirect unauthenticated users
@@ -119,17 +131,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: Settings,
     },
   ]
-
-  const handleLogout = () => {
-    console.log("Logging out...")
-    // Clear authentication token or user data
-    localStorage.removeItem("authToken") // Remove token from localStorage
-    sessionStorage.clear() // Optional: Clear session storage
-    // document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;" // Clear cookies if used
-  
-    // Redirect to the login or landing page
-    router.push("/");
-  }
 
   const Sidebar = () => (
     <div className={cn("flex flex-col h-full bg-card border-r overflow-hidden", collapsed ? "items-center" : "w-64")}>
