@@ -29,6 +29,8 @@ import { Progress } from "@/components/ui/progress"
 import { Switch } from "@/components/ui/switch"
 import { useSignUp } from "@/hooks/use-sign-up"
 import SuccessModal from "./success-modal"
+import { useSendOTP } from "@/hooks/use-send-otp"
+import { useVerifyOTP } from "@/hooks/use-verify-otp"
 
 
 interface OnboardingModalProps {
@@ -65,7 +67,8 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const { mutateAsync: signUp } = useSignUp()
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(true)
-
+  const { mutate: sendOTP } = useSendOTP()
+  const { mutate: verifyOTP } = useVerifyOTP()
 
   const totalSteps = 5
   const progress = (step / totalSteps) * 100
@@ -87,10 +90,17 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const handleSendOtp = () => {
     if (!formData.email) return
 
-    // In a real app, this would send an OTP to the user's email
-    setOtpSent(true)
-    // alert(`OTP sent to ${formData.email}. For demo purposes, use code: 123456`)
+    sendOTP(formData.email, {
+      onSuccess: () => {
+        console.log("OTP sent successfully!")
+        setOtpSent(true)
+      },
+      onError: () => {
+        console.error("Failed to send OTP.")
+      },
+    })
   }
+
 
   const handleOtpChange = (index, value) => {
     if (value.length > 1) {
@@ -111,18 +121,21 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const handleVerifyOtp = () => {
     setVerifying(true)
 
-    // In a real app, this would verify the OTP with a backend service
-    setTimeout(() => {
-      const enteredOtp = otp.join("")
-      // For demo purposes, any 6-digit code is accepted
-      if (enteredOtp.length === 6) {
-        setVerified(true)
-        setVerifying(false)
-      } else {
-        alert("Invalid OTP. Please try again.")
-        setVerifying(false)
+    verifyOTP(
+{ email: formData.email, otp: otp.join("") },
+      {
+        onSuccess: () => {
+          console.log("OTP verified successfully!")
+          setVerified(true)
+          setVerifying(false)
+        },
+        onError: () => {
+          setVerifying(false)
+          setVerified(false)
+          console.error("Failed to verify OTP.")
+        },
       }
-    }, 1500)
+    )
   }
 
   const nextStep = () => {
