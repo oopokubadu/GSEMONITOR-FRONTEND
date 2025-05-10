@@ -428,19 +428,28 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-3 min-[400px]:flex-row">
-                  <Button size="lg" className="gap-1 bg-primary hover:bg-primary/90 text-lg" onClick={openOnboarding}>
-                    Get started for free
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="gap-1 border-gray-700 hover:bg-gray-800 text-white text-lg"
-                    onClick={handleWatchDemo}
-                  >
-                    <PlayCircle className="h-4 w-4" />
-                    Watch demo
-                  </Button>
+                 {!isSignedIn
+                  ? <>
+                      <Button size="lg" className="gap-1 bg-primary hover:bg-primary/90 text-lg" onClick={openOnboarding}>
+                        Get started for free
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="gap-1 border-gray-700 hover:bg-gray-800 text-white text-lg"
+                        onClick={handleWatchDemo}
+                      >
+                        <PlayCircle className="h-4 w-4" />
+                        Watch demo
+                      </Button>
+                    </>
+                  : <Button size="lg" className="gap-1 bg-primary hover:bg-primary/90 text-lg" onClick={openOnboarding}>
+                      View Market Trends
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  }
+
                 </div>
                 <p className="text-gray-400">$0 forever, no credit card needed</p>
                 <div className="flex items-center gap-4 text-sm">
@@ -1196,6 +1205,14 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="mx-auto w-full max-w-sm space-y-2">
+                {
+                isSignedIn
+                ?
+                  <Button type="submit" className="bg-primary hover:bg-primary/90">
+                    Start Trading
+                  </Button>
+                :
+                <>
                 <form className="flex flex-col gap-2 sm:flex-row" onSubmit={handleEmailSubmit}>
                   <Input
                     type="email"
@@ -1225,6 +1242,8 @@ export default function LandingPage() {
                     Privacy Policy
                   </button>
                 </p>
+                </>
+                }
               </div>
               <div className="flex items-center gap-4 pt-4">
                 <div className="flex items-center gap-1">
