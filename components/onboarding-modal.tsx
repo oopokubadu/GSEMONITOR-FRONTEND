@@ -27,6 +27,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Switch } from "@/components/ui/switch"
+import { useSignUp } from "@/hooks/use-sign-up"
+import SuccessModal from "./success-modal"
+
 
 interface OnboardingModalProps {
   isOpen: boolean
@@ -52,6 +55,17 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const [otp, setOtp] = useState(["", "", "", "", "", ""])
   const [verifying, setVerifying] = useState(false)
   const [verified, setVerified] = useState(false)
+  const [validationErrors, setValidationErrors] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+  })
+  const { mutateAsync: signUp } = useSignUp()
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(true)
+
 
   const totalSteps = 5
   const progress = (step / totalSteps) * 100
@@ -75,7 +89,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
 
     // In a real app, this would send an OTP to the user's email
     setOtpSent(true)
-    alert(`OTP sent to ${formData.email}. For demo purposes, use code: 123456`)
+    // alert(`OTP sent to ${formData.email}. For demo purposes, use code: 123456`)
   }
 
   const handleOtpChange = (index, value) => {
@@ -113,18 +127,62 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
 
   const nextStep = () => {
     if (step === 2) {
-      if (!verified && formData.email) {
-        alert("Please verify your email before proceeding.")
+      const errors = {
+        fullName: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+      }
+  
+      // Validate Full Name
+      if (!formData.fullName) {
+        errors.fullName = "Full Name is required."
+      }
+  
+      // Validate Email
+      if (!formData.email) {
+        errors.email = "Email Address is required."
+      } else if (!verified) {
+        errors.email = "Please verify your email before proceeding."
+      }
+  
+      // Validate Phone
+      if (!formData.phone) {
+        errors.phone = "Phone Number is required."
+      }
+  
+      // Validate Password
+      if (!formData.password) {
+        errors.password = "Password is required."
+      } else if (formData.password.length < 8) {
+        errors.password = "Password must be at least 8 characters."
+      } else if (!/[A-Z]/.test(formData.password)) {
+        errors.password = "Password must contain at least one uppercase letter."
+      } else if (!/[0-9]/.test(formData.password)) {
+        errors.password = "Password must contain at least one number."
+      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+        errors.password = "Password must contain at least one special character."
+      }
+  
+      // Validate Confirm Password
+      if (!formData.confirmPassword) {
+        errors.confirmPassword = "Confirm Password is required."
+      } else if (formData.password !== formData.confirmPassword) {
+        errors.confirmPassword = "Passwords do not match."
+      }
+  
+      // Check if there are any errors
+      const hasErrors = Object.values(errors).some((error) => error !== "")
+      if (hasErrors) {
+        setValidationErrors(errors)
         return
       }
-
-      if (formData.password && formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match. Please check and try again.")
-        return
-      }
-    }
-
-    if (step < totalSteps) {
+  
+      // Clear errors and proceed to the next step
+      setValidationErrors({})
+      setStep(step + 1)
+    } else {
       setStep(step + 1)
     }
   }
@@ -135,10 +193,23 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
     }
   }
 
-  const completeOnboarding = () => {
-    // In a real app, this would save the user's preferences
-    alert("Onboarding completed! Your preferences have been saved.")
-    onClose()
+  const completeOnboarding = async () => {
+    try {
+      await signUp({
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        confirm_password: formData.confirmPassword,
+        trading_experience: formData.experience,
+        investment_goals: formData.investmentGoals,
+      }) // Pass transformed formData to the sign-up mutation
+      setShowOnboarding(false) // Hide onboarding modal
+      setIsSuccessModalOpen(true) // Show success modal on successful sign-up
+    } catch (error) {
+      console.error("Sign-up failed:", error)
+      alert("An error occurred during sign-up. Please try again.")
+    }
   }
 
   const handleInvestmentGoalToggle = (goalId) => {
@@ -159,6 +230,9 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   if (!isOpen) return null
 
   return (
+    <>
+    <SuccessModal isOpen={isSuccessModalOpen} onClose={() => setIsSuccessModalOpen(false)} />
+    {showOnboarding && 
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <div className="relative w-full max-w-4xl max-h-[90vh] overflow-auto rounded-lg bg-white dark:bg-black border border-gray-200 dark:border-gray-800">
         <Button
@@ -262,9 +336,15 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                     placeholder="Enter your full name"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
+                    className={`bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 ${
+                      validationErrors.fullName ? "border-red-500 focus-visible:ring-red-500" : ""
+                    }`}
                   />
+                  {validationErrors.fullName && (
+                    <p className="text-xs text-red-500">{validationErrors.fullName}</p>
+                  )}
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
                   <div className="flex gap-2">
@@ -275,7 +355,9 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                       placeholder="Enter your email address"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
+                      className={`bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 ${
+                        validationErrors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+                      }`}
                       disabled={verified}
                     />
                     {!otpSent && !verified && formData.email && (
@@ -289,6 +371,9 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                       </Button>
                     )}
                   </div>
+                  {validationErrors.email && (
+                    <p className="text-xs text-red-500">{validationErrors.email}</p>
+                  )}
                 </div>
 
                 {otpSent && !verified && (
@@ -333,13 +418,6 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                   </div>
                 )}
 
-                {verified && (
-                  <div className="flex items-center gap-2 mt-2 text-green-400">
-                    <Check className="h-5 w-5" />
-                    <span>Email verified successfully</span>
-                  </div>
-                )}
-
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
                   <Input
@@ -349,8 +427,13 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                     placeholder="Enter your phone number"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
+                    className={`bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 ${
+                      validationErrors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
+                    }`}
                   />
+                  {validationErrors.phone && (
+                    <p className="text-xs text-red-500">{validationErrors.phone}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -362,11 +445,13 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                     placeholder="Create a secure password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
+                    className={`bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 ${
+                      validationErrors.password ? "border-red-500 focus-visible:ring-red-500" : ""
+                    }`}
                   />
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Password must be at least 8 characters and include a number and special character
-                  </p>
+                  {validationErrors.password && (
+                    <p className="text-xs text-red-500">{validationErrors.password}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -379,56 +464,16 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     className={`bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 ${
-                      formData.confirmPassword && formData.password !== formData.confirmPassword
-                        ? "border-red-500 focus-visible:ring-red-500"
-                        : ""
+                      validationErrors.confirmPassword ? "border-red-500 focus-visible:ring-red-500" : ""
                     }`}
                   />
-                  {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                    <p className="text-xs text-red-500">Passwords do not match</p>
+                  {validationErrors.confirmPassword && (
+                    <p className="text-xs text-red-500">{validationErrors.confirmPassword}</p>
                   )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Trading Experience</Label>
-                  <RadioGroup
-                    value={formData.experience}
-                    onValueChange={(value) => setFormData((prev) => ({ ...prev, experience: value }))}
-                    className="grid grid-cols-3 gap-4 pt-2"
-                  >
-                    <div>
-                      <RadioGroupItem value="beginner" id="beginner" className="peer sr-only" />
-                      <Label
-                        htmlFor="beginner"
-                        className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-4 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                      >
-                        <span className="text-sm font-medium">Beginner</span>
-                      </Label>
-                    </div>
-                    <div>
-                      <RadioGroupItem value="intermediate" id="intermediate" className="peer sr-only" />
-                      <Label
-                        htmlFor="intermediate"
-                        className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-4 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                      >
-                        <span className="text-sm font-medium">Intermediate</span>
-                      </Label>
-                    </div>
-                    <div>
-                      <RadioGroupItem value="advanced" id="advanced" className="peer sr-only" />
-                      <Label
-                        htmlFor="advanced"
-                        className="flex flex-col items-center justify-between rounded-md border-2 border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-4 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                      >
-                        <span className="text-sm font-medium">Advanced</span>
-                      </Label>
-                    </div>
-                  </RadioGroup>
                 </div>
               </div>
             </div>
           )}
-
           {/* Step 3: Investment Goals */}
           {step === 3 && (
             <div className="space-y-6">
@@ -700,7 +745,8 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             ) : (
-              <Button className="bg-primary hover:bg-primary/90" onClick={completeOnboarding}>
+              <Button className="bg-primary hover:bg-primary/90" onClick={completeOnboarding}
+              >
                 Get Started
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
@@ -709,5 +755,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
         </div>
       </div>
     </div>
+    }
+    </>
   )
 }
