@@ -7,6 +7,10 @@ import { Label } from "@/components/ui/label"
 import { X } from "lucide-react"
 import { useSignIn } from "@/hooks/use-sign-in"
 import { useQueryClient } from "@tanstack/react-query"
+import { useSendOTP } from "@/hooks/use-send-otp"
+import { useCheckEmail } from "@/hooks/use-check-email"
+import { useVerifyOTP } from "@/hooks/use-verify-otp"
+import { useResetPassword } from "@/hooks/use-reset-password"
 
 interface LoginModalProps {
   isOpen: boolean
@@ -31,52 +35,77 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
+  const { mutate: sendOTP } = useSendOTP()
+  const { mutate: checkEmail } = useCheckEmail()
+  const { mutate: verifyOTP } = useVerifyOTP()
+  const { mutate: resetPassword } = useResetPassword()
 
-  
   const handleSendOTP = async () => {
     setIsSubmitting(true)
     setErrorMessage(null)
-
-    // Simulate API call to send OTP
-    setTimeout(() => {
-      if (formData.email === "test@example.com") {
-        setCurrentStep(2) // Move to Step 2: OTP Verification
-      } else {
+    if (!formData.email) return
+    
+    checkEmail(formData.email, {
+      onSuccess: () => {
+        sendOTP(formData.email, {
+          onSuccess: () => {
+            console.log("OTP sent successfully!")
+            setCurrentStep(2)
+          },
+          onError: () => {
+            setErrorMessage("Failed to send OTP. Please try again.")
+            console.error("Failed to send OTP.")
+          },
+        })
+      },
+      onError: () => {
         setErrorMessage("Email not found in our database.")
-      }
-      setIsSubmitting(false)
-    }, 1500)
+      },
+    })
+
+    setIsSubmitting(false)
   }
 
   const handleVerifyOTP = async () => {
     setIsSubmitting(true)
     setErrorMessage(null)
 
-    // Simulate API call to verify OTP
-    setTimeout(() => {
-      if (formData.otp === "123456") {
+    verifyOTP({ email: formData.email, otp: formData.otp }, {
+      onSuccess: () => {
+        console.log("OTP verified successfully!")
         setCurrentStep(3) // Move to Step 3: Create New Password
-      } else {
+      },
+      onError: () => {
         setErrorMessage("Invalid OTP. Please try again.")
-      }
-      setIsSubmitting(false)
-    }, 1500)
+        console.error("Failed to verify OTP.")
+      },
+    })
+
+    setIsSubmitting(false)
   }
 
   const handleResetPassword = async () => {
     setIsSubmitting(true)
     setErrorMessage(null)
 
-    // Simulate API call to reset password
-    setTimeout(() => {
-      if (formData.newPassword === formData.confirmPassword) {
+    if (formData.newPassword !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match.")
+      setIsSubmitting(false)
+      return
+    }
+    
+    resetPassword({ email: formData.email, password: formData.newPassword }, {
+      onSuccess: () => {
+        console.log("Password reset successfully!")
         alert("Password reset successfully!")
         onClose() // Close the modal
-      } else {
-        setErrorMessage("Passwords do not match.")
-      }
-      setIsSubmitting(false)
-    }, 1500)
+      },
+      onError: () => {
+        setErrorMessage("Failed to reset password. Please try again.")
+        console.error("Failed to reset password.")
+      },
+    })
+    setIsSubmitting(false)
   }
 
   const handleLogin = async () => {
