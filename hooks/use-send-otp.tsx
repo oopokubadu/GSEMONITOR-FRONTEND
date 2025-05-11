@@ -4,7 +4,7 @@ import axios from "axios"
 export function useSendOTP() {
   return useMutation({
     mutationFn: async (email: string) => {
-      const response = await axios.post(`https://gsemonitor.vercel.app/sendOTP`, { email })
+      const response = await axios.post(`https://gsemonitor.vercel.app/send_otp`, { email })
       return response.data
     },
     onSuccess: (data) => {
