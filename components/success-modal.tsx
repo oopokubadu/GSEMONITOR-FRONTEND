@@ -3,7 +3,12 @@ import { Button } from "./ui/button"
 import LoginModal from "./login-modal"
 import { useState } from "react"
 
-const SuccessModal = ({ isOpen, onClose }) => {
+interface SuccessModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const SuccessModal = ({ isOpen, onClose }: SuccessModalProps) => {
     const [openLogin, setOpenLogin] = useState(false)
     if (!isOpen) return null
   

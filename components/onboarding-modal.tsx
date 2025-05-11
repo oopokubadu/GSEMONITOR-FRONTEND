@@ -21,7 +21,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -40,7 +39,18 @@ interface OnboardingModalProps {
 
 export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
   const [step, setStep] = useState(1)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    fullName: string
+    email: string
+    phone: string
+    password: string
+    confirmPassword: string
+    experience: string
+    investmentGoals: string[]
+    preferredBroker: string
+    notifications: boolean
+    marketUpdates: boolean
+  }>({
     fullName: "",
     email: "",
     phone: "",
@@ -73,7 +83,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const totalSteps = 5
   const progress = (step / totalSteps) * 100
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
@@ -83,7 +93,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
     }
   }
 
-  const handleSwitchChange = (name, checked) => {
+  const handleSwitchChange = (name: string, checked: boolean) => {
     setFormData((prev) => ({ ...prev, [name]: checked }))
   }
 
@@ -102,13 +112,13 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   }
 
 
-  const handleOtpChange = (index, value) => {
+  const handleOtpChange = (index: number, value: string | any[]) => {
     if (value.length > 1) {
       value = value.slice(0, 1)
     }
 
     const newOtp = [...otp]
-    newOtp[index] = value
+    newOtp[index] = typeof value === "string" ? value : ""
     setOtp(newOtp)
 
     // Auto-focus next input
@@ -193,7 +203,13 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
       }
   
       // Clear errors and proceed to the next step
-      setValidationErrors({})
+      setValidationErrors({
+        fullName: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+      })
       setStep(step + 1)
     } else {
       setStep(step + 1)
@@ -225,7 +241,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
     }
   }
 
-  const handleInvestmentGoalToggle = (goalId) => {
+  const handleInvestmentGoalToggle = (goalId: string) => {
     setFormData((prev) => {
       const investmentGoals = [...prev.investmentGoals]
       const goalIndex = investmentGoals.indexOf(goalId)
@@ -269,7 +285,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                 Step {step} of {totalSteps}
               </Badge>
             </div>
-            <Progress value={progress} className="h-1 bg-gray-200 dark:bg-gray-800" indicatorClassName="bg-primary" />
+            <Progress value={progress} className="h-1 bg-gray-200 dark:bg-gray-800 bg-primary" />
           </div>
 
           {/* Step 1: Welcome */}
