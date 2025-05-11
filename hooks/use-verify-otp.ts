@@ -4,7 +4,7 @@ import axios from "axios"
 export function useVerifyOTP() {
   return useMutation({
     mutationFn: async ({ email, otp }: { email: string; otp: string }) => {
-      const response = await axios.post(`${process.env.BASE_URL}/verifyOTP`, { email, otp })
+      const response = await axios.post(`https://gsemonitor.vercel.app/verify_otp`, { email, otp })
       return response.data
     },
     onSuccess: (data) => {
