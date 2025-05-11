@@ -97,26 +97,26 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       label: "Watchlist",
       icon: BarChart3,
     },
-    {
-      href: "/portfolio",
-      label: "Portfolio",
-      icon: PieChart,
-    },
-    {
-      href: "/trade",
-      label: "Trade",
-      icon: CreditCard,
-    },
-    {
-      href: "/news",
-      label: "News",
-      icon: Globe,
-    },
-    {
-      href: "/education",
-      label: "Education",
-      icon: BookOpen,
-    },
+    // {
+    //   href: "/portfolio",
+    //   label: "Portfolio",
+    //   icon: PieChart,
+    // },
+    // {
+    //   href: "/trade",
+    //   label: "Trade",
+    //   icon: CreditCard,
+    // },
+    // {
+    //   href: "/news",
+    //   label: "News",
+    //   icon: Globe,
+    // },
+    // {
+    //   href: "/education",
+    //   label: "Education",
+    //   icon: BookOpen,
+    // },
   ]
 
   const accountNavItems: NavItem[] = [

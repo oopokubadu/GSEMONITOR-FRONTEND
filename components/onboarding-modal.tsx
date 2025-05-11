@@ -80,7 +80,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const { mutate: sendOTP } = useSendOTP()
   const { mutate: verifyOTP } = useVerifyOTP()
 
-  const totalSteps = 5
+  const totalSteps = 4
   const progress = (step / totalSteps) * 100
 
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
@@ -563,7 +563,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
           )}
 
           {/* Step 4: Connect Broker */}
-          {step === 4 && (
+          {/* {step === 4 && (
             <div className="space-y-6">
               <div className="text-center space-y-2">
                 <h2 className="text-3xl font-bold">Connect Your Broker</h2>
@@ -672,10 +672,10 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                 </Tabs>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Step 5: Preferences & Finish */}
-          {step === 5 && (
+          {step === 4 && (
             <div className="space-y-6">
               <div className="text-center space-y-2">
                 <h2 className="text-3xl font-bold">Almost Done!</h2>

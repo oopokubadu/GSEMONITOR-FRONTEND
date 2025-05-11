@@ -535,9 +535,9 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2">
               {/* Market Indices */}
-              <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
+              {/* <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <BarChart4 className="h-5 w-5 text-primary" />
@@ -559,7 +559,7 @@ export default function LandingPage() {
                     ))}
                   </div>
                 </CardContent>
-              </Card>
+              </Card> */}
 
               {/* Top Gainers */}
               <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
@@ -889,7 +889,7 @@ export default function LandingPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
+              {/* <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
                 <CardHeader className="pb-2">
                   <Wallet className="h-10 w-10 text-primary" />
                   <CardTitle className="mt-4">Portfolio Tracking</CardTitle>
@@ -899,7 +899,7 @@ export default function LandingPage() {
                     Monitor your investments with real-time portfolio valuation and performance analytics.
                   </p>
                 </CardContent>
-              </Card>
+              </Card> */}
               <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
                 <CardHeader className="pb-2">
                   <Newspaper className="h-10 w-10 text-primary" />
@@ -911,7 +911,7 @@ export default function LandingPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
+              {/* <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
                 <CardHeader className="pb-2">
                   <BookOpen className="h-10 w-10 text-primary" />
                   <CardTitle className="mt-4">Educational Resources</CardTitle>
@@ -921,13 +921,13 @@ export default function LandingPage() {
                     Learn to trade with our comprehensive library of tutorials, guides, and webinars.
                   </p>
                 </CardContent>
-              </Card>
+              </Card> */}
             </div>
           </div>
         </section>
 
         {/* Community Section */}
-        <section id="community" className="border-t border-gray-200 dark:border-gray-800 py-20 md:py-24 lg:py-32">
+        {/* <section id="community" className="border-t border-gray-200 dark:border-gray-800 py-20 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -1133,7 +1133,7 @@ export default function LandingPage() {
               </Card>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* FAQ Section */}
         <section id="faq" className="border-t border-gray-200 dark:border-gray-800 py-20 md:py-24 lg:py-32">
@@ -1215,7 +1215,7 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="border-t border-gray-200 dark:border-gray-800 bg-gradient-to-r from-gray-100 to-white dark:from-gray-900 dark:to-black py-20 md:py-24 lg:py-32">
+        {/* <section className="border-t border-gray-200 dark:border-gray-800 bg-gradient-to-r from-gray-100 to-white dark:from-gray-900 dark:to-black py-20 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -1277,7 +1277,7 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
 
       {/* Footer */}
@@ -1372,7 +1372,7 @@ export default function LandingPage() {
                     Features
                   </button>
                 </li>
-                <li>
+                {/* <li>
                   <button
                     onClick={() => scrollToSection("platform")}
                     className="text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
@@ -1387,7 +1387,7 @@ export default function LandingPage() {
                   >
                     Community
                   </button>
-                </li>
+                </li> */}
                 <li>
                   <button onClick={() => scrollToSection("faq")} className="text-sm text-gray-400 hover:text-white">
                     FAQ
@@ -1406,7 +1406,7 @@ export default function LandingPage() {
                     About Us
                   </button>
                 </li>
-                <li>
+                {/* <li>
                   <button
                     onClick={() => alert("Careers page coming soon!")}
                     className="text-sm text-gray-400 hover:text-white"
@@ -1429,7 +1429,7 @@ export default function LandingPage() {
                   >
                     Press
                   </button>
-                </li>
+                </li> */}
                 <li>
                   <button
                     onClick={() => alert("Contact page coming soon!")}
