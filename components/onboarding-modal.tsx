@@ -98,6 +98,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   }
 
   const handleSendOtp = () => {
+
     if (!formData.email) return
 
     sendOTP(formData.email, {
@@ -131,18 +132,30 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const handleVerifyOtp = () => {
     setVerifying(true)
 
-    verifyOTP(
-{ email: formData.email, otp: otp.join("") },
+    verifyOTP({ email: formData.email, otp: otp.join("") },
       {
         onSuccess: () => {
           console.log("OTP verified successfully!")
           setVerified(true)
           setVerifying(false)
+          setValidationErrors({
+            fullName: "",
+            email: "",
+            phone: "",
+            password: "",
+            confirmPassword: "",
+          })
         },
         onError: () => {
           setVerifying(false)
           setVerified(false)
-          console.error("Failed to verify OTP.")
+          setValidationErrors({
+            fullName: "",
+            email: "Code is incorrect.",
+            phone: "",
+            password: "",
+            confirmPassword: "",
+          })
         },
       }
     )
@@ -169,6 +182,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
       } else if (!verified) {
         errors.email = "Please verify your email before proceeding."
       }
+      
   
       // Validate Phone
       if (!formData.phone) {
