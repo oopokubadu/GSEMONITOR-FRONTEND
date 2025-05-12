@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowDown, ArrowUp, Bell, BellOff, Edit, MoreHorizontal, Plus, Trash2, Clock } from "lucide-react"
+import { PlusCircleIcon, ArrowDown, ArrowUp, Bell, BellOff, Edit, MoreHorizontal, Plus, Trash2, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -26,12 +26,14 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 import { StockChart } from "@/components/stock-chart"
+import { useDashboardData } from "@/hooks/use-dashboard-data"
+import { useGetProfile } from "@/hooks/use-get-profile"
 
 // Sample watchlist data
 const defaultWatchlists = [
   {
     id: 1,
-    name: "My Watchlist",
+    name: "Watchlist",
     stocks: [
       {
         symbol: "GCB",
@@ -70,119 +72,49 @@ const defaultWatchlists = [
         alerts: false,
       },
     ],
-  },
-  {
-    id: 2,
-    name: "Financial Stocks",
-    stocks: [
-      {
-        symbol: "GCB",
-        name: "GCB Bank Ltd",
-        price: 5.25,
-        change: 0.15,
-        changePercent: 2.94,
-        isPositive: true,
-        alerts: true,
-      },
-      {
-        symbol: "EGH",
-        name: "Ecobank Ghana",
-        price: 7.5,
-        change: 0.2,
-        changePercent: 2.74,
-        isPositive: true,
-        alerts: false,
-      },
-      {
-        symbol: "SOGEGH",
-        name: "Societe Generale Ghana",
-        price: 1.05,
-        change: -0.02,
-        changePercent: 1.87,
-        isPositive: false,
-        alerts: false,
-      },
-      {
-        symbol: "CAL",
-        name: "CAL Bank Limited",
-        price: 0.85,
-        change: -0.03,
-        changePercent: 3.41,
-        isPositive: false,
-        alerts: true,
-      },
-      {
-        symbol: "SCB",
-        name: "Standard Chartered Bank",
-        price: 21.5,
-        change: 0.5,
-        changePercent: 2.38,
-        isPositive: true,
-        alerts: false,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Consumer Goods",
-    stocks: [
-      {
-        symbol: "GGBL",
-        name: "Guinness Ghana Breweries",
-        price: 2.15,
-        change: 0.05,
-        changePercent: 2.38,
-        isPositive: true,
-        alerts: false,
-      },
-      {
-        symbol: "BOPP",
-        name: "Benso Oil Palm Plantation",
-        price: 3.7,
-        change: -0.08,
-        changePercent: 2.12,
-        isPositive: false,
-        alerts: true,
-      },
-      {
-        symbol: "UNIL",
-        name: "Unilever Ghana",
-        price: 6.1,
-        change: 0.12,
-        changePercent: 2.01,
-        isPositive: true,
-        alerts: false,
-      },
-      {
-        symbol: "FML",
-        name: "Fan Milk Limited",
-        price: 3.2,
-        change: 0.08,
-        changePercent: 2.56,
-        isPositive: true,
-        alerts: true,
-      },
-    ],
-  },
+  }
 ]
 
 export function WatchlistContent() {
   const [watchlists, setWatchlists] = useState(defaultWatchlists)
   const [activeWatchlist, setActiveWatchlist] = useState(watchlists[0])
-  const [selectedStock, setSelectedStock] = useState(watchlists[0].stocks[0])
+  const [selectedStock, setSelectedStock] = useState(watchlists[0]?.stocks[0])
   const [newWatchlistName, setNewWatchlistName] = useState("")
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false)
   const [editingWatchlistId, setEditingWatchlistId] = useState<number | null>(null)
   const [editingWatchlistName, setEditingWatchlistName] = useState("")
+  const { data: dashboardData = [], isLoading, isError } = useDashboardData()
+  const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error } = useGetProfile()
   
-  useEffect(() => {
-    if (watchlists.length > 0) {
-      setActiveWatchlist(watchlists[0])
-      setSelectedStock(watchlists[0].stocks[0])
-    }
-  }, [watchlists])
-
+    // Load watchlists from profile
+    useEffect(() => {
+      if (profile && profile.watchlist) {
+        const formattedWatchlists = profile.watchlist.map((list: any, index: number) => ({
+          id: index + 1, // Generate a unique ID for each watchlist
+          name: list.name,
+          stocks: list.tickers.map((ticker: string) => {
+            const stockData = dashboardData.find((stock) => stock.symbol === ticker.toUpperCase())
+            return {
+              symbol: ticker.toUpperCase(),
+              name: stockData?.name || ticker.toUpperCase(), // Use dashboardData name or fallback to ticker
+              price: stockData?.price || 0, // Use dashboardData price or fallback to 0
+              change: stockData?.change || 0, // Use dashboardData change or fallback to 0
+              changePercent: stockData?.changePercent || 0, // Use dashboardData changePercent or fallback to 0
+              isPositive: stockData?.isPositive ?? true, // Use dashboardData isPositive or fallback to true
+              alerts: false, // Default alerts to false
+            }
+          }),
+        }))
+        setWatchlists(formattedWatchlists)
+        if (formattedWatchlists.length > 0) {
+          setActiveWatchlist(formattedWatchlists[0])
+          if (formattedWatchlists[0].stocks.length > 0) {
+            setSelectedStock(formattedWatchlists[0].stocks[0])
+          }
+        }
+      }
+    }, [profile, dashboardData])
 
   const handleAddWatchlist = () => {
     if (newWatchlistName.trim()) {
@@ -348,6 +280,14 @@ export function WatchlistContent() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => {
+                              
+                            }}
+                          >
+                            <PlusCircleIcon className="mr-2 h-4 w-4" />
+                            Add
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
                               setEditingWatchlistId(list.id)
                               setEditingWatchlistName(list.name)
                               setIsRenameDialogOpen(true)
@@ -442,7 +382,7 @@ export function WatchlistContent() {
         </div>
 
         <div className="flex-1">
-          {selectedStock && (
+          {watchlists[0]?.stocks.length > 0 && selectedStock && (
             <Card className="h-full">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="flex flex-col space-y-1">
@@ -490,38 +430,38 @@ export function WatchlistContent() {
                 </div>
               </CardHeader>
               <CardContent>
-                <Tabs defaultValue="1D" className="w-full">
+                <Tabs defaultValue="1M" className="w-full">
                   <div className="flex justify-between items-center mb-4">
-                    {/* <TabsList>
+                    <TabsList>
                       <TabsTrigger value="1D">1D</TabsTrigger>
                       <TabsTrigger value="1W">1W</TabsTrigger>
                       <TabsTrigger value="1M">1M</TabsTrigger>
                       <TabsTrigger value="3M">3M</TabsTrigger>
                       <TabsTrigger value="1Y">1Y</TabsTrigger>
                       <TabsTrigger value="ALL">ALL</TabsTrigger>
-                    </TabsList> */}
+                    </TabsList>
                     <div className="flex items-center text-xs text-muted-foreground">
                       <Clock className="h-3 w-3 mr-1" />
                       Last updated: 15:30 GMT
                     </div>
                   </div>
                   <TabsContent value="1D">
-                    <StockChart period="1D" />
+                    <StockChart ticker={selectedStock.symbol} period="1D" />
                   </TabsContent>
                   <TabsContent value="1W">
-                    <StockChart period="1W" />
+                    <StockChart ticker={selectedStock.symbol} period="1W" />
                   </TabsContent>
                   <TabsContent value="1M">
-                    <StockChart period="1M" />
+                    <StockChart ticker={selectedStock.symbol} period="1M" />
                   </TabsContent>
                   <TabsContent value="3M">
-                    <StockChart period="3M" />
+                    <StockChart ticker={selectedStock.symbol} period="3M" />
                   </TabsContent>
                   <TabsContent value="1Y">
-                    <StockChart period="1Y" />
+                    <StockChart ticker={selectedStock.symbol} period="1Y" />
                   </TabsContent>
                   <TabsContent value="ALL">
-                    <StockChart period="ALL" />
+                    <StockChart ticker={selectedStock.symbol} period="ALL" />
                   </TabsContent>
                 </Tabs>
               </CardContent>
