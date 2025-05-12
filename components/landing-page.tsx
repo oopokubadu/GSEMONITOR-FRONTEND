@@ -172,7 +172,7 @@ export default function LandingPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-72 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 p-2">
                 <div className="grid gap-2">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">Partner Brokers</div>
+                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">Contact Brokers</div>
                   {[
                     { id: "databank", name: "Databank", logo: "/placeholder.svg?key=xmhc7" },
                     { id: "ic-securities", name: "IC Securities", logo: "/placeholder.svg?key=x5zhc" },
@@ -199,7 +199,7 @@ export default function LandingPage() {
                       </div>
                     </DropdownMenuItem>
                   ))}
-                  <Separator className="my-1 bg-gray-200 dark:bg-gray-800" />
+                  {/* <Separator className="my-1 bg-gray-200 dark:bg-gray-800" />
                   <DropdownMenuItem
                     className="flex items-center gap-2 focus:bg-gray-100 dark:focus:bg-gray-800 rounded-md cursor-pointer"
                     onClick={() => scrollToSection("broker-comparison")}
@@ -213,16 +213,16 @@ export default function LandingPage() {
                   >
                     <UserPlus className="h-4 w-4 text-primary" />
                     <span>Open Account</span>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
-            <button
+            {/* <button
               onClick={() => scrollToSection("community")}
               className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >
               Community
-            </button>
+            </button> */}
           </nav>
 
           <div className="flex items-center gap-4">
@@ -425,7 +425,7 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="relative overflow-hidden py-20 md:py-28 lg:py-32">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-transparent z-10"></div>
+            <div className="absolute inset-0 dark:bg-gradient-to-r from-black via-black/90 to-transparent z-10"></div>
             <Image
               src="/placeholder.svg?key=1w578"
               alt="Background"
@@ -675,7 +675,7 @@ export default function LandingPage() {
                           onClick={() => alert(`Details for ${stock.name} coming soon!`)}
                         >
                           <td className="py-3 px-4 font-medium">{stock.symbol}</td>
-                          <td className="py-3 px-4 text-gray-300">{stock.name}</td>
+                          <td className="py-3 px-4 text-gray-400">{stock.name}</td>
                           <td className="py-3 px-4 text-right">{stock.price}</td>
                           <td className="py-3 px-4 text-right">
                             <span className={stock.change.startsWith("+") ? "text-green-400" : "text-red-400"}>
@@ -713,10 +713,10 @@ export default function LandingPage() {
             </div>
             <div className="mx-auto mt-12 max-w-6xl">
               <Tabs defaultValue="charts" className="w-full" onValueChange={handleTabChange}>
-                <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 bg-gray-100 dark:bg-gray-900 p-1">
+                {/* <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 bg-gray-100 dark:bg-gray-900 p-1">
                   <TabsTrigger
                     value="charts"
-                    className="data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-800"
+                    // className="data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-800"
                   >
                     Charts
                   </TabsTrigger>
@@ -726,7 +726,7 @@ export default function LandingPage() {
                   <TabsTrigger value="trading" className="data-[state=active]:bg-gray-800">
                     Trading
                   </TabsTrigger>
-                </TabsList>
+                </TabsList> */}
                 <TabsContent value="charts" className="mt-6">
                   <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg">
                     <div className="relative">
@@ -749,20 +749,20 @@ export default function LandingPage() {
                         <div className="rounded-lg bg-gray-100 dark:bg-gray-800 p-3 text-center">
                           <span className="text-sm font-medium">50+ Indicators</span>
                         </div>
-                        <div className="rounded-lg bg-gray-800 p-3 text-center">
+                        <div className="rounded-lg bg-gray-100 dark:bg-gray-800 p-3 text-center">
                           <span className="text-sm font-medium">Drawing Tools</span>
                         </div>
-                        <div className="rounded-lg bg-gray-800 p-3 text-center">
+                        <div className="rounded-lg bg-gray-100 dark:bg-gray-800 p-3 text-center">
                           <span className="text-sm font-medium">Multiple Timeframes</span>
                         </div>
-                        <div className="rounded-lg bg-gray-800 p-3 text-center">
+                        <div className="rounded-lg bg-gray-100 dark:bg-gray-800 p-3 text-center">
                           <span className="text-sm font-medium">Pattern Recognition</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </TabsContent>
-                <TabsContent value="screener" className="mt-6">
+                {/* <TabsContent value="screener" className="mt-6">
                   <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg">
                     <div className="relative">
                       <Image
@@ -831,7 +831,7 @@ export default function LandingPage() {
                       </div>
                     </div>
                   </div>
-                </TabsContent>
+                </TabsContent> */}
               </Tabs>
             </div>
           </div>
@@ -855,7 +855,7 @@ export default function LandingPage() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
+            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 md:grid-cols-2 md:gap-10 lg:grid-cols-2">
               <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
                 <CardHeader className="pb-2">
                   <LineChart className="h-10 w-10 text-primary" />
@@ -1155,14 +1155,14 @@ export default function LandingPage() {
                   <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
                     How do I open an account?
                   </AccordionTrigger>
-                  <AccordionContent className="text-gray-600 dark:text-gray-400">
+                  <AccordionContent className="text-gray-400">
                     To open an account, click on the "Get Started" button at the top of the page. You'll need to provide
                     some basic information and verify your email address. Once your account is created, you'll need to
                     complete your profile and link your brokerage account to start trading.
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2" className="border-gray-800">
-                  <AccordionTrigger className="text-white hover:text-primary">
+                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
                     What are the minimum system requirements?
                   </AccordionTrigger>
                   <AccordionContent className="text-gray-400">
@@ -1172,7 +1172,7 @@ export default function LandingPage() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-3" className="border-gray-800">
-                  <AccordionTrigger className="text-white hover:text-primary">
+                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
                     How real-time is your market data?
                   </AccordionTrigger>
                   <AccordionContent className="text-gray-400">
@@ -1182,7 +1182,7 @@ export default function LandingPage() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-4" className="border-gray-800">
-                  <AccordionTrigger className="text-white hover:text-primary">
+                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
                     Can I trade directly through your platform?
                   </AccordionTrigger>
                   <AccordionContent className="text-gray-400">
@@ -1192,7 +1192,7 @@ export default function LandingPage() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-5" className="border-gray-800">
-                  <AccordionTrigger className="text-white hover:text-primary">Is my data secure?</AccordionTrigger>
+                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">Is my data secure?</AccordionTrigger>
                   <AccordionContent className="text-gray-400">
                     Yes, we take security very seriously. All data is encrypted using industry-standard protocols, and
                     we employ multiple layers of security to protect your personal and financial information. We are
@@ -1200,7 +1200,7 @@ export default function LandingPage() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-6" className="border-gray-800">
-                  <AccordionTrigger className="text-white hover:text-primary">
+                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
                     Can I cancel my subscription?
                   </AccordionTrigger>
                   <AccordionContent className="text-gray-400">
