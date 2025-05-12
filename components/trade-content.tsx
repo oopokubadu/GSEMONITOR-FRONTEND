@@ -75,7 +75,7 @@ export function TradeContent() {
   const [quantity, setQuantity] = useState("100")
   const [orderType, setOrderType] = useState("market")
   const [limitPrice, setLimitPrice] = useState(selectedStock.price.toString())
-  const [cashBalance] = useState(12500)
+  // const [cashBalance] = useState(12500)
 
   const filteredStocks = stocks.filter(
     (stock) =>

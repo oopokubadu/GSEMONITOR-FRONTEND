@@ -33,10 +33,10 @@ export function TradePanel({ stock }: TradePanelProps) {
   return (
     <Tabs defaultValue="buy" className="w-full">
       <TabsList className="grid w-full grid-cols-2 mb-4">
-        <TabsTrigger value="buy" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+        <TabsTrigger value="buy" className="data-[state=active]:bg-gray-500 data-[state=active]:text-white">
           Buy
         </TabsTrigger>
-        <TabsTrigger value="sell" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
+        <TabsTrigger value="sell" className="data-[state=active]:bg-gray-500 data-[state=active]:text-white">
           Sell
         </TabsTrigger>
       </TabsList>
@@ -89,7 +89,7 @@ export function TradePanel({ stock }: TradePanelProps) {
             <span className="text-muted-foreground">Estimated Total:</span>
             <span className="font-medium">₵{calculateTotal()}</span>
           </div>
-          <Button className="w-full bg-green-500 hover:bg-green-600">Buy {stock?.symbol}</Button>
+          <Button className="w-full bg-gray-500 hover:bg-gray-600">Buy {stock?.symbol}</Button>
         </div>
       </TabsContent>
 
@@ -142,7 +142,7 @@ export function TradePanel({ stock }: TradePanelProps) {
             <span className="text-muted-foreground">Estimated Total:</span>
             <span className="font-medium">₵{calculateTotal()}</span>
           </div>
-          <Button className="w-full bg-red-500 hover:bg-red-600">Sell {stock?.symbol}</Button>
+          <Button className="w-full bg-gray-500 hover:bg-gray-600">Sell {stock?.symbol}</Button>
         </div>
       </TabsContent>
     </Tabs>
