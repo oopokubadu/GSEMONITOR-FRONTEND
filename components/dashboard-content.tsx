@@ -16,7 +16,7 @@ export function DashboardContent() {
   const [activeStock, setActiveStock] = useState(() => dashboardData[0] || null)
   const [filteredStocks, setFilteredStocks] = useState(dashboardData)
   const [activeFilter, setActiveFilter] = useState("All") // Track the active filter
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState("1D") // Default period is 1D
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("1M") // Default period is 1D
 
   // Update activeStock and filteredStocks when dashboardData changes
   useEffect(() => {
@@ -106,7 +106,7 @@ export function DashboardContent() {
             </CardHeader>
             <CardContent>
               <Tabs
-                defaultValue="1D"
+                defaultValue="1M"
                 className="w-full"
                 onValueChange={setSelectedTimePeriod}
               >
