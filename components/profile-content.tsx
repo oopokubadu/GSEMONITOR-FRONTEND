@@ -7,9 +7,11 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
+import { useUpdateProfile } from "@/hooks/use-update-profile"
 
 export default function ProfilePage() {
   const { data: profile, isLoading, isError, error } = useGetProfile()
+  const { mutate: updateProfile } = useUpdateProfile()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     full_name: profile?.full_name || "",
@@ -19,15 +21,21 @@ export default function ProfilePage() {
     investment_goals: profile?.investment_goals || [],
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSave = () => {
-    // Save logic here (e.g., API call to update profile)
-    console.log("Profile saved:", formData)
-    setIsEditing(false)
+    updateProfile(formData, {
+      onSuccess: () => {
+        console.log("Profile updated successfully")
+        setIsEditing(false)
+      },
+      onError: () => {
+        console.error("Failed to update profile")
+      },
+    })
   }
 
   if (isLoading) {
@@ -78,19 +86,26 @@ export default function ProfilePage() {
             </div>
             <div>
               <Label htmlFor="trading_experience">Trading Experience</Label>
-              <Input
+              <br/>
+              <select
                 id="trading_experience"
                 name="trading_experience"
                 value={formData.trading_experience}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-              />
+                className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-md p-2 w-full"
+              >
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+                <option value="veteran">Veteran</option>
+              </select>
             </div>
           </div>
           <div>
             <Label>Investment Goals</Label>
             <div className="flex flex-wrap gap-2">
-              {formData.investment_goals.map((goal, index) => (
+              {formData.investment_goals.map((goal: any, index: any) => (
                 <Badge key={index} variant="outline">
                   {goal}
                 </Badge>
