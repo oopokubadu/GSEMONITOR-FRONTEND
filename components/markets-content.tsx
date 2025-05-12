@@ -52,7 +52,7 @@ const chartTypes: { id: "candle" | "line"; name: string; icon: typeof BarChart2 
 export function MarketsContent() {
   const { data: dashboardData = [], isLoading, isError } = useDashboardData()
   const [selectedTicker, setSelectedTicker] = useState("gcb")
-  const [chartTimeframe, setChartTimeframe] = useState("1D")
+  const [chartTimeframe, setChartTimeframe] = useState("1M")
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">("line")
   const [activeIndicators, setActiveIndicators] = useState(technicalIndicators.filter((i) => i.active).map((i) => i.id))
