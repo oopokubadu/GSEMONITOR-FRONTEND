@@ -179,6 +179,11 @@ export function CandlestickChart({
       const chart = await initializeChart()
       if (!chart) return
 
+      // const totalCandles = chartData?.length ?? 0;
+      // const start = totalCandles - (currentPage * candlesPerPage);
+      // const end = start + candlesPerPage;
+
+
       const start = currentPage * candlesPerPage
       const end = start + candlesPerPage
       const paginatedData = (chartData ?? [])
