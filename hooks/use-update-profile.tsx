@@ -12,7 +12,8 @@ export function useUpdateProfile() {
     onSuccess: () => {
       console.log("Profile updated successfully")
       // Invalidate or refetch the profile query to ensure updated data
-      queryClient.invalidateQueries({queryKey: ["userProfile"]})
+      queryClient.refetchQueries({queryKey: ["userProfile"]})
+      // Optionally, you can invalidate the query to force a refetch
     },
     onError: (error) => {
       console.error("Failed to update profile:", error)

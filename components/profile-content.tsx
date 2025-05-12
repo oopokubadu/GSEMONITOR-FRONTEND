@@ -14,11 +14,11 @@ export default function ProfilePage() {
   const { mutate: updateProfile } = useUpdateProfile()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
-    full_name: profile?.full_name || "",
-    email: profile?.email || "",
-    phone: profile?.phone || "",
-    trading_experience: profile?.trading_experience || "",
-    investment_goals: profile?.investment_goals || [],
+    full_name: profile?.full_name ?? "",
+    email: profile?.email ?? "",
+    phone: profile?.phone ?? "",
+    trading_experience: profile?.trading_experience ?? "",
+    investment_goals: profile?.investment_goals ?? [],
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -36,14 +36,6 @@ export default function ProfilePage() {
         console.error("Failed to update profile")
       },
     })
-  }
-
-  if (isLoading) {
-    return <p>Loading profile...</p>
-  }
-
-  if (isError) {
-    return <p>Error fetching profile: {error.message}</p>
   }
 
   return (
