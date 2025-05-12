@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "@/components/ui/chart"
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 interface StockChartProps {
   period: "1D" | "1W" | "1M" | "3M" | "1Y" | "ALL"
@@ -68,6 +68,7 @@ const generateStockData = (period: StockChartProps["period"]) => {
       break
   }
 
+  console.log("Generated stock data:", dataPoints)
   return dataPoints
 }
 
