@@ -4,7 +4,9 @@ import axios from "axios"
 export function useCheckEmail() {
   return useMutation({
     mutationFn: async (email: string) => {
-      const response = await axios.post(`https://gsemonitor.vercel.app/user`, { email })
+      const response = await axios.get(`https://gsemonitor.vercel.app/user`, {
+        params: { email }, // Include the email in the request body
+      })
       return response.data
     },
     onSuccess: (data) => {
