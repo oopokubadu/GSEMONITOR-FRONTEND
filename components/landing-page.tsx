@@ -636,7 +636,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                     variant="outline"
                     size="sm"
                     className="border-gray-700 hover:bg-gray-800 text-black dark:text-white"
-                    onClick={() => window.location.href = "/markets"}
+                    onClick={() => isSignedIn ? window.location.href = "/markets": setLoginOpen(true)}
                   >
                     View All
                   </Button>
