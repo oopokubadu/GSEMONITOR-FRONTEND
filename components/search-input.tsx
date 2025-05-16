@@ -1,24 +1,22 @@
 import { useState, useEffect } from "react"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { useDashboardData } from "@/hooks/use-dashboard-data"
+import { useAuth } from "@/hooks/use-auth"
 
 export function SearchInput() {
   const [query, setQuery] = useState("")
+  const { data: dashboardData = [] } = useDashboardData()
   const [results, setResults] = useState<string[]>([]) // Replace `string[]` with your actual data type
   const [isTyping, setIsTyping] = useState(false)
+  const { isSignedIn, isLoading } = useAuth()
 
   // Simulate fetching search results
-  const fetchResults = async (searchQuery: string) => {
+  const fetchResults = (searchQuery: string) => {
     // Simulate an API call
-    return new Promise<string[]>((resolve) => {
-      setTimeout(() => {
-        if (searchQuery === "notfound") {
-          resolve([]) // Simulate no results
-        } else {
-          resolve([]) // Simulate results
-        }
-      }, 500) // Simulate network delay
-    })
+    return dashboardData
+      .filter(x => JSON.stringify(x).includes(searchQuery))
+      .map(x => `${x.name}:${x.symbol}`)
   }
 
   // Handle input change
@@ -36,13 +34,20 @@ export function SearchInput() {
     }
 
     const timeoutId = setTimeout(async () => {
-      const fetchedResults = await fetchResults(query)
+      const fetchedResults = fetchResults(query)
       setResults(fetchedResults)
       setIsTyping(false)
     }, 500) // Wait 500ms after the user stops typing
 
     return () => clearTimeout(timeoutId) // Cleanup timeout
   }, [query])
+
+  const checkandRedirect = (e: any) => {
+    const res = e.target.innerHTML?.split(":")[1]
+    if(isSignedIn){
+        window.location.href = `/dashboard?stock=${res}`
+      }
+  }
 
   return (
     <div className="relative">
@@ -52,7 +57,7 @@ export function SearchInput() {
         placeholder="Search GSE Trader"
         value={query}
         onChange={handleInputChange}
-        className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
+        className="w-full appearance-none bg-background pl-8 shadow-none"
       />
       {query && (
         <div className="absolute left-0 right-0 mt-2 bg-card border rounded-md shadow-lg z-10">
@@ -61,7 +66,7 @@ export function SearchInput() {
           ) : results.length > 0 ? (
             <ul className="divide-y divide-muted-foreground">
               {results.map((result, index) => (
-                <li key={index} className="p-4 hover:bg-muted cursor-pointer">
+                <li key={index} onClick={checkandRedirect} className="p-4 hover:bg-muted cursor-pointer">
                   {result}
                 </li>
               ))}
