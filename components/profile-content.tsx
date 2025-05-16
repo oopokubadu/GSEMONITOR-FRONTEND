@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useUpdateProfile } from "@/hooks/use-update-profile"
 
 export default function ProfilePage() {
-  const { data: profile, isLoading, isError, error } = useGetProfile()
+  const { data: profile} = useGetProfile()
   const { mutate: updateProfile } = useUpdateProfile()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
@@ -20,6 +20,16 @@ export default function ProfilePage() {
     trading_experience: profile?.trading_experience ?? "",
     investment_goals: profile?.investment_goals ?? [],
   })
+
+  useEffect(() => {
+    setFormData({
+      full_name: profile?.full_name,
+      email: profile?.email,
+      phone: profile?.phone,
+      trading_experience: profile?.trading_experience,
+      investment_goals: profile?.investment_goals,
+    });
+  }, [profile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
