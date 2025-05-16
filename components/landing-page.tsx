@@ -45,9 +45,10 @@ import LoginModal from "./login-modal"
 import { useQueryClient } from "@tanstack/react-query"
 import { useDashboardData } from "@/hooks/use-dashboard-data"
 import { SearchInput } from "./search-input"
-import hero from "@/assets/hero.jpg"
+import hero from "@/assets/hero_opt.webp"
 import charts from "@/assets/chart.png"
 import logo from "@/assets/gselogo.png"
+import logoblack from "@/assets/gselogoblack.png"
 
 export default function LandingPage() {
   const { theme, setTheme } = useTheme()
@@ -160,7 +161,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <Image src={logo} alt="gse logo" width={100}/>
+              <Image src={theme == "dark" ? logo : logoblack} alt="gse logo" width={100}/>
             </Link>
           </div>
 
@@ -269,7 +270,6 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
             </DropdownMenu>
 
             <div className="hidden md:flex gap-2">
-              
               {
                 isSignedIn ?
                 <>
@@ -323,7 +323,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
           <div className="container flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
               <Link href="/" className="flex items-center gap-2">
-              <Image src={logo} alt="gse logo" width={100}/>
+              <Image src={theme == "dark" ? logo : logoblack} alt="gse logo" width={100}/>
               </Link>
             </div>
             <Button variant="ghost" size="icon" className="text-gray-300" onClick={() => setMobileMenuOpen(false)}>
@@ -453,7 +453,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                     The best trades on the Ghana Stock Exchange require research, then commitment.
                   </p>
                 </div>
-                <div className="flex flex-col gap-3 min-[400px]:flex-row">
+                <div className="flex flex-col gap-3 min-[500px]:flex-row">
                  {!isSignedIn
                   ? <>
                       <Button size="lg" className="gap-1 bg-primary hover:bg-primary/90 text-lg" onClick={openOnboarding}>
@@ -1289,7 +1289,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <Link href="/" className="flex items-center gap-2">
-                <Image src={logo} alt="gse logo" width={100}/>
+                <Image src={theme == "dark" ? logo : logoblack} alt="gse logo" width={140}/>
               </Link>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 The leading trading platform for the Ghana Stock Exchange, providing real-time data, advanced charts,
