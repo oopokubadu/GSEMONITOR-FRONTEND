@@ -65,6 +65,7 @@ export function SearchInput() {
             <div className="p-4 text-sm text-muted-foreground">Searching...</div>
           ) : results.length > 0 ? (
             <ul className="divide-y divide-muted-foreground">
+              {!isSignedIn && <li>Sign In To Analyze</li>}
               {results.map((result, index) => (
                 <li key={index} onClick={checkandRedirect} className="p-4 hover:bg-muted cursor-pointer">
                   {result}
