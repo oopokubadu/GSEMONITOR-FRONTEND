@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowDown, ArrowUp, Clock, Filter, Info, MoreHorizontal, RefreshCw, Search } from "lucide-react"
+import { ArrowDown, ArrowUp, Clock, Filter, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -12,19 +12,21 @@ import { CandlestickChart } from "@/components/candlestick-chart"
 import { useDashboardData } from "@/hooks/use-dashboard-data"
 
 export function DashboardContent() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const parameterValue = urlParams.get("stock");
   const { data: dashboardData = [], isLoading, isError } = useDashboardData()
   const [activeStock, setActiveStock] = useState(() => dashboardData[0] || null)
   const [filteredStocks, setFilteredStocks] = useState(dashboardData)
-  const [activeFilter, setActiveFilter] = useState("All") // Track the active filter
+  const [activeFilter, setActiveFilter] = useState("Gainers") // Track the active filter
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("1M") // Default period is 1D
 
   // Update activeStock and filteredStocks when dashboardData changes
   useEffect(() => {
     if (dashboardData.length > 0) {
-      setActiveStock(dashboardData[0])
+      setActiveStock(dashboardData.find(x => x.symbol == parameterValue) || dashboardData[0])
       setFilteredStocks(dashboardData)
     }
-  }, [dashboardData])
+  }, [dashboardData, parameterValue])
 
   // Sort stocks by gainers
   const handleGainers = () => {
