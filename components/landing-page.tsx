@@ -463,7 +463,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                       <Button
                         size="lg"
                         variant="outline"
-                        className="gap-1 border-gray-700 hover:bg-gray-800 text-white text-lg"
+                        className="gap-1 border-gray-700 hover:bg-gray-800 text-black dark:text-white text-lg"
                         onClick={handleWatchDemo}
                       >
                         <PlayCircle className="h-4 w-4" />
