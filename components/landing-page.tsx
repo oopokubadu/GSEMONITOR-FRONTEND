@@ -60,8 +60,9 @@ export default function LandingPage() {
   const [onboardingOpen, setOnboardingOpen] = useState(false)
   const { data: dashboardData = [] } = useDashboardData()
   const [loginOpen, setLoginOpen] = useState(false)
-  const { isSignedIn, isLoading } = useAuth()
+  const { isSignedIn } = useAuth()
   const queryClient = useQueryClient()
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,6 +71,10 @@ export default function LandingPage() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleTabChange = (value: SetStateAction<string>) => {
     setActiveTab(value)
@@ -161,7 +166,11 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <Image src={theme == "dark" ? logo : logoblack} alt="gse logo" width={100}/>
+            {
+              mounted && (
+                <Image src={theme === "dark" ? logo : logoblack} alt="gse logo" width={100} />
+              )
+            }
             </Link>
           </div>
 
@@ -323,7 +332,11 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
           <div className="container flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
               <Link href="/" className="flex items-center gap-2">
-              <Image src={theme == "dark" ? logo : logoblack} alt="gse logo" width={100}/>
+              {
+                mounted && (
+                  <Image src={theme === "dark" ? logo : logoblack} alt="gse logo" width={100} />
+                )
+              }
               </Link>
             </div>
             <Button variant="ghost" size="icon" className="text-gray-300" onClick={() => setMobileMenuOpen(false)}>
@@ -1289,7 +1302,11 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <Link href="/" className="flex items-center gap-2">
-                <Image src={theme == "dark" ? logo : logoblack} alt="gse logo" width={140}/>
+              {
+                mounted && (
+                  <Image src={theme === "dark" ? logo : logoblack} alt="gse logo" width={100} />
+                )
+              }
               </Link>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 The leading trading platform for the Ghana Stock Exchange, providing real-time data, advanced charts,
