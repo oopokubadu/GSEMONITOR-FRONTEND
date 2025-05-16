@@ -1,4 +1,4 @@
-import { CreditCard, LogOut, Settings, User } from "lucide-react"
+import { CreditCard, LogOut, Settings, User, Home } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -48,10 +48,15 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => window.location.href = "/profile"}>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => window.location.href = "/"}>
+            <Home className="mr-2 h-4 w-4" />
+            <span>Home</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => window.location.href = "/profile"}>
+          <User className="mr-2 h-4 w-4" />
+          <span>Profile</span>
+        </DropdownMenuItem>
           {/* <DropdownMenuItem>
             <CreditCard className="mr-2 h-4 w-4" />
             <span>Billing</span>
