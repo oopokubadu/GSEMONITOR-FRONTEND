@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
+  Home,
   BarChart3,
   BookOpen,
   ChevronLeft,
@@ -82,6 +83,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Navigation items
   const mainNavItems: NavItem[] = [
+    {
+      href: "/",
+      label: "Home",
+      icon: Home,
+    },
     {
       href: "/dashboard",
       label: "Dashboard",
