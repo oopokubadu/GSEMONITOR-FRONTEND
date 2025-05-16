@@ -43,6 +43,11 @@ import OnboardingModal from "@/components/onboarding-modal"
 import { useAuth } from "@/hooks/use-auth"
 import LoginModal from "./login-modal"
 import { useQueryClient } from "@tanstack/react-query"
+import { useDashboardData } from "@/hooks/use-dashboard-data"
+import { SearchInput } from "./search-input"
+import hero from "@/assets/hero.jpg"
+import charts from "@/assets/chart.png"
+import logo from "@/assets/gselogo.png"
 
 export default function LandingPage() {
   const { theme, setTheme } = useTheme()
@@ -51,6 +56,7 @@ export default function LandingPage() {
   const [activeTab, setActiveTab] = useState("charts")
   const [email, setEmail] = useState("")
   const [onboardingOpen, setOnboardingOpen] = useState(false)
+  const { data: dashboardData = [] } = useDashboardData()
   const [loginOpen, setLoginOpen] = useState(false)
   const { isSignedIn, isLoading } = useAuth()
   const queryClient = useQueryClient()
@@ -106,16 +112,32 @@ export default function LandingPage() {
   }
 
   // Mock stock data
-  const stockData = [
-    { symbol: "GCB", name: "GCB Bank Ltd", price: "5.23", change: "+0.15", percentChange: "+2.95%" },
-    { symbol: "MTNGH", name: "MTN Ghana", price: "1.17", change: "+0.02", percentChange: "+1.74%" },
-    { symbol: "SOGEGH", name: "Societe Generale Ghana", price: "0.98", change: "-0.01", percentChange: "-1.01%" },
-    { symbol: "EGH", name: "Ecobank Ghana", price: "7.50", change: "+0.10", percentChange: "+1.35%" },
-    { symbol: "TOTAL", name: "Total Petroleum Ghana", price: "4.30", change: "-0.05", percentChange: "-1.15%" },
-    { symbol: "FML", name: "Fan Milk Ltd", price: "2.10", change: "+0.08", percentChange: "+3.96%" },
-    { symbol: "GOIL", name: "Ghana Oil Company", price: "1.65", change: "+0.03", percentChange: "+1.85%" },
-    { symbol: "UNIL", name: "Unilever Ghana", price: "5.85", change: "-0.10", percentChange: "-1.68%" },
-  ]
+  const stockData = dashboardData.map(({ symbol, name, price, change, changePercent }) => ({
+    symbol,
+    name,
+    price: price.toFixed(2), // Ensures price formatting consistency
+    change: change >= 0 ? `+${change}` : `${change}`, // Formats change with a "+" if positive
+    percentChange: changePercent >= 0 ? `+${changePercent}%` : `${changePercent}%` // Adds percentage sign
+  }));
+
+  const topLosers = stockData
+                      .filter((stock) => stock.change.startsWith("-"))
+                      .toSorted(
+                        (a, b) =>
+                          Number.parseFloat(b.percentChange.replace("-", "").replace("%", "")) -
+                          Number.parseFloat(a.percentChange.replace("-", "").replace("%", "")),
+                      )
+                      .slice(0, 3)
+const topGainers = stockData
+                      .filter((stock) => stock.change.startsWith("+"))
+                      .toSorted(
+                        (a, b) =>
+                          Number.parseFloat(b.percentChange.replace("+", "").replace("%", "")) -
+                          Number.parseFloat(a.percentChange.replace("+", "").replace("%", "")),
+                      )
+                      .slice(0, 3)
+
+const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replace("%", "") > topLosers[0]?.percentChange?.replace("-", "")?.replace("%", "")
 
   // Mock market indices
   const marketIndices = [
@@ -137,20 +159,12 @@ export default function LandingPage() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <BarChart3 className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">GSE Trader</span>
+              <Image src={logo} alt="gse logo" width={100}/>
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-              <Input
-                type="search"
-                placeholder="Search..."
-                className="w-[200px] pl-9 bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-sm focus-visible:ring-primary"
-              />
-            </div>
+          <div className="hidden md:flex items-center gap-4 pl-2 pr-2">
+              <SearchInput/>
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -250,9 +264,6 @@ export default function LandingPage() {
                 className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
               >
                 <DropdownMenuItem className="focus:bg-gray-100 dark:focus:bg-gray-800">English</DropdownMenuItem>
-                <DropdownMenuItem className="focus:bg-gray-100 dark:focus:bg-gray-800">Twi</DropdownMenuItem>
-                <DropdownMenuItem className="focus:bg-gray-100 dark:focus:bg-gray-800">Ga</DropdownMenuItem>
-                <DropdownMenuItem className="focus:bg-gray-100 dark:focus:bg-gray-800">Ewe</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -311,8 +322,7 @@ export default function LandingPage() {
           <div className="container flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
               <Link href="/" className="flex items-center gap-2">
-                <BarChart3 className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold">GSE Trader</span>
+              <Image src={logo} alt="gse logo" width={100}/>
               </Link>
             </div>
             <Button variant="ghost" size="icon" className="text-gray-300" onClick={() => setMobileMenuOpen(false)}>
@@ -338,32 +348,37 @@ export default function LandingPage() {
             <div className="space-y-3">
               <p className="text-lg font-medium text-gray-600 dark:text-gray-300">Brokers</p>
               <div className="pl-4 space-y-2">
-                <button
-                  onClick={() => scrollToSection("partner-brokers")}
-                  className="block text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-left w-full"
-                >
-                  Partner Brokers
-                </button>
-                <button
-                  onClick={() => scrollToSection("broker-comparison")}
-                  className="block text-base text-gray-400 hover:text-white text-left w-full"
-                >
-                  Broker Comparison
-                </button>
-                <button
-                  onClick={() => alert("Open Account feature coming soon!")}
-                  className="block text-base text-gray-400 hover:text-white text-left w-full"
-                >
-                  Open Account
-                </button>
+                <div className="grid gap-2">
+                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">Contact Brokers</div>
+                  {[
+                    { id: "databank", name: "Databank", logo: "/placeholder.svg?key=xmhc7" },
+                    { id: "ic-securities", name: "IC Securities", logo: "/placeholder.svg?key=x5zhc" },
+                    { id: "black-star", name: "Black Star Brokerage", logo: "/placeholder.svg?key=o2g9t" },
+                    { id: "ecobank", name: "Ecobank Securities", logo: "/placeholder.svg?key=vwcbw" },
+                    { id: "cal-brokers", name: "CAL Brokers", logo: "/placeholder.svg?key=pdkbd" },
+                  ].map((broker) => (
+                    <div
+                      key={broker.id}
+                      className="flex items-center gap-3 p-2 focus:bg-gray-100 dark:focus:bg-gray-800 rounded-md cursor-pointer"
+                      onClick={() => alert(`${broker.name} details coming soon!`)}
+                    >
+                      <div className="h-8 w-8 rounded-md overflow-hidden bg-white flex items-center justify-center flex-shrink-0">
+                        <Image
+                          src={broker.logo || "/placeholder.svg"}
+                          alt={broker.name}
+                          width={32}
+                          height={32}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{broker.name}</p>
+                      </div>
+                    </div>
+                  ))}
+                  </div>
               </div>
             </div>
-            <button
-              onClick={() => scrollToSection("community")}
-              className="text-lg font-medium text-gray-300 hover:text-white text-left"
-            >
-              Community
-            </button>
             <Separator className="bg-gray-200 dark:bg-gray-800" />
             <div className="flex items-center gap-4">
               <Button
@@ -386,9 +401,6 @@ export default function LandingPage() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-gray-900 border-gray-800">
                   <DropdownMenuItem className="focus:bg-gray-800">English</DropdownMenuItem>
-                  <DropdownMenuItem className="focus:bg-gray-800">Twi</DropdownMenuItem>
-                  <DropdownMenuItem className="focus:bg-gray-800">Ga</DropdownMenuItem>
-                  <DropdownMenuItem className="focus:bg-gray-800">Ewe</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -426,13 +438,13 @@ export default function LandingPage() {
         <section className="relative overflow-hidden py-20 md:py-28 lg:py-32">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 dark:bg-gradient-to-r from-black via-black/90 to-transparent z-10"></div>
-            <Image
-              src="/placeholder.svg?key=1w578"
+            {/* <Image
+              src={hero}
               alt="Background"
               fill
               className="object-cover opacity-40"
               priority
-            />
+            /> */}
           </div>
           <div className="container relative z-10 px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
@@ -471,22 +483,22 @@ export default function LandingPage() {
                   }
 
                 </div>
-                <p className="text-gray-400">$0 forever, no credit card needed</p>
+                <p className="text-gray-400">Access live GSE market data at no charge</p>
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-1">
                     <Shield className="h-4 w-4 text-primary" />
-                    <span>Secure & Regulated</span>
+                    <span>Secure & Reliable</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Users className="h-4 w-4 text-primary" />
-                    <span>10,000+ Traders</span>
+                    <span>30+ Listed Companies</span>
                   </div>
                 </div>
               </div>
               <div className="hidden lg:flex items-center justify-center lg:justify-end">
                 <div className="relative w-full max-w-[600px] overflow-hidden rounded-lg border border-gray-800 bg-gray-900 shadow-xl">
                   <Image
-                    src="/placeholder.svg?key=438zg"
+                    src={hero}
                     width={800}
                     height={600}
                     alt="GSE Trading Platform Dashboard"
@@ -495,9 +507,15 @@ export default function LandingPage() {
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
+                      { 
+                        isBestPormingGain ?
                         <Badge variant="secondary" className="bg-green-900/50 text-green-400 border-green-700">
-                          GSE: +1.25%
-                        </Badge>
+                          {topGainers[0]?.symbol}:{topGainers[0]?.percentChange}
+                        </Badge> :
+                        <Badge variant="secondary" className="bg-green-900/50 text-green-400 border-green-700">
+                        {topLosers[0]?.symbol}:{topLosers[0]?.percentChange}
+                      </Badge>
+                        }
                         <Badge variant="secondary" className="bg-blue-900/50 text-blue-400 border-blue-700">
                           Live Data
                         </Badge>
@@ -571,15 +589,7 @@ export default function LandingPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {stockData
-                      .filter((stock) => stock.change.startsWith("+"))
-                      .sort(
-                        (a, b) =>
-                          Number.parseFloat(b.percentChange.replace("+", "").replace("%", "")) -
-                          Number.parseFloat(a.percentChange.replace("+", "").replace("%", "")),
-                      )
-                      .slice(0, 3)
-                      .map((stock) => (
+                    {topGainers.map((stock) => (
                         <div key={stock.symbol} className="flex items-center justify-between">
                           <div>
                             <div className="font-medium">{stock.symbol}</div>
@@ -605,14 +615,7 @@ export default function LandingPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {stockData
-                      .filter((stock) => stock.change.startsWith("-"))
-                      .sort(
-                        (a, b) =>
-                          Number.parseFloat(b.percentChange.replace("-", "").replace("%", "")) -
-                          Number.parseFloat(a.percentChange.replace("-", "").replace("%", "")),
-                      )
-                      .slice(0, 3)
+                    {topLosers
                       .map((stock) => (
                         <div key={stock.symbol} className="flex items-center justify-between">
                           <div>
@@ -638,8 +641,8 @@ export default function LandingPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-gray-700 hover:bg-gray-800 text-white"
-                    onClick={() => alert("Full stock list coming soon!")}
+                    className="border-gray-700 hover:bg-gray-800 text-black dark:text-white"
+                    onClick={() => window.location.href = "/markets"}
                   >
                     View All
                   </Button>
@@ -668,7 +671,13 @@ export default function LandingPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {stockData.map((stock) => (
+                      {
+                      stockData
+                      .sort((a, b) =>
+                          Number.parseFloat(b.percentChange.replace("-", "").replace("%", "").replace("+", "")) -
+                          Number.parseFloat(a.percentChange.replace("-", "").replace("%", "").replace("+", "")),
+                      )
+                      .splice(0, 10).map((stock) => (
                         <tr
                           key={stock.symbol}
                           className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 cursor-pointer"
@@ -731,7 +740,7 @@ export default function LandingPage() {
                   <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg">
                     <div className="relative">
                       <Image
-                        src="/placeholder.svg?key=g8b8t"
+                        src={charts}
                         width={1200}
                         height={600}
                         alt="Advanced Chart"
@@ -1286,8 +1295,7 @@ export default function LandingPage() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <Link href="/" className="flex items-center gap-2">
-                <BarChart3 className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold">GSE Trader</span>
+                <Image src={logo} alt="gse logo" width={100}/>
               </Link>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 The leading trading platform for the Ghana Stock Exchange, providing real-time data, advanced charts,
