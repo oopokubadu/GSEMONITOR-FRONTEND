@@ -331,14 +331,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
             </Button>
           </div>
           <nav className="container grid gap-6 py-6">
-            <div className="relative mb-4">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-              <Input
-                type="search"
-                placeholder="Search..."
-                className="w-full pl-9 bg-gray-100 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-sm"
-              />
-            </div>
+            <SearchInput/>
             <button
               onClick={() => scrollToSection("market-data")}
               className="text-lg font-medium text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-left"
