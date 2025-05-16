@@ -52,6 +52,7 @@ import logo from "@/assets/gselogo.png"
 export default function LandingPage() {
   const { theme, setTheme } = useTheme()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [showBrokers, setShowBrokers] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeTab, setActiveTab] = useState("charts")
   const [email, setEmail] = useState("")
@@ -342,8 +343,8 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <p className="text-lg font-medium text-gray-600 dark:text-gray-300">Brokers</p>
               <div className="pl-4 space-y-2">
                 <div className="grid gap-2">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">Contact Brokers</div>
-                  {[
+                  <div onClick={() => setShowBrokers(!showBrokers)} className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">{showBrokers ? "Hide" : "Show"} Brokers</div>
+                  {showBrokers && [
                     { id: "databank", name: "Databank", logo: "/placeholder.svg?key=xmhc7" },
                     { id: "ic-securities", name: "IC Securities", logo: "/placeholder.svg?key=x5zhc" },
                     { id: "black-star", name: "Black Star Brokerage", logo: "/placeholder.svg?key=o2g9t" },
@@ -402,7 +403,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               isSignedIn ?
                 <Button
                     variant="outline"
-                    className="w-full border-gray-700 hover:bg-gray-800 text-white"
+                    className="w-full border-gray-700 hover:bg-gray-800 text-black dark:text-white"
                     onClick={() => window.location.href = "/dashboard"}
                   >
                   Go to My Dashboard
@@ -411,7 +412,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <>
                 <Button
                   variant="outline"
-                  className="w-full border-gray-700 hover:bg-gray-800 text-white"
+                  className="w-full border-gray-700 hover:bg-gray-800  text-black dark:text-white"
                   onClick={openLogin}
                 >
                   Log In
