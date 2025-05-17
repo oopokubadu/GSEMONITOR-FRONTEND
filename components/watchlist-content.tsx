@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { PlusCircleIcon, ArrowDown, ArrowUp, Bell, BellOff, Edit, MoreHorizontal, Plus, Trash2, Clock } from "lucide-react"
+import { PlusCircleIcon, ArrowDown, ArrowUp, Bell, BellOff, Edit, MoreHorizontal, Plus, Trash2, Clock, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -28,47 +28,22 @@ import { cn } from "@/lib/utils"
 import { StockChart } from "@/components/stock-chart"
 import { useDashboardData } from "@/hooks/use-dashboard-data"
 import { useGetProfile } from "@/hooks/use-get-profile"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { useUpdateProfile } from "@/hooks/use-update-profile"
 
 // Sample watchlist data
 const defaultWatchlists = [
   {
     id: 1,
-    name: "Watchlist",
+    name: "WatchList Loading",
     stocks: [
       {
-        symbol: "GCB",
-        name: "GCB Bank Ltd",
-        price: 5.25,
-        change: 0.15,
-        changePercent: 2.94,
+        symbol: "",
+        name: "",
+        price: 0.0,
+        change: 0.0,
+        changePercent: 0.0,
         isPositive: true,
-        alerts: true,
-      },
-      {
-        symbol: "MTNGH",
-        name: "MTN Ghana",
-        price: 1.12,
-        change: 0.04,
-        changePercent: 3.7,
-        isPositive: true,
-        alerts: false,
-      },
-      {
-        symbol: "EGH",
-        name: "Ecobank Ghana",
-        price: 7.5,
-        change: 0.2,
-        changePercent: 2.74,
-        isPositive: true,
-        alerts: true,
-      },
-      {
-        symbol: "TOTAL",
-        name: "Total Petroleum Ghana",
-        price: 4.3,
-        change: -0.1,
-        changePercent: 2.27,
-        isPositive: false,
         alerts: false,
       },
     ],
@@ -78,14 +53,19 @@ const defaultWatchlists = [
 export function WatchlistContent() {
   const [watchlists, setWatchlists] = useState(defaultWatchlists)
   const [activeWatchlist, setActiveWatchlist] = useState(watchlists[0])
-  const [selectedStock, setSelectedStock] = useState(watchlists[0]?.stocks[0])
+  console.log(watchlists)
+  const [selectedStock, setSelectedStock] = useState(watchlists[0]?.stocks && watchlists[0]?.stocks[0])
   const [newWatchlistName, setNewWatchlistName] = useState("")
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false)
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false)
   const [editingWatchlistId, setEditingWatchlistId] = useState<number | null>(null)
   const [editingWatchlistName, setEditingWatchlistName] = useState("")
+  const [selectedTicker, setSelectedTicker] = useState("")
+  const [saved, setSaved] = useState(true)
   const { data: dashboardData = [], isLoading, isError } = useDashboardData()
-  const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error } = useGetProfile()
+  const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error } = useGetProfile();
+  const { mutate: updateProfile } = useUpdateProfile();
   
     // Load watchlists from profile
     useEffect(() => {
@@ -93,7 +73,7 @@ export function WatchlistContent() {
         const formattedWatchlists = profile.watchlist.map((list: any, index: number) => ({
           id: index + 1, // Generate a unique ID for each watchlist
           name: list.name,
-          stocks: list.tickers.map((ticker: string) => {
+          stocks: list.tickers?.map((ticker: string) => {
             const stockData = dashboardData.find((stock) => stock.symbol === ticker.toUpperCase())
             return {
               symbol: ticker.toUpperCase(),
@@ -109,7 +89,7 @@ export function WatchlistContent() {
         setWatchlists(formattedWatchlists)
         if (formattedWatchlists.length > 0) {
           setActiveWatchlist(formattedWatchlists[0])
-          if (formattedWatchlists[0].stocks.length > 0) {
+          if (formattedWatchlists[0]?.stocks?.length > 0) {
             setSelectedStock(formattedWatchlists[0].stocks[0])
           }
         }
@@ -124,9 +104,44 @@ export function WatchlistContent() {
         stocks: [],
       }
       setWatchlists([...watchlists, newWatchlist])
+      setSaved(false)
       setNewWatchlistName("")
       setIsAddDialogOpen(false)
     }
+  }
+
+  const saveActiveWatchlist = () => {
+    const formData = profile;
+
+    formData.watchlist = watchlists.map((list) => ({
+      name: list.name,
+      tickers: list.stocks?.map((stock) => stock.symbol.toLowerCase()) || [], 
+    }));
+    
+    if(!saved){
+      setSaved(true)
+      updateProfile(formData, {
+      onSuccess: () => {
+        console.log("Profile updated successfully")
+        },
+      onError: () => {
+        setSaved(false)
+        console.error("Failed to update profile")
+        },
+      })
+    }
+  }
+
+  const handleAddStocklist = () => {
+      const updatedWatchList =  watchlists.map((list) => {
+            return list.id === editingWatchlistId
+            ? { ...list, stocks: [...list.stocks ?? [], JSON.parse(selectedTicker)] }
+            : list
+        })
+        console.log("updatedWatchList", updatedWatchList)
+      setWatchlists(updatedWatchList)
+      setSaved(false)
+      setIsAddStockDialogOpen(false)
   }
 
   const handleRenameWatchlist = () => {
@@ -138,7 +153,7 @@ export function WatchlistContent() {
       if (activeWatchlist.id === editingWatchlistId) {
         setActiveWatchlist({ ...activeWatchlist, name: editingWatchlistName })
       }
-
+      setSaved(false)
       setIsRenameDialogOpen(false)
     }
   }
@@ -150,6 +165,8 @@ export function WatchlistContent() {
     if (activeWatchlist.id === id && updatedWatchlists.length > 0) {
       setActiveWatchlist(updatedWatchlists[0])
     }
+
+    setSaved(false)
   }
 
   const toggleStockAlert = (symbol: string) => {
@@ -178,6 +195,7 @@ export function WatchlistContent() {
     if (updatedStocks.length > 0 && selectedStock.symbol === symbol) {
       setSelectedStock(updatedStocks[0])
     }
+    setSaved(false)
   }
 
   return (
@@ -185,8 +203,10 @@ export function WatchlistContent() {
       <div className="flex flex-col md:flex-row gap-4 lg:gap-6">
         <div className="w-full md:w-80 lg:w-96 flex flex-col gap-4">
           <Card>
+            {!saved && <center><sub className="text-red-500">Unsaved Changes will Be lost</sub></center>}
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-lg">My Watchlists</CardTitle>
+              <div>
               <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogTrigger asChild>
                   <Button variant="outline" size="icon">
@@ -217,7 +237,41 @@ export function WatchlistContent() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-
+               <Button variant="outline" size="icon" className={!saved ? "bg-red-500 ml-2" : 'bg-green-500 ml-2'} onClick={saveActiveWatchlist}>
+                    <Save/>
+              </Button>
+              <Dialog open={isAddStockDialogOpen} onOpenChange={setIsAddStockDialogOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add Stock to Watchlist</DialogTitle>
+                    <DialogDescription>Select a stock to add</DialogDescription>
+                  </DialogHeader>
+                  <Select onValueChange={setSelectedTicker}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select ticker" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dashboardData
+                      // profile?.watchlist[list.id - 1].tickers
+                      .filter((stock) =>
+                        editingWatchlistId !== null &&
+                        !profile?.watchlist[editingWatchlistId - 1]?.tickers?.includes(stock.symbol.toLowerCase())
+                      )
+                      .map((stock) => (
+                        <SelectItem key={stock.symbol.toLowerCase()} value={JSON.stringify(stock)}>
+                          {stock.symbol} - {stock.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsAddStockDialogOpen(false)}>
+                      Close
+                    </Button>
+                    <Button onClick={handleAddStocklist}>Add to Watchlist</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
               <Dialog open={isRenameDialogOpen} onOpenChange={setIsRenameDialogOpen}>
                 <DialogContent>
                   <DialogHeader>
@@ -242,6 +296,7 @@ export function WatchlistContent() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+              </div>
             </CardHeader>
             <CardContent>
               <Tabs
@@ -250,8 +305,8 @@ export function WatchlistContent() {
                   const selected = watchlists.find((list) => list.id.toString() === value)
                   if (selected) {
                     setActiveWatchlist(selected)
-                    if (selected.stocks.length > 0) {
-                      setSelectedStock(selected.stocks[0])
+                    if (selected?.stocks?.length > 0) {
+                      setSelectedStock(selected?.stocks[0])
                     }
                   }
                 }}
@@ -264,7 +319,6 @@ export function WatchlistContent() {
                     </TabsTrigger>
                   ))}
                 </TabsList>
-
                 {watchlists.map((list) => (
                   <TabsContent key={list.id} value={list.id.toString()} className="m-0">
                     <div className="flex justify-between items-center mb-4">
@@ -280,7 +334,9 @@ export function WatchlistContent() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => {
-                              
+                              setEditingWatchlistId(list.id)
+                              setEditingWatchlistName(list.name)
+                              setIsAddStockDialogOpen(!isAddDialogOpen)
                             }}
                           >
                             <PlusCircleIcon className="mr-2 h-4 w-4" />
@@ -305,8 +361,8 @@ export function WatchlistContent() {
                     </div>
 
                     <div className="space-y-1">
-                      {list.stocks.length > 0 ? (
-                        list.stocks.map((stock) => (
+                      {list.stocks?.length > 0 ? (
+                        list.stocks?.map((stock) => (
                           <div
                             key={stock.symbol}
                             className={cn(
@@ -382,7 +438,7 @@ export function WatchlistContent() {
         </div>
 
         <div className="flex-1">
-          {watchlists[0]?.stocks.length > 0 && selectedStock && (
+          {watchlists[0]?.stocks?.length > 0 && selectedStock && (
             <Card className="h-full">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="flex flex-col space-y-1">
@@ -424,12 +480,13 @@ export function WatchlistContent() {
                       </>
                     )}
                   </Button>
-                  <Button variant="outline" size="sm">
-                    Trade
-                  </Button>
+                  {/* <Button variant="outline" size="sm">
+                    Trade (Coming Soon)
+                  </Button> */}
                 </div>
               </CardHeader>
-              <CardContent>
+              {
+              selectedStock.symbol.length > 0 && <CardContent>
                 <Tabs defaultValue="1M" className="w-full">
                   <div className="flex justify-between items-center mb-4">
                     <TabsList>
@@ -465,6 +522,7 @@ export function WatchlistContent() {
                   </TabsContent>
                 </Tabs>
               </CardContent>
+              }
             </Card>
           )}
         </div>
