@@ -27,6 +27,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   })
   const [currentStep, setCurrentStep] = useState(1) // Step 1: Email, Step 2: OTP, Step 3: New Password
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [didForgotPassword, setDidForgotPassword] = useState(false)
   const { mutate: signIn } = useSignIn()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isForgotPassword, setIsForgotPassword] = useState(false) // State to toggle modal content
@@ -97,8 +98,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     resetPassword({ email: formData.email, password: formData.newPassword }, {
       onSuccess: () => {
         console.log("Password reset successfully!")
-        alert("Password reset successfully!")
-        onClose() // Close the modal
+        setDidForgotPassword(true)
+        setIsForgotPassword(false)
       },
       onError: () => {
         setErrorMessage("Failed to reset password. Please try again.")
@@ -111,6 +112,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleLogin = async () => {
     setIsSubmitting(true)
     setErrorMessage(null)
+    setDidForgotPassword(false)
     signIn(formData, {
       onSuccess: () => {
         queryClient.refetchQueries({queryKey: ["authState"]}) // Invalidate user data
@@ -305,7 +307,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <div className="p-4">
               <div>
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold">Welcome Back</h2>
+                <h2 className="text-2xl font-bold">{didForgotPassword ? "Password Resetted" : "Welcome Back"}</h2>
                 <p className="text-gray-600 dark:text-gray-400">Log in to your account</p>
               </div>
 
