@@ -23,7 +23,7 @@ export function CandlestickChart({
   period,
   chartType,
   containerClassName = "h-400 w-full",
-  candlesPerPage = 100, // Default to 50 candles per page
+  candlesPerPage = 300, // Default to 50 candles per page
   isHorizontalToolActive = false, // Add this prop
   isVerticalToolActive = false,
   isFullScreen = false,
@@ -36,8 +36,7 @@ export function CandlestickChart({
   const { theme } = useTheme()
   const { data: chartData, isLoading, isError } = useChartData(ticker, period)
 
-  const [currentPage, setCurrentPage] = useState(0) // Track the current page
-
+  const [currentPage, setCurrentPage] = useState(1) // Track the current page
 
   // Initialize the chart
   const initializeChart = async () => {
@@ -183,12 +182,14 @@ export function CandlestickChart({
       // const start = totalCandles - (currentPage * candlesPerPage);
       // const end = start + candlesPerPage;
 
+      const lengthOfDataToShow = candlesPerPage * currentPage 
+      const chartLength = chartData?.length 
 
-      const start = currentPage * candlesPerPage
-      const end = start + candlesPerPage
+      const start = chartLength && lengthOfDataToShow > chartLength ? 0 : lengthOfDataToShow;
+      const end = chartData?.length
       const paginatedData = (chartData ?? [])
         .slice(start, end)
-        .filter((item) => item.date && item.open && item.high && item.low && item.close)
+        // .filter((item) => item.date && item.open && item.high && item.low && item.close)
         .map((item) => ({
           time: item.date,
           open: item.open,
