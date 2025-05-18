@@ -245,7 +245,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
         password: formData.password,
         confirm_password: formData.confirmPassword,
         trading_experience: formData.experience,
-        investment_goals: formData.investmentGoals,
+        investment_goals: formData.investmentGoals ?? [],
       }) // Pass transformed formData to the sign-up mutation
       setShowOnboarding(false) // Hide onboarding modal
       setIsSuccessModalOpen(true) // Show success modal on successful sign-up
@@ -741,6 +741,10 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                       <span className="text-gray-600 dark:text-gray-400">Preferred Broker:</span>
                       <span className="capitalize">{formData.preferredBroker || "Not selected"}</span>
                     </div>
+                    {/* <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">Investment Goals</span>
+                      <span className="capitalize">{formData.preferredBroker || "Not selected"}</span>
+                    </div> */}
                   </div>
                 </div>
 
