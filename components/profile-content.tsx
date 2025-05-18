@@ -61,7 +61,7 @@ export default function ProfilePage() {
               <Input
                 id="full_name"
                 name="full_name"
-                value={formData.full_name}
+                value={formData.full_name ?? ""}
                 onChange={handleInputChange}
                 disabled={!isEditing}
               />
@@ -71,7 +71,7 @@ export default function ProfilePage() {
               <Input
                 id="email"
                 name="email"
-                value={formData.email}
+                value={formData.email ?? ""}
                 onChange={handleInputChange}
                 disabled
               />
@@ -81,7 +81,7 @@ export default function ProfilePage() {
               <Input
                 id="phone"
                 name="phone"
-                value={formData.phone}
+                value={formData.phone ?? ""}
                 onChange={handleInputChange}
                 disabled={!isEditing}
               />
@@ -92,7 +92,7 @@ export default function ProfilePage() {
               <select
                 id="trading_experience"
                 name="trading_experience"
-                value={formData.trading_experience}
+                value={formData.trading_experience ?? ""}
                 onChange={handleInputChange}
                 disabled={!isEditing}
                 className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-md p-2 w-full"
@@ -107,7 +107,7 @@ export default function ProfilePage() {
           <div>
             <Label>Investment Goals</Label>
             <div className="flex flex-wrap gap-2">
-              {formData.investment_goals.map((goal: any, index: any) => (
+              {formData.investment_goals?.map((goal: any, index: any) => (
                 <Badge key={index} variant="outline">
                   {goal}
                 </Badge>
