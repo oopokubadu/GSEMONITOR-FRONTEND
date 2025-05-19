@@ -188,15 +188,15 @@ export function DashboardContent() {
           </CardContent>
         </Card>
         <Card className="md:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
             <CardTitle className="text-lg">Market News</CardTitle>
             <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" className="h-8 gap-1 text-xs">
+              {/* <Button variant="outline" size="sm" className="h-8 gap-1 text-xs">
                 <Filter className="h-3 w-3" /> Filter
               </Button>
               <Button variant="outline" size="sm" className="h-8 gap-1 text-xs">
                 <Search className="h-3 w-3" /> Search
-              </Button>
+              </Button> */}
             </div>
           </CardHeader>
           <CardContent>
