@@ -17,7 +17,7 @@ export function DashboardContent() {
   const { data: dashboardData = [], isLoading, isError } = useDashboardData()
   const [activeStock, setActiveStock] = useState(() => dashboardData[0] || null)
   const [filteredStocks, setFilteredStocks] = useState(dashboardData)
-  const [activeFilter, setActiveFilter] = useState("Gainers") // Track the active filter
+  const [activeFilter, setActiveFilter] = useState("All") // Track the active filter
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("1M") // Default period is 1D
 
   // Update activeStock and filteredStocks when dashboardData changes

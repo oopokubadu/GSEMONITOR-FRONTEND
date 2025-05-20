@@ -4,12 +4,7 @@ import { Clock } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useNewsData } from "@/hooks/use-news-data"
-
-function formatDate(dateString: string) {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options).replace(/,/g, '');
-}
+import { formatDate } from "@/lib/utils"
 
 export function MarketNews() {
   const {data: NewsData} = useNewsData()

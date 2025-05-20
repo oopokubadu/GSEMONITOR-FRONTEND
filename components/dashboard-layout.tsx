@@ -113,11 +113,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     //   label: "Trade",
     //   icon: CreditCard,
     // },
-    // {
-    //   href: "/news",
-    //   label: "News",
-    //   icon: Globe,
-    // },
+    {
+      href: "/news",
+      label: "News",
+      icon: Globe,
+    },
     // {
     //   href: "/education",
     //   label: "Education",

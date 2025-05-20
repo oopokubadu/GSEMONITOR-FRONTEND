@@ -24,7 +24,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { cn } from "@/lib/utils"
+import { cn, handleShare } from "@/lib/utils"
 import { CandlestickChart } from "@/components/candlestick-chart"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -51,10 +51,17 @@ const chartTypes: { id: "candle" | "line"; name: string; icon: typeof BarChart2 
 
 export function MarketsContent() {
   const { data: dashboardData = [], isLoading, isError } = useDashboardData()
+  const urlParams = new URLSearchParams(window.location.search);
+  const tickerParam = urlParams.get("ticker");
+  const periodParam = urlParams.get("period");
+  const typeParam = urlParams.get("type");
+
   const [selectedTicker, setSelectedTicker] = useState("gcb")
-  const [chartTimeframe, setChartTimeframe] = useState("1M")
+  const [chartTimeframe, setChartTimeframe] = useState(periodParam ?? "1M")
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">("line")
+  const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">(
+    typeParam === "candle" || typeParam === "line" ? typeParam : "line"
+  )
   const [activeIndicators, setActiveIndicators] = useState(technicalIndicators.filter((i) => i.active).map((i) => i.id))
   const [showDrawingToolsMenu, setShowDrawingToolsMenu] = useState(false)
   const [showChartSettingsMenu, setShowChartSettingsMenu] = useState(false)
@@ -65,7 +72,6 @@ export function MarketsContent() {
   const [isTrendingToolActive, setIsTrendingToolActive] = useState(false)
   const [isVerticalToolActive, setIsVerticalToolActive] = useState(false)
   const [isSaveChart, setIsSaveChart] = useState(false)
-  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   // Map chartTimeframe to period
   const periodMap: Record<string, string> = {
@@ -81,7 +87,7 @@ export function MarketsContent() {
   // Set the default selected ticker when data is loaded
   useEffect(() => {
     if (dashboardData.length > 0) {
-      setSelectedTicker(dashboardData[0].symbol.toLowerCase())
+      setSelectedTicker(tickerParam ?? dashboardData[0].symbol.toLowerCase())
       setFilteredStocks(dashboardData) // Initialize filtered stocks
     }
   }, [dashboardData])
@@ -116,22 +122,8 @@ export function MarketsContent() {
   }
 
   const handleShareChart = (platform?: string) => {
-    const baseUrl = window.location.origin
-    const shareUrl = `${baseUrl}/markets?ticker=${selectedTicker}&period=${selectedPeriod}&type=${selectedChartType}`
-  
-    if (platform === "clipboard") {
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        setToastMessage("Chart URL copied to clipboard!") // Show toast message 
-      }).catch((err) => {
-        console.error("Failed to copy URL: ", err)
-      })
-    } else if (platform === "twitter") {
-      window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=Check out this chart!`, "_blank")
-    } else if (platform === "facebook") {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, "_blank")
-    } else if (platform === "linkedin") {
-      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, "_blank")
-    }
+    const query = `ticker=${selectedTicker}&period=${chartTimeframe}&type=${selectedChartType}`
+    handleShare("markets", query, platform)
   }
 
   return (
