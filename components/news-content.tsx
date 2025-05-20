@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useNewsData } from "@/hooks/use-news-data"
-import { formatDate } from "@/lib/utils"
+import { formatDate, timeAgo } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { handleShare } from "@/lib/utils"
@@ -21,7 +21,7 @@ export function NewsContent() {
     id: index + 1,
     title: news.headline,
     source: news.source,
-    time: "4 days ago", //calculate based off date
+    time: timeAgo(news.date_time_published),
     date: formatDate(news.date_time_published),
     summary: news.summary,
     content: news.content,

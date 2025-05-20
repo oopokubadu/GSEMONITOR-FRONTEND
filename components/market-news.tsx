@@ -4,7 +4,7 @@ import { Clock } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useNewsData } from "@/hooks/use-news-data"
-import { formatDate } from "@/lib/utils"
+import { formatDate, timeAgo } from "@/lib/utils"
 
 export function MarketNews() {
   const {data: NewsData} = useNewsData()
@@ -12,7 +12,8 @@ export function MarketNews() {
     id: index,
     title: news.headline,
     source: news.source,
-    time: formatDate(news.date_time_published),
+    time: timeAgo(news.date_time_published),
+    date: formatDate(news.date_time_published),
     summary: news.summary,
     sentiment: news.sentiment,
     image: "/placeholder.svg?key=mlzoz",
@@ -40,7 +41,7 @@ export function MarketNews() {
           </div>
         </div>
       ))}
-      <Button variant="outline" className="w-full">
+      <Button variant="outline" className="w-full" onClick={() => window.location.href = "/news"}>
         View All News
       </Button>
     </div>
