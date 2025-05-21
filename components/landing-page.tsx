@@ -153,6 +153,29 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
     { name: "GSE Manufacturing Index", value: "1,876.30", change: "-0.21%" },
   ]
 
+  const faqData = [
+  {
+    question: "What is this platform, and how does it relate to the Ghana Stock Exchange?",
+    answer: "We provide real-time market insights, stock analytics, and tools to help investors and traders make informed decisions. We are not affiliated with the official GSE but aggregate and visualize data from the exchange."
+  },
+  {
+    question: "How do I create an account?",
+    answer: "Simply click on the 'Get Started' button on the homepage. You’ll be guided through a quick signup process using your email or phone number."
+  },
+  {
+    question: "Do I need a broker to trade?",
+    answer: "Yes. While we provide tools for market monitoring and trade planning, you’ll still need a licensed broker to place trades on the Ghana Stock Exchange."
+  },
+  {
+    question: "Is the market data live or delayed?",
+    answer: "We strive to offer near real-time data. However, some feeds may have slight delays depending on your network connection and API access level."
+  },
+  {
+    question: "Can I track my portfolio here?",
+    answer: "Yes. You can build a custom watchlist and manually track your stock portfolio performance over time."
+  }
+];
+
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-black text-gray-900 dark:text-white">
       {/* Header */}
@@ -1167,64 +1190,22 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
             </div>
             <div className="mx-auto mt-12 max-w-3xl">
               <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1" className="border-gray-200 dark:border-gray-800">
-                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
-                    How do I open an account?
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-400">
-                    To open an account, click on the "Get Started" button at the top of the page. You'll need to provide
-                    some basic information and verify your email address. Once your account is created, you'll need to
-                    complete your profile and link your brokerage account to start trading.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-2" className="border-gray-800">
-                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
-                    What are the minimum system requirements?
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-400">
-                    Our platform is web-based and works on most modern browsers, including Chrome, Firefox, Safari, and
-                    Edge. We recommend using the latest version of your preferred browser for the best experience. For
-                    mobile devices, we offer dedicated apps for iOS and Android.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-3" className="border-gray-800">
-                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
-                    How real-time is your market data?
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-400">
-                    Our Basic plan provides delayed market data (15 minutes), while our Premium and Professional plans
-                    offer real-time market data directly from the Ghana Stock Exchange. This ensures you have the most
-                    up-to-date information when making trading decisions.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-4" className="border-gray-800">
-                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
-                    Can I trade directly through your platform?
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-400">
-                    Yes, you can execute trades directly through our platform once you've linked your brokerage account.
-                    We support market orders, limit orders, and stop orders. All trades are executed through our partner
-                    brokers who are members of the Ghana Stock Exchange.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-5" className="border-gray-800">
-                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">Is my data secure?</AccordionTrigger>
-                  <AccordionContent className="text-gray-400">
-                    Yes, we take security very seriously. All data is encrypted using industry-standard protocols, and
-                    we employ multiple layers of security to protect your personal and financial information. We are
-                    also compliant with all relevant regulations regarding data protection and privacy.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-6" className="border-gray-800">
-                  <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
-                    Can I cancel my subscription?
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-400">
-                    Yes, you can cancel your subscription at any time. If you cancel, you'll continue to have access to
-                    your subscription features until the end of your current billing period. We don't offer refunds for
-                    partial subscription periods.
-                  </AccordionContent>
-                </AccordionItem>
+                {
+                faqData.map((faq) => (
+                  <AccordionItem
+                    key={faq.question}
+                    value={`item-${faq.question.replace(/\s+/g, '-').toLowerCase()}`}
+                    className="border-gray-200 dark:border-gray-800"
+                  >
+                    <AccordionTrigger className="text-gray-900 dark:text-white hover:text-primary">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-400">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))
+                }
               </Accordion>
             </div>
           </div>
@@ -1309,8 +1290,8 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               }
               </Link>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                The leading trading platform for the Ghana Stock Exchange, providing real-time data, advanced charts,
-                and seamless trading.
+                The go-to platform for Ghana Stock Exchange traders and investors — delivering real-time market data, 
+                smart analytics, interactive charts, and tools for efficient, informed trading.
               </p>
               <div className="flex gap-4">
                 <Button
