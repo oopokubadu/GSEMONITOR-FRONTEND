@@ -45,10 +45,10 @@ import LoginModal from "./login-modal"
 import { useQueryClient } from "@tanstack/react-query"
 import { useDashboardData } from "@/hooks/use-dashboard-data"
 import { SearchInput } from "./search-input"
-import hero from "@/assets/hero_opt.webp"
 import charts from "@/assets/chart.png"
 import logo from "@/assets/gselogo.png"
 import logoblack from "@/assets/gselogoblack.png"
+import ReactPlayer from "react-player";
 
 export default function LandingPage() {
   const { theme, setTheme } = useTheme()
@@ -63,6 +63,7 @@ export default function LandingPage() {
   const { isSignedIn } = useAuth()
   const queryClient = useQueryClient()
   const [mounted, setMounted] = useState(false);
+  const [watchDemo, setWatchDemo] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,7 +100,7 @@ export default function LandingPage() {
 
   const handleWatchDemo = () => {
     // In a real app, this would open a video modal
-    alert("Demo video coming soon!")
+    setWatchDemo(true)
   }
 
   const scrollToSection = (sectionId: string) => {
@@ -222,11 +223,11 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                 <div className="grid gap-2">
                   <div className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">Contact Brokers</div>
                   {[
-                    { id: "databank", name: "Databank", logo: "/placeholder.svg?key=xmhc7" },
-                    { id: "ic-securities", name: "IC Securities", logo: "/placeholder.svg?key=x5zhc" },
-                    { id: "black-star", name: "Black Star Brokerage", logo: "/placeholder.svg?key=o2g9t" },
-                    { id: "ecobank", name: "Ecobank Securities", logo: "/placeholder.svg?key=vwcbw" },
-                    { id: "cal-brokers", name: "CAL Brokers", logo: "/placeholder.svg?key=pdkbd" },
+                    { id: "databank", name: "Databank", logo: "https://cdn.brandfetch.io/idvnRWNCiD/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1741214899554" },
+                    { id: "ic-securities", name: "IC Securities", logo: "https://cdn.brandfetch.io/idEHo1F7KY/w/200/h/200/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1740538630001" },
+                    { id: "black-star", name: "Black Star Brokerage", logo: "https://gsiaonline.org/images/pagepics/gtlcmember_ff_20200203_1580732894.png" },
+                    { id: "ecobank", name: "Ecobank Securities", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Ecobank_Logo.svg/750px-Ecobank_Logo.svg.png?20181117204655" },
+                    { id: "cal-brokers", name: "CAL Brokers", logo: "https://www.csd.com.gh/images/CSD_Logo_neu.png" }
                   ].map((broker) => (
                     <DropdownMenuItem
                       key={broker.id}
@@ -381,11 +382,11 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                 <div className="grid gap-2">
                   <div onClick={() => setShowBrokers(!showBrokers)} className="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1">{showBrokers ? "Hide" : "Show"} Brokers</div>
                   {showBrokers && [
-                    { id: "databank", name: "Databank", logo: "/placeholder.svg?key=xmhc7" },
-                    { id: "ic-securities", name: "IC Securities", logo: "/placeholder.svg?key=x5zhc" },
-                    { id: "black-star", name: "Black Star Brokerage", logo: "/placeholder.svg?key=o2g9t" },
-                    { id: "ecobank", name: "Ecobank Securities", logo: "/placeholder.svg?key=vwcbw" },
-                    { id: "cal-brokers", name: "CAL Brokers", logo: "/placeholder.svg?key=pdkbd" },
+                    { id: "databank", name: "Databank", logo: "https://cdn.brandfetch.io/idvnRWNCiD/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1741214899554" },
+                    { id: "ic-securities", name: "IC Securities", logo: "https://cdn.brandfetch.io/idEHo1F7KY/w/200/h/200/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1740538630001" },
+                    { id: "black-star", name: "Black Star Brokerage", logo: "https://gsiaonline.org/images/pagepics/gtlcmember_ff_20200203_1580732894.png" },
+                    { id: "ecobank", name: "Ecobank Securities", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Ecobank_Logo.svg/750px-Ecobank_Logo.svg.png?20181117204655" },
+                    { id: "cal-brokers", name: "CAL Brokers", logo: "https://www.csd.com.gh/images/CSD_Logo_neu.png" }
                   ].map((broker) => (
                     <div
                       key={broker.id}
@@ -527,13 +528,24 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               </div>
               <div className="hidden lg:flex items-center justify-center lg:justify-end">
                 <div className="relative w-full max-w-[600px] overflow-hidden rounded-lg border border-gray-800 bg-gray-900 shadow-xl">
+                  {watchDemo 
+                  ?
+                  <ReactPlayer
+                    url="https://res.cloudinary.com/dgmevpvaq/video/upload/v1747388228/sample-video.mp4"
+                    width="800px"
+                    height="600px"
+                    controls
+                    className="w-full object-cover"
+                  />
+                  :
                   <Image
-                    src={hero}
+                    src="https://res.cloudinary.com/dgmevpvaq/image/upload/v1747388228/hero.d3ed764f_l6i90c.webp"
                     width={800}
                     height={600}
                     alt="GSE Trading Platform Dashboard"
                     className="w-full object-cover"
                   />
+                  }
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -1491,9 +1503,9 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 © {new Date().getFullYear()} GSE Trader. All rights reserved.
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              {/* <p className="text-sm text-gray-500 dark:text-gray-400">
                 GSE Trader is regulated by the Securities and Exchange Commission of Ghana.
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

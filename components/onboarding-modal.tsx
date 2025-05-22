@@ -315,7 +315,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
 
               <div className="relative h-64 mx-auto my-8 rounded-lg overflow-hidden">
                 <Image
-                  src="/placeholder.svg?key=bnvr2"
+                  src="https://res.cloudinary.com/dfevzgrbu/image/upload/v1747412987/What-is-Proprietary-Trading_qsl9pc.webp"
                   alt="GSE Trader Platform Overview"
                   fill
                   className="object-cover"
