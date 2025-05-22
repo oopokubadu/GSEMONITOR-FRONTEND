@@ -37,7 +37,7 @@ export function MarketNews() {
               <span className="mx-1">•</span>
               <span>{item.sentiment}</span>
             </div>
-            <p className="text-sm text-muted-foreground">{item.summary}</p>
+            <p className="text-sm text-muted-foreground">{item.summary.substring(0, 200) + ` `}<a href={`/news?id=${item.id + 1}`} className="text-red-300">...read more</a></p>
           </div>
         </div>
       ))}

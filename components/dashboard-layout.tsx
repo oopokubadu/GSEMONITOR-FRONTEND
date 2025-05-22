@@ -139,7 +139,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   ]
 
   const Sidebar = () => (
-    <div className={cn("flex flex-col h-full bg-card border-r overflow-hidden", collapsed ? "items-center" : "w-64")}>
+    <div className={cn("flex flex-col max-h-128 bg-card border-r overflow-hidden", collapsed ? "items-center" : "w-64")}>
       <div className={cn("flex h-14 items-center border-b px-4", collapsed ? "justify-center" : "justify-between")}>
         {!collapsed && <span className="font-bold text-lg">GSE Trader</span>}
         {isDesktop && (
