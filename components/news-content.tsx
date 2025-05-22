@@ -27,7 +27,7 @@ export function NewsContent() {
     content: news.content,
     category: news.sentiment,
     url: news.url,
-    image: "/placeholder.svg?key=mlzoz",
+    image: news.thumbnail,
     isBookmarked: false,
   }))
   
@@ -143,7 +143,7 @@ useEffect(() => {
                         onClick={() => setSelectedArticle(item)}
                       >
                         <Avatar className="h-12 w-12 rounded-md">
-                          <AvatarImage src={item.image || "/placeholder.svg"} alt={item.source} />
+                          <AvatarImage src={item.image} alt={item.source} />
                           <AvatarFallback className="rounded-md">{item.source.substring(0, 2)}</AvatarFallback>
                         </Avatar>
                         <div className="space-y-1 flex-1">
@@ -173,7 +173,7 @@ useEffect(() => {
                         onClick={() => setSelectedArticle(item)}
                       >
                         <Avatar className="h-12 w-12 rounded-md">
-                          <AvatarImage src={item.image || "/placeholder.svg"} alt={item.source} />
+                          <AvatarImage src={item.image} alt={item.source} />
                           <AvatarFallback className="rounded-md">{item.source.substring(0, 2)}</AvatarFallback>
                         </Avatar>
                         <div className="space-y-1 flex-1">
@@ -253,7 +253,7 @@ useEffect(() => {
             <CardContent className="space-y-4">
               <div className="relative w-full h-48 md:h-64 lg:h-80 rounded-md overflow-hidden">
                 <img
-                  src={selectedArticle?.image || "/placeholder.svg"}
+                  src={selectedArticle?.image}
                   alt={selectedArticle?.title}
                   className="w-full h-full object-cover"
                 />
@@ -277,7 +277,7 @@ useEffect(() => {
                         onClick={() => setSelectedArticle(item)}
                       >
                         <Avatar className="h-10 w-10 rounded-md">
-                          <AvatarImage src={item.image || "/placeholder.svg"} alt={item.source} />
+                          <AvatarImage src={item.image} alt={item.source} />
                           <AvatarFallback className="rounded-md">{item.source.substring(0, 2)}</AvatarFallback>
                         </Avatar>
                         <div className="space-y-1">

@@ -16,7 +16,7 @@ export function MarketNews() {
     date: formatDate(news.date_time_published),
     summary: news.summary,
     sentiment: news.sentiment,
-    image: "/placeholder.svg?key=mlzoz",
+    image: news.thumbnail,
   }))
 
   return (

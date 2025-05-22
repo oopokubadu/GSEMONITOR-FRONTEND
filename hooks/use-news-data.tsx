@@ -14,6 +14,7 @@ export interface NewsData {
   source: string,
   summary: string,
   ticker: string,
+  thumbnail: string,
   url: string
 }
 
