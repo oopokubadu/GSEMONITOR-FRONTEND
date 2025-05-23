@@ -487,7 +487,7 @@ export function WatchlistContent() {
               </CardHeader>
               {
               selectedStock.symbol.length > 0 && <CardContent>
-                <Tabs defaultValue="1M" className="w-full">
+                <Tabs defaultValue="1D" className="w-full">
                   <div className="flex justify-between items-center mb-4">
                     <TabsList>
                       <TabsTrigger value="1D">1D</TabsTrigger>
@@ -497,10 +497,10 @@ export function WatchlistContent() {
                       <TabsTrigger value="1Y">1Y</TabsTrigger>
                       <TabsTrigger value="ALL">ALL</TabsTrigger>
                     </TabsList>
-                    <div className="flex items-center text-xs text-muted-foreground">
+                    {/* <div className="flex items-center text-xs text-muted-foreground">
                       <Clock className="h-3 w-3 mr-1" />
                       Last updated: 15:30 GMT
-                    </div>
+                    </div> */}
                   </div>
                   <TabsContent value="1D">
                     <StockChart ticker={selectedStock.symbol} period="1D" />
