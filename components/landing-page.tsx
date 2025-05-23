@@ -1490,7 +1490,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
           <div className="mt-12 border-t border-gray-200 dark:border-gray-800 pt-8">
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                © {new Date().getFullYear()} GSE Trader. All rights reserved.
+                © {new Date().getFullYear()} GSE Monitor. All rights reserved.
               </p>
               {/* <p className="text-sm text-gray-500 dark:text-gray-400">
                 GSE Trader is regulated by the Securities and Exchange Commission of Ghana.
