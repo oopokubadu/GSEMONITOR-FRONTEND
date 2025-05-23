@@ -8,8 +8,8 @@ import { QueryProvider } from "@/providers/query-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Ghana Stock Exchange Platform",
-  description: "Trading platform for the Ghana Stock Exchange"
+  title: "Ghana Stock Exchange Monitor",
+  description: "Stock trading monitor for the Ghana Stock Exchange"
 }
 
 export default function RootLayout({
