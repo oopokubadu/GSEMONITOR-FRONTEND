@@ -54,7 +54,7 @@ export function SearchInput() {
       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       <Input
         type="search"
-        placeholder="Search GSE Trader"
+        placeholder="Search GSE Monitor"
         value={query}
         onChange={handleInputChange}
         className="w-full appearance-none bg-background pl-8 shadow-none"

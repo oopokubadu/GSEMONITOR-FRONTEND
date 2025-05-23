@@ -293,7 +293,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <BarChart3 className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold">GSE Trader Onboarding</span>
+                <span className="text-xl font-bold">GSE Monitor Onboarding</span>
               </div>
               <Badge variant="outline" className="text-primary border-primary">
                 Step {step} of {totalSteps}
@@ -306,7 +306,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
           {step === 1 && (
             <div className="space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="text-3xl font-bold">Welcome to GSE Trader</h2>
+                <h2 className="text-3xl font-bold">Welcome to GSE Monitor</h2>
                 <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                   Let's set up your account to help you get the most out of your trading experience on the Ghana Stock
                   Exchange.
@@ -316,7 +316,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
               <div className="relative h-64 mx-auto my-8 rounded-lg overflow-hidden">
                 <Image
                   src="https://res.cloudinary.com/dfevzgrbu/image/upload/v1747412987/What-is-Proprietary-Trading_qsl9pc.webp"
-                  alt="GSE Trader Platform Overview"
+                  alt="GSE Monitor Platform Overview"
                   fill
                   className="object-cover"
                 />
@@ -756,7 +756,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                     <h3 className="font-medium">Invite Friends & Earn Rewards</h3>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    Invite your friends to GSE Trader and earn rewards when they sign up and start trading.
+                    Invite your friends to GSE Monitor and earn rewards when they sign up and start trading.
                   </p>
                   <div className="flex gap-2">
                     <Input
