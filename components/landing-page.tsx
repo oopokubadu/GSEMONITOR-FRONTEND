@@ -48,7 +48,7 @@ import { SearchInput } from "./search-input"
 import charts from "@/assets/chart.png"
 import logo from "@/assets/gselogo.png"
 import logoblack from "@/assets/gselogoblack.png"
-import ReactPlayer from "react-player";
+import WatchDemoModal from "./watch-demo-modal"
 
 export default function LandingPage() {
   const { theme, setTheme } = useTheme()
@@ -528,16 +528,6 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               </div>
               <div className="hidden lg:flex items-center justify-center lg:justify-end">
                 <div className="relative w-full max-w-[600px] overflow-hidden rounded-lg border border-gray-800 bg-gray-900 shadow-xl">
-                  {watchDemo 
-                  ?
-                  <ReactPlayer
-                    url="https://res.cloudinary.com/dgmevpvaq/video/upload/v1747388228/sample-video.mp4"
-                    width="800px"
-                    height="600px"
-                    controls
-                    className="w-full object-cover"
-                  />
-                  :
                   <Image
                     src="https://res.cloudinary.com/dgmevpvaq/image/upload/v1747388228/hero.d3ed764f_l6i90c.webp"
                     width={800}
@@ -545,7 +535,6 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                     alt="GSE Trading Platform Dashboard"
                     className="w-full object-cover"
                   />
-                  }
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -1512,6 +1501,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
       </footer>
 
       {/* Onboarding Modal */}
+      <WatchDemoModal isOpen={watchDemo} onClose={() => setWatchDemo(false)} />
       <OnboardingModal isOpen={onboardingOpen} onClose={() => setOnboardingOpen(false)} />
       <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </div>

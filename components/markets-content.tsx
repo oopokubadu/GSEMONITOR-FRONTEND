@@ -57,7 +57,7 @@ export function MarketsContent() {
   const typeParam = urlParams.get("type");
 
   const [selectedTicker, setSelectedTicker] = useState("gcb")
-  const [chartTimeframe, setChartTimeframe] = useState(periodParam ?? "1M")
+  const [chartTimeframe, setChartTimeframe] = useState(periodParam ?? "1D")
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">(
     typeParam === "candle" || typeParam === "line" ? typeParam : "line"
@@ -409,11 +409,11 @@ export function MarketsContent() {
                 <span className="hidden sm:inline">Customize</span>
               </Button>
 
-              <div className="flex items-center text-xs text-muted-foreground whitespace-nowrap">
+              {/* <div className="flex items-center text-xs text-muted-foreground whitespace-nowrap">
                 <Clock className="h-3 w-3 mr-1" />
                 <span className="hidden sm:inline">Last updated:</span>{" "}
                 {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </div>
+              </div> */}
             </div>
           </div>
 

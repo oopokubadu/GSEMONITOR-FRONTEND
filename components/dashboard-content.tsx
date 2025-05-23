@@ -108,7 +108,7 @@ export function DashboardContent() {
             </CardHeader>
             <CardContent>
               <Tabs
-                defaultValue="1M"
+                defaultValue="1D"
                 className="w-full"
                 onValueChange={setSelectedTimePeriod}
               >
@@ -120,10 +120,10 @@ export function DashboardContent() {
                     <TabsTrigger value="3M">3M</TabsTrigger>
                     <TabsTrigger value="1Y">1Y</TabsTrigger>
                   </TabsList>
-                  <div className="flex items-center text-xs text-muted-foreground">
+                  {/* <div className="flex items-center text-xs text-muted-foreground">
                     <Clock className="h-3 w-3 mr-1" />
                     Last updated: 15:30 GMT
-                  </div>
+                  </div> */}
                 </div>
                 <TabsContent value={selectedTimePeriod} key={activeStock?.symbol}>
                   <CandlestickChart
