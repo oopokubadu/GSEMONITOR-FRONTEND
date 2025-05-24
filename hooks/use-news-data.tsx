@@ -41,11 +41,11 @@ export function useNewsData() {
   return useQuery({
     queryKey: ["NewsData"],
     queryFn: fetchNewsData,
-    refetchInterval: 60000, // Refetch every minute
-    refetchOnWindowFocus: true,
+    // refetchInterval: 60000, // Refetch every minute
+    // refetchOnWindowFocus: true,
     retry: 2,
     placeholderData: fallbackData,
-    staleTime: 30000, // Consider data fresh for 30 seconds
-    gcTime: 5 * 60 * 1000, // Keep unused data in cache for 5 minutes
+    staleTime: 24 * 60 * 60000, // Consider data fresh for 30 seconds
+    gcTime: 15 * 60 * 1000, // Keep unused data in cache for 5 minutes
   })
 }

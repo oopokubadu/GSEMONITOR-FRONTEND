@@ -38,8 +38,22 @@ async function fetchChartData(ticker: string, period: string): Promise<ChartData
   }
 }
 
+// Define allowed period values
+type Period = "daily" | "weekly" | "monthly" | "quarterly" | "yearly" ;
+
 // Hook to use chart data
-export function useChartData(ticker: string, period: string) {
+export function useChartData(ticker: string, period: Period) {
+
+   const config: Record<Period, { staleTime: number; gcTime: number }> = {
+    daily: { staleTime: 24 * 60 * 60 * 1000, gcTime: 2 * 24 * 60 * 60 * 1000 }, // 1-day freshness, 2-day cache retention
+    weekly: { staleTime: 7 * 24 * 60 * 60 * 1000, gcTime: 14 * 24 * 60 * 60 * 1000 }, // 1-week freshness, 2-week cache retention
+    monthly: { staleTime: 30 * 24 * 60 * 60 * 1000, gcTime: 60 * 24 * 60 * 60 * 1000 }, // 1-month freshness, 2-month cache retention
+    quarterly: { staleTime: 3 * 30 * 24 * 60 * 60 * 1000, gcTime: 60 * 24 * 60 * 60 * 1000 }, // 1-month freshness, 2-month cache retention
+    yearly: { staleTime: 30 * 24 * 60 * 60 * 1000, gcTime: 60 * 24 * 60 * 60 * 1000 }, // 1-month freshness, 2-month cache retention
+  };
+
+  const { staleTime, gcTime } = config[period]; 
+  
   return useQuery({
     queryKey: ["chartData", ticker, period],
     queryFn: () => fetchChartData(ticker, period),
@@ -47,7 +61,7 @@ export function useChartData(ticker: string, period: string) {
     refetchOnWindowFocus: true,
     retry: 2,
     placeholderData: fallbackData,
-    staleTime: 30000, // Consider data fresh for 30 seconds
-    gcTime: 5 * 60 * 1000, // Keep unused data in cache for 5 minutes
+    staleTime,
+    gcTime, // Keep unused data in cache for 5 minutes
   })
 }

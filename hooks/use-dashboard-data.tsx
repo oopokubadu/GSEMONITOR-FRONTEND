@@ -36,8 +36,8 @@ export function useDashboardData() {
   return useQuery({
     queryKey: ["dashboardData"],
     queryFn: fetchDashboardData,
-    refetchInterval: 60000, // Refetch every minute
-    refetchOnWindowFocus: true,
+    refetchInterval: 2 * 60000, // Refetch every minute
+    refetchOnWindowFocus: false,
     retry: 2,
     placeholderData: fallbackData,
     staleTime: 30000, // Consider data fresh for 30 seconds
