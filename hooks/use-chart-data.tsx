@@ -39,12 +39,11 @@ async function fetchChartData(ticker: string, period: string): Promise<ChartData
 }
 
 // Define allowed period values
-type Period = "daily" | "weekly" | "monthly" | "quarterly" | "yearly" ;
 
 // Hook to use chart data
-export function useChartData(ticker: string, period: Period) {
+export function useChartData(ticker: string, period: string) {
 
-   const config: Record<Period, { staleTime: number; gcTime: number }> = {
+   const config: Record<string, { staleTime: number; gcTime: number }> = {
     daily: { staleTime: 24 * 60 * 60 * 1000, gcTime: 2 * 24 * 60 * 60 * 1000 }, // 1-day freshness, 2-day cache retention
     weekly: { staleTime: 7 * 24 * 60 * 60 * 1000, gcTime: 14 * 24 * 60 * 60 * 1000 }, // 1-week freshness, 2-week cache retention
     monthly: { staleTime: 30 * 24 * 60 * 60 * 1000, gcTime: 60 * 24 * 60 * 60 * 1000 }, // 1-month freshness, 2-month cache retention
