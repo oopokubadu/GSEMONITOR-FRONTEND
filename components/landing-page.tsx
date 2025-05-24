@@ -59,7 +59,9 @@ export default function LandingPage() {
   const [email, setEmail] = useState("")
   const [onboardingOpen, setOnboardingOpen] = useState(false)
   const { data: dashboardData = [] } = useDashboardData()
-  const [loginOpen, setLoginOpen] = useState(false)
+  const urlParams = new URLSearchParams(window.location.search);
+  const login = urlParams.get("login") == "true"
+  const [loginOpen, setLoginOpen] = useState(login)
   const { isSignedIn } = useAuth()
   const queryClient = useQueryClient()
   const [mounted, setMounted] = useState(false);
