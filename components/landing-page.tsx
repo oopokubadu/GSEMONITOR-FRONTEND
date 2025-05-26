@@ -717,7 +717,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                         <tr
                           key={stock.symbol}
                           className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 cursor-pointer"
-                          onClick={() => alert(`Details for ${stock.name} coming soon!`)}
+                          // onClick={() => alert(`Details for ${stock.name} coming soon!`)}
                         >
                           <td className="py-3 px-4 font-medium">{stock.symbol}</td>
                           <td className="py-3 px-4 text-gray-400">{stock.name}</td>
@@ -1465,7 +1465,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                     Privacy Policy
                   </button>
                 </li>
-                <li>
+                {/* <li>
                   <button
                     onClick={() => alert("Cookie Policy page coming soon!")}
                     className="text-sm text-gray-400 hover:text-white"
@@ -1488,7 +1488,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                   >
                     Compliance
                   </button>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
