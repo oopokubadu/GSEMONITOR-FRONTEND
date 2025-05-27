@@ -1459,7 +1459,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                 </li>
                 <li>
                   <button
-                    onClick={() => alert("Privacy Policy page coming soon!")}
+                    onClick={() => window.location.href = "/privacy"}
                     className="text-sm text-gray-400 hover:text-white"
                   >
                     Privacy Policy
