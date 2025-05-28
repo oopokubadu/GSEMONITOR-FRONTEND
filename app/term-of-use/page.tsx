@@ -8,7 +8,7 @@ const TermsAndConditions = () => {
       <main className="flex-1 flex flex-col items-center justify-center py-12 px-4">
         <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-8">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl font-bold">Terms and Conditions</h1>
+            <h1 className="text-3xl font-bold">Terms of Service</h1>
             <Link
               href="/"
               className="inline-block px-4 py-2 text-sm font-medium bg-primary text-white rounded hover:bg-primary/90 transition"
