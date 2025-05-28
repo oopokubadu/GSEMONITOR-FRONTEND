@@ -1451,7 +1451,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <ul className="space-y-2">
                 <li>
                   <button
-                     onClick={() => window.location.href = "/terms"}
+                     onClick={() => window.location.href = "/term-of-use"}
                     className="text-sm text-gray-400 hover:text-white"
                   >
                     Terms of Service
@@ -1459,7 +1459,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                 </li>
                 <li>
                   <button
-                    onClick={() => window.location.href = "/privacy"}
+                    onClick={() => window.location.href = "/privacy-policy"}
                     className="text-sm text-gray-400 hover:text-white"
                   >
                     Privacy Policy
