@@ -1406,7 +1406,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <ul className="space-y-2">
                 <li>
                   <button
-                    onClick={() => alert("About Us page coming soon!")}
+                     onClick={() => window.location.href = "/about"}
                     className="text-sm text-gray-400 hover:text-white"
                   >
                     About Us
@@ -1438,7 +1438,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                 </li> */}
                 <li>
                   <button
-                    onClick={() => alert("Contact page coming soon!")}
+                     onClick={() => window.location.href = "/contact"}
                     className="text-sm text-gray-400 hover:text-white"
                   >
                     Contact
@@ -1451,7 +1451,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <ul className="space-y-2">
                 <li>
                   <button
-                    onClick={() => alert("Terms of Service page coming soon!")}
+                     onClick={() => window.location.href = "/terms"}
                     className="text-sm text-gray-400 hover:text-white"
                   >
                     Terms of Service
