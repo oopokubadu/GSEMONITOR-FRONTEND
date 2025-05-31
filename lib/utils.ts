@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { toast } from "@/hooks/use-toast"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -47,6 +48,10 @@ export const handleShare = (page: string, query: string, platform?: string) => {
     if (platform === "clipboard") {
       navigator.clipboard.writeText(shareUrl).then(() => {
         //TODO: Show toast
+      toast({
+        title: "Info",
+        description: "This is a toast from outside a component.",
+      })
       }).catch((err) => {
         console.error("Failed to copy URL: ", err)
       })
