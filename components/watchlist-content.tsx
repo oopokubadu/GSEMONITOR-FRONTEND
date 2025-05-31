@@ -133,7 +133,7 @@ export function WatchlistContent() {
       onSuccess: () => {
         toast({
           title: "Price Alert Set",
-          description: `You will be notified when ${selectedStock.symbol} reaches ₵${alertPrice}.`,
+          description: `You will be notified when ${selectedStock.symbol} reaches ₵${alertPrice}.`
         })
         console.log("Price alert set successfully")
       },
@@ -472,12 +472,13 @@ export function WatchlistContent() {
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     toggleStockAlert(stock.symbol)
+                                    !selectedStock.alerts &&  setIsPriceAlertDialogOpen(true)
                                   }}
                                 >
                                   {stock.alerts ? (
                                     <Bell className="h-3 w-3 text-primary" />
                                   ) : (
-                                    <BellOff className="h-3 w-3 text-muted-foreground" onClick={() => setIsPriceAlertDialogOpen(true)} />
+                                    <BellOff className="h-3 w-3 text-muted-foreground" />
                                   )}
                                 </Button>
                                 <Button
