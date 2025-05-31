@@ -47,10 +47,10 @@ export const handleShare = (page: string, query: string, platform?: string) => {
   
     if (platform === "clipboard") {
       navigator.clipboard.writeText(shareUrl).then(() => {
-        //TODO: Show toast
       toast({
-        title: "Info",
-        description: "This is a toast from outside a component.",
+        title: "Success!",
+        description: "URL copied to clipboard.",
+        duration: 2000
       })
       }).catch((err) => {
         console.error("Failed to copy URL: ", err)
