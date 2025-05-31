@@ -305,11 +305,55 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           ) : (
             // Login Content
             <div className="p-4">
+              
               <div>
               <div className="text-center mb-6">
                 <h2 className="text-2xl font-bold">{didForgotPassword ? "Password Resetted" : "Welcome Back"}</h2>
                 <p className="text-gray-600 dark:text-gray-400">Log in to your account</p>
               </div>
+              {!didForgotPassword && <div className="flex flex-col items-center mb-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full flex items-center justify-center gap-2 border-gray-300 dark:border-gray-700"
+                  onClick={() => {
+                    // TODO: Implement Google sign up logic
+                    alert("Sign up with Google clicked!")
+                  }}
+                >
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g>
+                      <path
+                        d="M44.5 20H24V28.5H36.9C35.5 33.1 31.2 36 24 36C16.3 36 10 29.7 10 22C10 14.3 16.3 8 24 8C27.3 8 30.2 9.1 32.5 11L38.1 5.4C34.5 2.2 29.6 0 24 0C10.7 0 0 10.7 0 24C0 37.3 10.7 48 24 48C37.3 48 48 37.3 48 24C48 22.3 47.8 20.7 47.5 19.2L44.5 20Z"
+                        fill="#FFC107"
+                      />
+                      <path
+                        d="M6.3 14.7L12.7 19.2C14.6 15.1 18.9 12 24 12C27.3 12 30.2 13.1 32.5 15L38.1 9.4C34.5 6.2 29.6 4 24 4C16.3 4 10 10.3 10 18C10 19.3 10.2 20.6 10.5 21.8L6.3 14.7Z"
+                        fill="#FF3D00"
+                      />
+                      <path
+                        d="M24 44C31.2 44 35.5 41.1 36.9 36.5L24 28.5V36H36.9C35.5 40.6 31.2 44 24 44Z"
+                        fill="#4CAF50"
+                      />
+                      <path
+                        d="M44.5 20H24V28.5H36.9C36.3 30.7 34.7 32.6 32.5 34L38.1 39.6C41.6 36.5 44 31.8 44.5 26.5C44.5 25.7 44.5 24.9 44.5 24C44.5 22.3 44.3 20.7 44.5 20Z"
+                        fill="#1976D2"
+                      />
+                    </g>
+                  </svg>
+                  Login with Google
+                </Button>
+                <div className="my-4 w-full flex items-center">
+                  <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+                  <span className="mx-2 text-xs text-gray-400">or</span>
+                  <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+                </div>
+              </div>}
 
               {errorMessage && (
                 <div className="mb-4 p-2 text-sm text-red-600 bg-red-100 rounded-lg">
