@@ -30,6 +30,7 @@ import { useSignUp } from "@/hooks/use-sign-up"
 import SuccessModal from "./success-modal"
 import { useSendOTP } from "@/hooks/use-send-otp"
 import { useVerifyOTP } from "@/hooks/use-verify-otp"
+import { toast } from "@/hooks/use-toast"
 
 
 interface OnboardingModalProps {
@@ -100,14 +101,19 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
   const handleSendOtp = () => {
 
     if (!formData.email) return
-
+    setOtpSent(true)
     sendOTP(formData.email, {
       onSuccess: () => {
         console.log("OTP sent successfully!")
-        setOtpSent(true)
       },
       onError: () => {
+        setOtpSent(false)
         console.error("Failed to send OTP.")
+        toast({
+          title: "Error",
+          description: "Failed to send OTP. Please try again.",
+          variant: "destructive",
+        })
       },
     })
   }
@@ -251,7 +257,11 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
       setIsSuccessModalOpen(true) // Show success modal on successful sign-up
     } catch (error) {
       console.error("Sign-up failed:", error)
-      alert("An error occurred during sign-up. Please try again.")
+      toast({
+        title: "Sign-up Failed",
+        description: "An error occurred during sign-up. Please try again.",
+        variant: "destructive",
+      })
     }
   }
 
