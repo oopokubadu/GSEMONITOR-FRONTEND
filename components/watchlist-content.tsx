@@ -30,6 +30,8 @@ import { useDashboardData } from "@/hooks/use-dashboard-data"
 import { useGetProfile } from "@/hooks/use-get-profile"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { useUpdateProfile } from "@/hooks/use-update-profile"
+import { useSendPriceAlert } from "@/hooks/use-send-alert"
+import { toast } from "@/hooks/use-toast"
 
 // Sample watchlist data
 const defaultWatchlists = [
@@ -63,9 +65,12 @@ export function WatchlistContent() {
   const [editingWatchlistName, setEditingWatchlistName] = useState("")
   const [selectedTicker, setSelectedTicker] = useState("")
   const [saved, setSaved] = useState(true)
+  const [isPriceAlertDialogOpen, setIsPriceAlertDialogOpen] = useState(false)
+  const [alertPrice, setAlertPrice] = useState("")
   const { data: dashboardData = [], isLoading, isError } = useDashboardData()
   const { data: profile, isLoading: isProfileLoading, isError: isProfileError, error } = useGetProfile();
   const { mutate: updateProfile } = useUpdateProfile();
+  const { mutate: sendPriceAlert } = useSendPriceAlert();
   
     // Load watchlists from profile
     useEffect(() => {
@@ -107,6 +112,46 @@ export function WatchlistContent() {
       setSaved(false)
       setNewWatchlistName("")
       setIsAddDialogOpen(false)
+    }
+  }
+
+  const handleSetPriceAlert = () => {
+    setIsPriceAlertDialogOpen(false)
+    if (alertPrice.trim()) {
+      // const updatedWatchlist = {
+      //   ...activeWatchlist,
+      //   stocks: activeWatchlist.stocks.map((stock) =>
+      //     stock.symbol === stockSymbol ? { ...stock, alertPrice: parseFloat(alertPrice) } : stock,
+      //   ),
+      // }
+      // setActiveWatchlist(updatedWatchlist)
+      // setWatchlists(watchlists.map((list) => (list.id === activeWatchlist.id ? updatedWatchlist : list)))
+      sendPriceAlert({
+        ticker: selectedStock.symbol,
+        price: parseFloat(alertPrice),
+      }, {
+      onSuccess: () => {
+        toast({
+          title: "Price Alert Set",
+          description: `You will be notified when ${selectedStock.symbol} reaches ₵${alertPrice}.`,
+        })
+        console.log("Price alert set successfully")
+      },
+      onError: (error) => {
+        console.error("Failed to set price alert:", error)
+        setIsPriceAlertDialogOpen(false)
+        toast({
+          title: "Error",
+          description: `Failed to set price alert for ${selectedStock.symbol}. Please try again.`,
+          variant: "destructive",
+        })
+      },
+      })
+      setAlertPrice("")
+      // Here you can add logic to actually set the price alert in your backend or notification system
+    } else {
+      console.error("Please enter a valid alert price and stock symbol.")
+      // You can show an error message to the user here
     }
   }
 
@@ -296,6 +341,32 @@ export function WatchlistContent() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+              <Dialog open={isPriceAlertDialogOpen} onOpenChange={setIsPriceAlertDialogOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Set Price Alert for {selectedStock.symbol}</DialogTitle>
+                    <DialogDescription>Enter the details for your price alert.</DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="price-alert">Alert Price</Label>
+                      <Input
+                        id="price-alert"
+                        value={alertPrice}
+                        onChange={(e) => setAlertPrice(e.target.value)}
+                        type="number"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsPriceAlertDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button onClick={handleSetPriceAlert}>Set Alert</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               </div>
             </CardHeader>
             <CardContent>
@@ -406,7 +477,7 @@ export function WatchlistContent() {
                                   {stock.alerts ? (
                                     <Bell className="h-3 w-3 text-primary" />
                                   ) : (
-                                    <BellOff className="h-3 w-3 text-muted-foreground" />
+                                    <BellOff className="h-3 w-3 text-muted-foreground" onClick={() => setIsPriceAlertDialogOpen(true)} />
                                   )}
                                 </Button>
                                 <Button
@@ -466,7 +537,11 @@ export function WatchlistContent() {
                     variant={selectedStock.alerts ? "default" : "outline"}
                     size="sm"
                     className={selectedStock.alerts ? "bg-primary" : ""}
-                    onClick={() => toggleStockAlert(selectedStock.symbol)}
+                    onClick={() => {
+                      toggleStockAlert(selectedStock.symbol)
+                      !selectedStock.alerts && setIsPriceAlertDialogOpen(true)
+                    }
+                  }
                   >
                     {selectedStock.alerts ? (
                       <>
