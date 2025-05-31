@@ -266,7 +266,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
         });
     } else {
         toast({
-          title: "",
+          title: "Sign-up Failed",
           description: "An error occurred during sign-up. Please try again.",
           variant: "destructive",
         })
