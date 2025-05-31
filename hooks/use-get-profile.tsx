@@ -8,20 +8,26 @@ async function fetchUserProfile() {
   if (!userId) {
     throw new Error("User ID not found in local storage")
   }
-  
-  const response = await axios.get(`${url}/user`, {
-    params: { user_id: userId }, // Include the user ID in the request body
-  })
-
-  if (!response.status || response.status !== 200) {
-    if(response.data.error) {
-      localStorage.removeItem("authToken")
-      window.location.href = "/?login=true"
+  try {
+    const response = await axios.get(`${url}/user`, {
+      params: { user_id: userId }, // Include the user ID in the request body
+    })
+    
+    if (!response.status || response.status !== 200) {
+      console.log("Error fetching user profile:", response.data)
+      if(response.data.error) {
+        localStorage.removeItem("authToken")
+        window.location.href = "/?login=true"
+      }
+      throw new Error(`Failed to fetch user profile: ${response.status}`)
     }
-    throw new Error(`Failed to fetch user profile: ${response.status}`)
-  }
-
   return response.data // Return the user profile data
+} catch (error) {
+    console.error("Error fetching user profile:", error)
+    localStorage.removeItem("authToken")
+    window.location.href = "/?login=true"
+  }
+  throw new Error("Failed to fetch user profile")
 }
 
 // Hook to use user profile data
