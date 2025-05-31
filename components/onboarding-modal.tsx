@@ -257,13 +257,23 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
       setIsSuccessModalOpen(true) // Show success modal on successful sign-up
     } catch (error) {
       console.error("Sign-up failed:", error)
-      toast({
-        title: "Sign-up Failed",
-        description: "An error occurred during sign-up. Please try again.",
-        variant: "destructive",
-      })
-    }
+    // Check if the response status is 409 (Conflict)
+    if (error.response?.status) {
+        toast({
+            title: "Sign-up Failed",
+            description: error.response.data?.error,
+            variant: "destructive",
+        });
+    } else {
+        toast({
+          title: "",
+          description: "An error occurred during sign-up. Please try again.",
+          variant: "destructive",
+        })
+      }
+    }      
   }
+
 
   const handleInvestmentGoalToggle = (goalId: string) => {
     setFormData((prev) => {
