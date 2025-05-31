@@ -2,9 +2,10 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
 export function useResetPassword() {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
   return useMutation({
     mutationFn: async ({ password, email }: { password: string; email: string }) => {
-      const response = await axios.patch(`https://gsemonitor.vercel.app/user`, { email, password })
+      const response = await axios.patch(`${url}/user`, { email, password })
       return response.data
     },
     onSuccess: (data) => {

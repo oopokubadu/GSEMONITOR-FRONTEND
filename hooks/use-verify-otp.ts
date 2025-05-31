@@ -2,9 +2,10 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
 export function useVerifyOTP() {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
   return useMutation({
     mutationFn: async ({ email, otp }: { email: string; otp: string }) => {
-      const response = await axios.post(`https://gsemonitor.vercel.app/verify_otp`, { email, otp })
+      const response = await axios.post(`${url}/verify_otp`, { email, otp })
       return response.data
     },
     onSuccess: (data) => {

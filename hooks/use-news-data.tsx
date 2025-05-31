@@ -20,9 +20,10 @@ export interface NewsData {
 
 // Function to fetch News data using POST request
 async function fetchNewsData(): Promise<NewsData[]> {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
   try {
     // Fetch data from the provided API route using POST
-    const response = await fetch('https://gsemonitor.vercel.app/news', {
+    const response = await fetch(`${url}/news`, {
       method: 'GET'
     })
     if (!response.ok) {

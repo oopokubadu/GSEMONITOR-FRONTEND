@@ -4,18 +4,20 @@ import axios from "axios"
 // Function to fetch user profile
 async function fetchUserProfile() {
   const userId = localStorage.getItem("userId") // Get user ID from local storage
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
   if (!userId) {
     throw new Error("User ID not found in local storage")
   }
   
-  const response = await axios.get(`https://gsemonitor.vercel.app/user`, {
+  const response = await axios.get(`${url}/user`, {
     params: { user_id: userId }, // Include the user ID in the request body
   })
 
-  console.log("User profile response:", response) // Log the response for debugging
-  // Check if the response is successful
-
   if (!response.status || response.status !== 200) {
+    if(response.data.error) {
+      localStorage.removeItem("authToken")
+      window.location.href = "/?login=true"
+    }
     throw new Error(`Failed to fetch user profile: ${response.status}`)
   }
 

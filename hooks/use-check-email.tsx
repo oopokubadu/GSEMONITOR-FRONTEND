@@ -2,9 +2,10 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
 export function useCheckEmail() {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
   return useMutation({
     mutationFn: async (email: string) => {
-      const response = await axios.get(`https://gsemonitor.vercel.app/user`, {
+      const response = await axios.get(`${url}/user`, {
         params: { email }, // Include the email in the request body
       })
       return response.data

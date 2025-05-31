@@ -17,9 +17,10 @@ export interface DashboardData {
 
 // Function to fetch dashboard data
 async function fetchDashboardData(): Promise<DashboardData[]> {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
   try {
     // Fetch data from the provided API route
-    const response = await fetch('https://gsemonitor.vercel.app/dashboard')
+    const response = await fetch(`${url}/dashboard`)
     if (!response.ok) {
       throw new Error(`Failed to fetch dashboard data: ${response.status}`)
     }
