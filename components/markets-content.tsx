@@ -46,7 +46,6 @@ const technicalIndicators = [
 const chartTypes: { id: "candle" | "line"; name: string; icon: typeof BarChart2 }[] = [
   { id: "line", name: "Line", icon: LineChart },
   { id: "candle", name: "Candlestick", icon: BarChart2 },
-  
 ]
 
 export function MarketsContent() {
@@ -62,7 +61,7 @@ export function MarketsContent() {
   const [selectedChartType, setSelectedChartType] = useState<"candle" | "line">(
     typeParam === "candle" || typeParam === "line" ? typeParam : "line"
   )
-  const [activeIndicators, setActiveIndicators] = useState(technicalIndicators.filter((i) => i.active).map((i) => i.id))
+  const [activeIndicators, setActiveIndicators] = useState([])
   const [showDrawingToolsMenu, setShowDrawingToolsMenu] = useState(false)
   const [showChartSettingsMenu, setShowChartSettingsMenu] = useState(false)
   const [activeDrawingTool, setActiveDrawingTool] = useState<string | null>(null) // Track active drawing tool
@@ -327,7 +326,7 @@ export function MarketsContent() {
             </div>
           )}
 
-          <TooltipProvider>
+          {/* <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
@@ -344,7 +343,7 @@ export function MarketsContent() {
               </TooltipTrigger>
               <TooltipContent side="right">Chart Settings</TooltipContent>
             </Tooltip>
-          </TooltipProvider>
+          </TooltipProvider> */}
 
           {/* {showChartSettingsMenu && (
             <div className="relative left-14 top-20 bg-white shadow-md rounded-md p-2 z-50">
@@ -404,10 +403,10 @@ export function MarketsContent() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button variant="outline" size="sm" className="h-8 gap-1">
+              {/* <Button variant="outline" size="sm" className="h-8 gap-1">
                 <Settings className="h-4 w-4" />
                 <span className="hidden sm:inline">Customize</span>
-              </Button>
+              </Button> */}
 
               {/* <div className="flex items-center text-xs text-muted-foreground whitespace-nowrap">
                 <Clock className="h-3 w-3 mr-1" />
@@ -429,6 +428,7 @@ export function MarketsContent() {
               isFullScreen={isFullScreen}
               isTrendLineToolActive={isTrendingToolActive}
               isSaveChart={isSaveChart}
+              technicalIndicators={activeIndicators}
             />
           </div>
 
@@ -443,7 +443,7 @@ export function MarketsContent() {
                     <div key={id} className="flex items-center bg-background rounded-md px-2 py-1 text-xs">
                       {indicator?.name}
                       <Button variant="ghost" size="icon" className="h-4 w-4 ml-1" onClick={() => toggleIndicator(id)}>
-                        <ArrowDown className="h-3 w-3" />
+                        <X className="h-3 w-3" />
                       </Button>
                     </div>
                   )
