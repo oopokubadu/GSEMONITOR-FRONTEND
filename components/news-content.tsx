@@ -66,7 +66,7 @@ useEffect(() => {
     const matchesSearch =
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.summary.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory
+    const matchesCategory = selectedCategory === "all" || item.category.toLowerCase() === selectedCategory
     return matchesSearch && matchesCategory
   })
 
