@@ -49,7 +49,7 @@ export function CandlestickChart({
   period,
   chartType,
   containerClassName = "h-400 w-full",
-  candlesPerPage = 300,
+  candlesPerPage = Infinity,
   isHorizontalToolActive = false,
   isVerticalToolActive = false,
   isFullScreen = false,
