@@ -109,7 +109,7 @@ export function WatchlistContent() {
         stocks: [],
       }
       setWatchlists([...watchlists, newWatchlist])
-      setSaved(false)
+      saveActiveWatchlist()
       setNewWatchlistName("")
       setIsAddDialogOpen(false)
     }
@@ -164,13 +164,11 @@ export function WatchlistContent() {
     }));
     
     if(!saved){
-      setSaved(true)
       updateProfile(formData, {
       onSuccess: () => {
         console.log("Profile updated successfully")
         },
       onError: () => {
-        setSaved(false)
         console.error("Failed to update profile")
         },
       })
@@ -185,7 +183,7 @@ export function WatchlistContent() {
         })
         console.log("updatedWatchList", updatedWatchList)
       setWatchlists(updatedWatchList)
-      setSaved(false)
+      saveActiveWatchlist()
       setIsAddStockDialogOpen(false)
   }
 
@@ -198,7 +196,7 @@ export function WatchlistContent() {
       if (activeWatchlist.id === editingWatchlistId) {
         setActiveWatchlist({ ...activeWatchlist, name: editingWatchlistName })
       }
-      setSaved(false)
+      saveActiveWatchlist()
       setIsRenameDialogOpen(false)
     }
   }
@@ -211,7 +209,7 @@ export function WatchlistContent() {
       setActiveWatchlist(updatedWatchlists[0])
     }
 
-    setSaved(false)
+    saveActiveWatchlist()
   }
 
   const toggleStockAlert = (symbol: string) => {
@@ -240,7 +238,7 @@ export function WatchlistContent() {
     if (updatedStocks.length > 0 && selectedStock.symbol === symbol) {
       setSelectedStock(updatedStocks[0])
     }
-    setSaved(false)
+    saveActiveWatchlist()
   }
 
   return (
@@ -282,9 +280,9 @@ export function WatchlistContent() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-               <Button variant="outline" size="icon" className={!saved ? "bg-red-500 ml-2" : 'bg-green-500 ml-2'} onClick={saveActiveWatchlist}>
+               {/* <Button variant="outline" size="icon" className={!saved ? "bg-red-500 ml-2" : 'bg-green-500 ml-2'} onClick={saveActiveWatchlist}>
                     <Save/>
-              </Button>
+              </Button> */}
               <Dialog open={isAddStockDialogOpen} onOpenChange={setIsAddStockDialogOpen}>
                 <DialogContent>
                   <DialogHeader>

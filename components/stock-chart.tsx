@@ -20,14 +20,14 @@ export function StockChart({ period, ticker }: Readonly<StockChartProps>) {
     "1Y": "yearly"
   }
   const { data: chartData } = useChartData(ticker, periodMap[period])
-
+  
   useEffect(() => {
     const paginatedData = (chartData ?? [])
       .slice(-10, chartData?.length) // Adjust the slice to get the last 10 items
-      .filter((item) => item.date && item.open && item.high && item.low && item.close)
+      // .filter((item) => item.date && item.open && item.high && item.low && item.close)
       .map((item) => ({
         time: item.date,
-        price: item.open + item.close / 2, // Average of open and close prices
+        price: item.close, // Average of open and close prices
       }))
 
     setData(paginatedData)
