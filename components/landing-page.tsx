@@ -323,7 +323,6 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                   >
                     Logout
                   </Button>
-                  
                 </>
               : 
               <>
@@ -1405,12 +1404,13 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <h3 className="text-lg font-medium">Company</h3>
               <ul className="space-y-2">
                 <li>
-                  <button
-                     onClick={() => window.location.href = "/about"}
-                    className="text-sm text-gray-400 hover:text-white"
-                  >
-                    About Us
-                  </button>
+                  <Link href={"/about"}>
+                    <button
+                      className="text-sm text-gray-400 hover:text-white"
+                    >
+                      About Us
+                    </button>
+                  </Link>
                 </li>
                 {/* <li>
                   <button
@@ -1437,12 +1437,13 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                   </button>
                 </li> */}
                 <li>
-                  <button
-                     onClick={() => window.location.href = "/contact"}
-                    className="text-sm text-gray-400 hover:text-white"
-                  >
-                    Contact
-                  </button>
+                  <Link href={"/contact"}>
+                    <button
+                      className="text-sm text-gray-400 hover:text-white"
+                    >
+                      Contact
+                    </button>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -1450,20 +1451,22 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
               <h3 className="text-lg font-medium">Legal</h3>
               <ul className="space-y-2">
                 <li>
-                  <button
-                     onClick={() => window.location.href = "/term-of-use"}
-                    className="text-sm text-gray-400 hover:text-white"
-                  >
-                    Terms of Service
-                  </button>
+                  <Link href={"/term-of-use"}>
+                    <button
+                      className="text-sm text-gray-400 hover:text-white"
+                    >
+                      Terms of Service
+                    </button>
+                  </Link>
                 </li>
                 <li>
+                  <Link href={"/privacy-policy"}>
                   <button
-                    onClick={() => window.location.href = "/privacy-policy"}
                     className="text-sm text-gray-400 hover:text-white"
                   >
                     Privacy Policy
                   </button>
+                  </Link>
                 </li>
                 {/* <li>
                   <button
