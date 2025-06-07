@@ -6,7 +6,7 @@ export default function Callback() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("user_id");
-    const authToken = urlParams.get("auth_token");
+    const authToken = urlParams.get("access_token");
 
     console.log("Callback component mounted", authToken, userId);
 
