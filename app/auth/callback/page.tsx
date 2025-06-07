@@ -1,16 +1,15 @@
 "use client";
 
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function Callback() {
-  const router = useRouter();
 
   useEffect(() => {
-      localStorage.setItem("authToken", router?.query?.token as string);
-      localStorage.setItem("userId", router?.query?.user_id as string);
-      router.replace("/dashboard");
-  }, [router]);
+      const urlParams = new URLSearchParams(window.location.search);
+      const authToken = urlParams.get("auth_token");
+      const userId = urlParams.get("user_id");
+      window.location.href = "/dashboard?user_id=" + userId;
+  }, []); // Redirect to the dashboard when the component mounts
 
   return <p>Signing you in...</p>;
 }
