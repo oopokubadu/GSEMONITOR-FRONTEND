@@ -8,15 +8,13 @@ export default function Callback() {
     const userId = urlParams.get("user_id");
     const authToken = urlParams.get("access_token");
 
-    console.log("Callback component mounted", authToken, userId);
-
     if (userId && authToken) {
       localStorage.setItem("authToken", authToken);
       localStorage.setItem("userId", userId);
 
       // Ensure localStorage is set before redirecting
       setTimeout(() => {
-        window.location.href = `/?userId=${userId}&authtoken=${authToken}`;
+        window.location.href = `/`;
       }, 100); // Small delay to allow storage update
     }
   }, []);
