@@ -232,7 +232,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                     { id: "ic-securities", name: "IC Securities", logo: "https://cdn.brandfetch.io/idEHo1F7KY/w/200/h/200/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1740538630001" },
                     { id: "black-star", name: "Black Star Brokerage", logo: "https://gsiaonline.org/images/pagepics/gtlcmember_ff_20200203_1580732894.png" },
                     { id: "ecobank", name: "Ecobank Securities", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Ecobank_Logo.svg/750px-Ecobank_Logo.svg.png?20181117204655" },
-                    { id: "cal-brokers", name: "CAL Brokers", logo: "https://www.csd.com.gh/images/CSD_Logo_neu.png" }
+                    { id: "sasghana", name: "Strategic African Securities", logo: "https://www.sasghana.com/assets/upload/logo.png" }
                   ].map((broker) => (
                     <DropdownMenuItem
                       key={broker.id}
@@ -390,7 +390,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                     { id: "ic-securities", name: "IC Securities", logo: "https://cdn.brandfetch.io/idEHo1F7KY/w/200/h/200/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1740538630001" },
                     { id: "black-star", name: "Black Star Brokerage", logo: "https://gsiaonline.org/images/pagepics/gtlcmember_ff_20200203_1580732894.png" },
                     { id: "ecobank", name: "Ecobank Securities", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Ecobank_Logo.svg/750px-Ecobank_Logo.svg.png?20181117204655" },
-                    { id: "cal-brokers", name: "CAL Brokers", logo: "https://www.csd.com.gh/images/CSD_Logo_neu.png" }
+                    { id: "sasghana", name: "Strategic African Securities", logo: "https://www.sasghana.com/assets/upload/logo.png" }
                   ].map((broker) => (
                     <div
                       key={broker.id}
