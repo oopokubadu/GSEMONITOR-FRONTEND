@@ -70,6 +70,10 @@ useEffect(() => {
     return matchesSearch && matchesCategory
   })
 
+  const scrollToSection = (sectionId: string) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   const toggleBookmark = (id: number) => {
     const updatedNews = newsItems.map((item) => (item.id === id ? { ...item, isBookmarked: !item.isBookmarked } : item))
 
@@ -92,7 +96,7 @@ useEffect(() => {
   return (
     <div className="flex flex-col space-y-4 p-4 lg:p-6">
       <div className="flex flex-col md:flex-row gap-4 lg:gap-6">
-        <div className="w-full md:w-96 lg:w-[400px] flex flex-col gap-4">
+        <div className="order-2 md:order-1 w-full md:w-96 lg:w-[400px] flex flex-col gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-lg">Market News</CardTitle>
@@ -121,7 +125,9 @@ useEffect(() => {
                     key={category}
                     variant={selectedCategory === category.toLowerCase() ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory(category.toLowerCase())}
+                    onClick={() => {
+                      setSelectedCategory(category.toLowerCase())}
+                    }
                   >
                     {category}
                   </Button>
@@ -140,7 +146,11 @@ useEffect(() => {
                       <div
                         key={item.id}
                         className={`flex gap-4 p-3 rounded-md cursor-pointer hover:bg-accent ${selectedArticle?.id === item.id ? "bg-accent" : ""}`}
-                        onClick={() => setSelectedArticle(item)}
+                        onClick={() => {
+                          setSelectedArticle(item)
+                          scrollToSection("news-article")
+                        }
+                      }
                       >
                         <Avatar className="h-12 w-12 rounded-md">
                           <AvatarImage src={item.image} alt={item.source} />
@@ -198,7 +208,7 @@ useEffect(() => {
           </Card>
         </div>
 
-        <div className="flex-1">
+        <div id="news-article" className="order-1 md:order-2 flex-1">
           <Card className="h-full">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
@@ -246,7 +256,7 @@ useEffect(() => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TooltipTrigger>
-              <TooltipContent>Share Chart</TooltipContent>
+              <TooltipContent>Share News</TooltipContent>
             </Tooltip>
           </TooltipProvider>
             </CardHeader>
@@ -274,7 +284,12 @@ useEffect(() => {
                       <div
                         key={item.id}
                         className="flex gap-3 p-2 rounded-md cursor-pointer hover:bg-accent"
-                        onClick={() => setSelectedArticle(item)}
+                        onClick={() => 
+                        {
+                          setSelectedArticle(item)
+                          scrollToSection("news-article")
+                        }
+                      }
                       >
                         <Avatar className="h-10 w-10 rounded-md">
                           <AvatarImage src={item.image} alt={item.source} />
