@@ -391,14 +391,13 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
               </div>
 
               <div className="max-w-md mx-auto space-y-4">
-                {/* <div className="flex flex-col items-center mb-4">
+                <div className="flex flex-col items-center mb-4">
                   <Button
                     type="button"
                     variant="outline"
                     className="w-full flex items-center justify-center gap-2 border-gray-300 dark:border-gray-700"
                     onClick={() => {
-                      // TODO: Implement Google sign up logic
-                      alert("Sign up with Google clicked!")
+                      window.open("https://engine.gsemonitor.chopmoney.co/google_auth", "_blank")
                     }}
                   >
                     <svg
@@ -426,14 +425,14 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
                         />
                       </g>
                     </svg>
-                    Sign up with Google
+                    Sign in with Google
                   </Button>
                   <div className="my-4 w-full flex items-center">
                     <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
                     <span className="mx-2 text-xs text-gray-400">or</span>
                     <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
                   </div>
-                </div> */}
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full Name</Label>
                   <Input

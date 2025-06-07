@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
+import { useSearchParams } from "next/navigation";
 
 // Function to fetch user profile
 async function fetchUserProfile() {
-  const userId = localStorage.getItem("userId") // Get user ID from local storage
+  const userId = localStorage.getItem("userId")// Get user ID from local storage
   const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
   if (!userId) {
     throw new Error("User ID not found in local storage")
@@ -32,8 +33,10 @@ async function fetchUserProfile() {
 
 // Hook to use user profile data
 export function useGetProfile() {
+  const searchParams = useSearchParams();
+
   return useQuery({
-    queryKey: ["userProfile", localStorage.getItem("userId")], // Unique query key for caching
+    queryKey: ["userProfile", searchParams.get("user_id") ?? localStorage.getItem("userId") ], // Unique query key for caching
     queryFn: fetchUserProfile, // Fetch user profile using userId
     enabled: !!localStorage.getItem("userId"), // Only fetch if userId exists in local storage
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes

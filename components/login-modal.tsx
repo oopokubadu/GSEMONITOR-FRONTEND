@@ -311,14 +311,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <h2 className="text-2xl font-bold">{didForgotPassword ? "Password Resetted" : "Welcome Back"}</h2>
                 <p className="text-gray-600 dark:text-gray-400">Log in to your account</p>
               </div>
-              {/* {!didForgotPassword && <div className="flex flex-col items-center mb-4">
+              {!didForgotPassword && <div className="flex flex-col items-center mb-4">
                 <Button
                   type="button"
                   variant="outline"
                   className="w-full flex items-center justify-center gap-2 border-gray-300 dark:border-gray-700"
                   onClick={() => {
-                    // TODO: Implement Google sign up logic
-                    alert("Log In with Google clicked!")
+                    window.open("https://engine.gsemonitor.chopmoney.co/google_auth", "_blank")
                   }}
                 >
                   <svg
@@ -353,7 +352,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   <span className="mx-2 text-xs text-gray-400">or</span>
                   <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
                 </div>
-              </div>} */}
+              </div>}
 
               {errorMessage && (
                 <div className="mb-4 p-2 text-sm text-red-600 bg-red-100 rounded-lg">
