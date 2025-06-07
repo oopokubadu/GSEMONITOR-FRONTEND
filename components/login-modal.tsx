@@ -317,7 +317,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   variant="outline"
                   className="w-full flex items-center justify-center gap-2 border-gray-300 dark:border-gray-700"
                   onClick={() => {
-                    window.open("https://engine.gsemonitor.chopmoney.co/google_auth", "_blank")
+                    window.location.href = "https://engine.gsemonitor.chopmoney.co/google_auth"
                   }}
                 >
                   <svg
