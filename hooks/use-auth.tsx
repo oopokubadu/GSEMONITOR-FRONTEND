@@ -11,7 +11,7 @@ export function useAuth() {
   })
 
   return {
-    isSignedIn: Boolean(localStorage.getItem("googleToken")) ?? !!data , // User is signed in if data exists
+    isSignedIn: !!data , // User is signed in if data exists
     isLoading,
     isError,
   }

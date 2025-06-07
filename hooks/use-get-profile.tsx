@@ -18,7 +18,6 @@ async function fetchUserProfile() {
       console.log("Error fetching user profile:", response.data)
       if(response.data.error) {
         localStorage.removeItem("authToken")
-        localStorage.removeItem("googleToken")
         window.location.href = "/?login=true"
       }
       throw new Error(`Failed to fetch user profile: ${response.status}`)
@@ -27,7 +26,6 @@ async function fetchUserProfile() {
 } catch (error) {
     console.error("Error fetching user profile:", error)
     localStorage.removeItem("authToken")
-    localStorage.removeItem("googleToken")
     window.location.href = "/?login=true"
   }
   throw new Error("Failed to fetch user profile")

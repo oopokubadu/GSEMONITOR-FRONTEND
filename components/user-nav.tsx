@@ -20,7 +20,6 @@ export function UserNav() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken")
-    localStorage.removeItem("googleToken")
     sessionStorage.clear()
     document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     queryClient.invalidateQueries({queryKey: ["authState"]})
