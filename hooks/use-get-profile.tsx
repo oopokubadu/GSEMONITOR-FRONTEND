@@ -34,13 +34,14 @@ async function fetchUserProfile() {
 // Hook to use user profile data
 export function useGetProfile() {
   const urlParams = typeof window != "undefined" && new URLSearchParams(window.location.search);
+  const localStorageUserId = typeof localStorage != "undefined" && localStorage.getItem("userId");
 
   return useQuery({
     queryKey: [
       "userProfile",
       urlParams && typeof urlParams.get === "function"
         ? urlParams.get("user_id")
-        : localStorage.getItem("userId")
+        : localStorageUserId
     ], // Unique query key for caching
     queryFn: fetchUserProfile, // Fetch user profile using userId
     enabled: !!localStorage.getItem("userId"), // Only fetch if userId exists in local storage
