@@ -7,12 +7,11 @@ import { useGetProfile } from "@/hooks/use-get-profile"
 
 export default function Callback() {
   const router = useRouter();
-  const urlParams = new URLSearchParams(window.location.search);
-  const parameterValue = urlParams.get("stock");
   const { data: profile } = useGetProfile();
   const {isSignedIn} = useAuth()
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
     const user_id = urlParams.get("user_id");
     const access_token = urlParams.get("access_token");
 
@@ -29,7 +28,7 @@ export default function Callback() {
         // If user_id is not present, redirect to login page
         router.replace("/?login=true");
     }
-  }, [router, profile, urlParams]);
+  }, [router, profile]);
 
-  return <p></p>;
+  return <p>Signing you in...</p>;
 }
