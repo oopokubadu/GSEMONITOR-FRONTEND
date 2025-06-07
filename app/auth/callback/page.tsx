@@ -1,33 +1,14 @@
-"use client"
-
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useAuth } from "@/hooks/use-auth";
-import { useGetProfile } from "@/hooks/use-get-profile"
 
 export default function Callback() {
   const router = useRouter();
-  const { data: profile } = useGetProfile();
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const user_id = urlParams.get("user_id");
-    const access_token = urlParams.get("access_token");
-
-    if (user_id) {
-      const id = user_id ?? "";
-      const token = access_token ?? "";
-      
-      if(profile?.full_name && localStorage) {
-        localStorage.setItem("userId", user_id);
-        localStorage.setItem("authToken", token);
-        router.replace("/dashboard");
-      }
-    } else {
-        // If user_id is not present, redirect to login page
-        router.replace("/?login=true");
-    }
-  }, [router, profile]);
+      localStorage.setItem("authToken", router?.query?.token as string);
+      localStorage.setItem("userId", router?.query?.user_id as string);
+      router.replace("/dashboard");
+  }, [router]);
 
   return <p>Signing you in...</p>;
 }
