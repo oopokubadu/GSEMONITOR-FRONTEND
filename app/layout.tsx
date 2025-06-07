@@ -10,7 +10,10 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Ghana Stock Exchange Monitor",
-  description: "Stock trading monitor for the Ghana Stock Exchange"
+  description: "Stock trading monitor for the Ghana Stock Exchange",
+  icons: {
+    icon: "/favicon.jpg"
+  },
 }
 
 export default function RootLayout({
