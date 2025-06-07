@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { useSearchParams } from "next/navigation";
-
 // Function to fetch user profile
 async function fetchUserProfile() {
   const userId = localStorage.getItem("userId")// Get user ID from local storage
@@ -33,10 +31,10 @@ async function fetchUserProfile() {
 
 // Hook to use user profile data
 export function useGetProfile() {
-  const searchParams = useSearchParams();
+  const urlParams = new URLSearchParams(window.location.search);
 
   return useQuery({
-    queryKey: ["userProfile", searchParams.get("user_id") ?? localStorage.getItem("userId") ], // Unique query key for caching
+    queryKey: ["userProfile", urlParams.get("user_id") ?? localStorage.getItem("userId") ], // Unique query key for caching
     queryFn: fetchUserProfile, // Fetch user profile using userId
     enabled: !!localStorage.getItem("userId"), // Only fetch if userId exists in local storage
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
