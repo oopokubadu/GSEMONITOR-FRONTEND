@@ -8,7 +8,6 @@ import { useGetProfile } from "@/hooks/use-get-profile"
 export default function Callback() {
   const router = useRouter();
   const { data: profile } = useGetProfile();
-  const {isSignedIn} = useAuth()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -19,8 +18,8 @@ export default function Callback() {
       const id = user_id ?? "";
       const token = access_token ?? "";
       
-      if(profile?.full_name) {
-        localStorage.setItem("userId", id);
+      if(profile?.full_name && localStorage) {
+        localStorage.setItem("userId", user_id);
         localStorage.setItem("authToken", token);
         router.replace("/dashboard");
       }
