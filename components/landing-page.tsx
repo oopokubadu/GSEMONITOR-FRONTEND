@@ -89,6 +89,7 @@ export default function LandingPage() {
   const handleLogout = () => {
       console.log("Logging out...")
       localStorage.removeItem("authToken")
+    localStorage.removeItem("googleToken")
       sessionStorage.clear()
       document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
       queryClient.invalidateQueries({queryKey: ["authState"]})

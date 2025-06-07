@@ -55,8 +55,8 @@ const defaultWatchlists = [
 export function WatchlistContent() {
   const [watchlists, setWatchlists] = useState(defaultWatchlists)
   const [activeWatchlist, setActiveWatchlist] = useState(watchlists[0])
-  console.log(watchlists)
   const [selectedStock, setSelectedStock] = useState(watchlists[0]?.stocks && watchlists[0]?.stocks[0])
+  const [selectedTickers, setSelectedTickers] = useState<string[]>([])
   const [newWatchlistName, setNewWatchlistName] = useState("")
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false)
@@ -178,7 +178,7 @@ export function WatchlistContent() {
   const handleAddStocklist = () => {
       const updatedWatchList =  watchlists.map((list) => {
             return list.id === editingWatchlistId
-            ? { ...list, stocks: [...list.stocks ?? [], JSON.parse(selectedTicker)] }
+            ? { ...list, stocks: [...list.stocks ?? [], ...selectedTickers.map((ticker) => JSON.parse(ticker))] }
             : list
         })
         console.log("updatedWatchList", updatedWatchList)
@@ -289,7 +289,17 @@ export function WatchlistContent() {
                     <DialogTitle>Add Stock to Watchlist</DialogTitle>
                     <DialogDescription>Select a stock to add</DialogDescription>
                   </DialogHeader>
-                  <Select onValueChange={setSelectedTicker}>
+                  <div className="flex">
+                    {selectedTickers.map((ticker) => (
+                      <div key={ticker} className="flex items-center">
+                        <span>{JSON.parse(ticker).symbol}</span>
+                        <Button variant="ghost" size="icon" onClick={() => setSelectedTickers((prev) => prev.filter((s) => s !== ticker))}>
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                  <Select onValueChange={(value) => !selectedTickers.includes(JSON.stringify(value)) ? setSelectedTickers((prev) => [...prev, value]) : setSelectedTickers((prev) => prev.filter((s) => s !== value))}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Select ticker" />
                     </SelectTrigger>
@@ -301,7 +311,7 @@ export function WatchlistContent() {
                         !profile?.watchlist[editingWatchlistId - 1]?.tickers?.includes(stock.symbol.toLowerCase())
                       )
                       .map((stock) => (
-                        <SelectItem key={stock.symbol.toLowerCase()} value={JSON.stringify(stock)}>
+                        <SelectItem key={stock.symbol.toLowerCase()} value={JSON.stringify(stock)} className={selectedTickers.includes(JSON.stringify(stock)) ? "bg-accent" : "" }>
                           {stock.symbol} - {stock.name}
                         </SelectItem>
                       ))}
