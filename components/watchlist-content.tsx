@@ -163,16 +163,14 @@ export function WatchlistContent() {
       tickers: list.stocks?.map((stock) => stock.symbol.toLowerCase()) || [], 
     }));
     
-    if(!saved){
-      updateProfile(formData, {
-      onSuccess: () => {
-        console.log("Profile updated successfully")
-        },
-      onError: () => {
-        console.error("Failed to update profile")
-        },
-      })
-    }
+    updateProfile(formData, {
+    onSuccess: () => {
+      console.log("Profile updated successfully")
+      },
+    onError: () => {
+      console.error("Failed to update profile")
+      },
+    })
   }
 
   const handleAddStocklist = () => {
@@ -181,7 +179,6 @@ export function WatchlistContent() {
             ? { ...list, stocks: [...list.stocks ?? [], ...selectedTickers.map((ticker) => JSON.parse(ticker))] }
             : list
         })
-        console.log("updatedWatchList", updatedWatchList)
       setWatchlists(updatedWatchList)
       saveActiveWatchlist()
       setIsAddStockDialogOpen(false)
