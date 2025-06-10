@@ -150,7 +150,9 @@ const topGainers = stockData
                       )
                       .slice(0, 3)
 
-const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replace("%", "") > topLosers[0]?.percentChange?.replace("-", "")?.replace("%", "")
+const isBestPerformingGain = 
+  parseFloat(topGainers[0]?.percentChange?.replace("+", "").replace("%", "") || "0") >
+  parseFloat(topLosers[0]?.percentChange?.replace("-", "").replace("%", "") || "0");
 
   // Mock market indices
   const marketIndices = [
@@ -543,7 +545,7 @@ const isBestPormingGain = topGainers[0]?.percentChange?.replace("+", "")?.replac
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                       { 
-                        isBestPormingGain ?
+                        isBestPerformingGain ?
                         <Badge variant="secondary" className="bg-green-900/50 text-green-400 border-green-700">
                           {topGainers[0]?.symbol}:{topGainers[0]?.percentChange}
                         </Badge> :
