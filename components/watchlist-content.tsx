@@ -101,6 +101,12 @@ export function WatchlistContent() {
       }
     }, [profile, dashboardData])
 
+  useEffect(() => {
+  if (profile?.user_id && watchlists[0]?.name !== "WatchList Loading") {
+    saveActiveWatchlist();
+  }
+}, [profile, watchlists]);
+
   const handleAddWatchlist = () => {
     if (newWatchlistName.trim()) {
       const newWatchlist = {
@@ -109,7 +115,6 @@ export function WatchlistContent() {
         stocks: [],
       }
       setWatchlists([...watchlists, newWatchlist])
-      saveActiveWatchlist()
       setNewWatchlistName("")
       setIsAddDialogOpen(false)
     }
@@ -156,31 +161,34 @@ export function WatchlistContent() {
   }
 
   const saveActiveWatchlist = () => {
-    const formData = profile;
-
+    type WatchlistItem = { name: string; tickers: string[] }
+    const formData: { user_id: string; watchlist: WatchlistItem[] } = {
+      user_id: profile?.user_id || "",
+      watchlist: [],
+    }
     formData.watchlist = watchlists.map((list) => ({
       name: list.name,
-      tickers: list.stocks?.map((stock) => stock.symbol.toLowerCase()) || [], 
-    }));
-    
+      tickers: list.stocks?.map((stock) => stock.symbol.toLowerCase()) || [],
+    }))
+
     updateProfile(formData, {
-    onSuccess: () => {
-      console.log("Profile updated successfully")
+      onSuccess: () => {
+        console.log("Profile updated successfully")
       },
-    onError: () => {
-      console.error("Failed to update profile")
+      onError: () => {
+        console.error("Failed to update profile")
       },
     })
   }
 
-  const handleAddStocklist = () => {
+  const handleAddStocklist = async () => {
       const updatedWatchList =  watchlists.map((list) => {
             return list.id === editingWatchlistId
             ? { ...list, stocks: [...list.stocks ?? [], ...selectedTickers.map((ticker) => JSON.parse(ticker))] }
             : list
         })
       setWatchlists(updatedWatchList)
-      saveActiveWatchlist()
+      setSelectedTickers([])
       setIsAddStockDialogOpen(false)
   }
 
@@ -193,7 +201,6 @@ export function WatchlistContent() {
       if (activeWatchlist.id === editingWatchlistId) {
         setActiveWatchlist({ ...activeWatchlist, name: editingWatchlistName })
       }
-      saveActiveWatchlist()
       setIsRenameDialogOpen(false)
     }
   }
@@ -205,8 +212,6 @@ export function WatchlistContent() {
     if (activeWatchlist.id === id && updatedWatchlists.length > 0) {
       setActiveWatchlist(updatedWatchlists[0])
     }
-
-    saveActiveWatchlist()
   }
 
   const toggleStockAlert = (symbol: string) => {
@@ -235,7 +240,6 @@ export function WatchlistContent() {
     if (updatedStocks.length > 0 && selectedStock.symbol === symbol) {
       setSelectedStock(updatedStocks[0])
     }
-    saveActiveWatchlist()
   }
 
   return (
