@@ -580,7 +580,6 @@ export function WatchlistContent() {
                       <TabsTrigger value="1M">1M</TabsTrigger>
                       <TabsTrigger value="3M">3M</TabsTrigger>
                       <TabsTrigger value="1Y">1Y</TabsTrigger>
-                      <TabsTrigger value="ALL">ALL</TabsTrigger>
                     </TabsList>
                     {/* <div className="flex items-center text-xs text-muted-foreground">
                       <Clock className="h-3 w-3 mr-1" />
