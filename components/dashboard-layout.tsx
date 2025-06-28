@@ -103,11 +103,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       label: "Watchlist",
       icon: BarChart3,
     },
-    // {
-    //   href: "/portfolio",
-    //   label: "Portfolio",
-    //   icon: PieChart,
-    // },
+    {
+      href: "/portfolio",
+      label: "Portfolio",
+      icon: PieChart,
+    },
     // {
     //   href: "/trade",
     //   label: "Trade",
