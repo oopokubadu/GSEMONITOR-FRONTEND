@@ -302,7 +302,7 @@ function PortfolioLineChart({ period }: { period: string }) {
   let data = performanceData?.performance?.performance ?? []
 
   data = data.map((item: { date: string; portfolio_value: number }) => ({
-    month: new Date(item.date).toLocaleDateString("en-US", { month: "short", year: "2-digit" }),
+    month: new Date(item.date).toLocaleDateString("en-US", { month: "short", year: "2-digit", day: "numeric" }),
     value: item.portfolio_value,
   }))
 
@@ -332,8 +332,8 @@ function PortfolioLineChart({ period }: { period: string }) {
       <div className="flex justify-between mb-2">
         <div className="text-xs text-muted-foreground">
           <span className="inline-flex items-center">
-            <span className="bg-green-500/20 text-green-500 px-2 py-0.5 rounded text-[10px] font-medium mr-2">DEV</span>
-            Using sample data
+            <span className="bg-green-500/20 text-green-500 px-2 py-0.5 rounded text-[10px] font-medium mr-2">LIVE</span>
+            Chart updates when there is a price change
           </span>
         </div>
         <Button variant="ghost" size="sm" onClick={() => refetch()} className="h-7">
@@ -355,7 +355,7 @@ function PortfolioLineChart({ period }: { period: string }) {
             tick={{ fontSize: 12 }}
             tickLine={false}
             axisLine={{ stroke: "#333" }}
-            tickFormatter={(value: number) => `₵${(value / 1000).toFixed(0)}K`}
+            tickFormatter={(value: number) => `₵${(value).toFixed(0)}`}
           />
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#333" />
           <Tooltip
