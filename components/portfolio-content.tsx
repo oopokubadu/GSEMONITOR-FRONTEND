@@ -213,6 +213,7 @@ export function PortfolioContent() {
     totalGain: data?.summary?.total_profit_loss || 0,
     totalGainPercent: data?.summary?.overall_profit_loss_percentage || 0,
     isPositive: data?.summary?.total_profit_loss || 0 >= 0,
+    holdings: data?.summary?.holdings_summary || [],
   }
   const portfolioHoldings = data?.holdings || []
   const transactionHistory = data?.transactions || []
@@ -337,7 +338,11 @@ export function PortfolioContent() {
           <CardContent>
             <PieChartComponent data={portfolioHoldings} />
             <div className="mt-4 space-y-2">
-              {portfolioHoldings.slice(0, 5).map((holding: { ticker: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; total_shares: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }, index: Key | null | undefined) => (
+              {portfolioSummary.holdings.slice(0, 5).map((holding:{
+                "allocation_percentage": number,
+                "current_value": number,
+                "ticker": "EGH"
+                }, index: number) => (
                 <div key={index} className="flex justify-between items-center">
                   <div className="flex items-center">
                     <div
@@ -345,7 +350,7 @@ export function PortfolioContent() {
                     ></div>
                     <span className="text-sm">{holding.ticker}</span>
                   </div>
-                  <span className="text-sm">{holding.total_shares}%</span>
+                  <span className="text-sm">{holding.allocation_percentage}%</span>
                 </div>
               ))}
               {portfolioHoldings.length > 5 && (
@@ -355,9 +360,9 @@ export function PortfolioContent() {
                     <span className="text-sm">Others</span>
                   </div>
                   <span className="text-sm">
-                    {portfolioHoldings
+                    {portfolioSummary.holdings
                       .slice(5)
-                      .reduce((sum: any, holding: { total_shares: any }) => sum + holding.total_shares, 0)
+                      .reduce((sum: any, holding: { allocation_percentage: any }) => sum + holding.allocation_percentage, 0)
                       .toFixed(1)}
                     %
                   </span>
