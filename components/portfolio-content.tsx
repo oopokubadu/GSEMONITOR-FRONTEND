@@ -1,6 +1,6 @@
 "use client"
 
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from "react"
+import { useState } from "react"
 import { ArrowDown, ArrowUp, Download, PieChart, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -209,7 +209,7 @@ export function PortfolioContent() {
   const portfolioSummary = {
     totalValue: data?.summary?.total_portfolio_value || 0,
     dayChange: 0,
-    dayChangePercent: 0,
+    dayChangePercent: data?.performance?.today_change_percentage || 0,
     totalGain: data?.summary?.total_profit_loss || 0,
     totalGainPercent: data?.summary?.overall_profit_loss_percentage || 0,
     isPositive: data?.summary?.total_profit_loss || 0 >= 0,
@@ -236,7 +236,9 @@ export function PortfolioContent() {
               ) : (
                 <ArrowDown className="h-4 w-4 mr-1" />
               )}
-              ₵{portfolioSummary.dayChange.toLocaleString()} ({portfolioSummary.dayChangePercent}%) Today
+              ₵
+              {/* {portfolioSummary.dayChange.toLocaleString()}  */}
+              {portfolioSummary.dayChangePercent}% Today
             </div>
           </CardContent>
         </Card>
@@ -410,7 +412,7 @@ export function PortfolioContent() {
                       </tr>
                     </thead>
                     <tbody>
-                      {portfolioHoldings.map((holding: { ticker: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; total_shares: { toLocaleString: () => string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }; average_cost: number; current_price: number; total_cost: { toLocaleString: () => string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }; profit_loss: number; profit_lost: number; profit_loss_percentage: number }, index: Key | null | undefined) => (
+                      {portfolioHoldings.map((holding: any, index: number) => (
                         <tr key={index} className="border-b transition-colors hover:bg-muted/50">
                           <td className="p-4 align-middle font-medium">{holding.ticker}</td>
                           <td className="p-4 align-middle">{holding.name}</td>
@@ -458,7 +460,7 @@ export function PortfolioContent() {
                       </tr>
                     </thead>
                     <tbody>
-                      {transactionHistory.map((transaction: { created_at: string | number | Date; txn_type: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; ticker: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; no_of_shares: { toLocaleString: () => string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }; price_per_share: number; total_amount: { toLocaleString: () => string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined } }, index: Key | null | undefined) => (
+                      {transactionHistory.map((transaction: any, index: number) => (
                         <tr key={index} className="border-b transition-colors hover:bg-muted/50">
                           <td className="p-4 align-middle">{new Date(transaction.created_at).toLocaleDateString()}</td>
                           <td
