@@ -10,9 +10,11 @@ import { PieChartComponent } from "@/components/pie-chart"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer } from "recharts";
 // import { usePortfolioData } from "@/hooks/use-portfolio-data"
 import { usePortfolioData } from "@/hooks/use-portfolio-data-new"
+import { AddRecordModal } from "@/components/add-record-modal"
 
 export function PortfolioContent() {
   const [selectedPeriod, setSelectedPeriod] = useState("1Y")
+  const [modalOpen, setModalOpen] = useState(false)
   const { data } = usePortfolioData(localStorage.getItem("userId") || "")
   const portfolioSummary = {
     totalValue: data?.summary?.total_portfolio_value || 0,
@@ -25,6 +27,11 @@ export function PortfolioContent() {
   }
   const portfolioHoldings = data?.holdings || []
   const transactionHistory = data?.transactions || []
+
+  function handleAddRecord(data: any) {
+    console.log("New record submitted:", data)
+    setModalOpen(false)
+  }
 
   return (
     <div className="flex flex-col space-y-4 p-4 lg:p-6">
@@ -46,14 +53,14 @@ export function PortfolioContent() {
               )}
               ₵
               {/* {portfolioSummary.dayChange.toLocaleString()}  */}
-              {portfolioSummary.dayChangePercent}% Today
+              {portfolioSummary.dayChangePercent.toFixed(2)}% Today
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 flex flex-col">
             <div className="text-sm font-medium text-muted-foreground">Total Gain/Loss</div>
-            <div className="text-2xl font-bold mt-1">₵{portfolioSummary.totalGain.toLocaleString()}</div>
+            <div className="text-2xl font-bold mt-1">₵{portfolioSummary.totalGain.toFixed(2)}</div>
             <div
               className={cn(
                 "flex items-center text-sm mt-1",
@@ -65,7 +72,7 @@ export function PortfolioContent() {
               ) : (
                 <ArrowDown className="h-4 w-4 mr-1" />
               )}
-              {portfolioSummary.totalGainPercent}% All Time
+              {portfolioSummary.totalGainPercent.toFixed(2)}% All Time
             </div>
           </CardContent>
         </Card>
@@ -87,7 +94,7 @@ export function PortfolioContent() {
           </CardContent>
         </Card>
       </div>
-
+      <AddRecordModal open={modalOpen} onOpenChange={setModalOpen} onSubmit={handleAddRecord} />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="md:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -155,10 +162,10 @@ export function PortfolioContent() {
                 }, index: number) => (
                 <div key={index} className="flex justify-between items-center">
                   <div className="flex items-center">
-                    <div
-                      className={`w-3 h-3 rounded-full mr-2 bg-green-500`} //${index % 5 === 0 ? "green" : index % 5 === 1 ? "yellow" : index % 5 === 2 ? "grey" : index % 5 === 3 ? "red" : "purple"}
-                    ></div>
-                    <span className="text-sm">{holding.ticker}</span>
+                    {/* <div //["#10b981", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#6b7280"]
+                      className={`w-3 h-3 rounded-full mr-2 bg-${index % 6 === 0 ? "emerald" : index % 6 === 1 ? "blue" : index % 6 === 2 ? "yellow" : index % 6 === 3 ? "red" : index % 6 === 4 ? "violet" : "grey"}-500`} 
+                    ></div> */}
+                    <span className={`text-sm text-${index % 6 === 0 ? "emerald" : index % 6 === 1 ? "blue" : index % 6 === 2 ? "yellow" : index % 6 === 3 ? "red" : index % 6 === 4 ? "violet" : "grey"}-500`}>{holding.ticker }</span>
                   </div>
                   <span className="text-sm">{holding.allocation_percentage}%</span>
                 </div>
@@ -166,8 +173,7 @@ export function PortfolioContent() {
               {portfolioHoldings.length > 5 && (
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full mr-2 bg-gray-500"></div>
-                    <span className="text-sm">Others</span>
+                    <span className="text-sm text-grey-500">Others</span>
                   </div>
                   <span className="text-sm">
                     {portfolioSummary.holdings
@@ -184,9 +190,14 @@ export function PortfolioContent() {
       </div>
 
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg">Portfolio Details</CardTitle>
-          <CardDescription>View and manage your stock holdings</CardDescription>
+        <CardHeader className="pb-2 flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-lg">Portfolio Details</CardTitle>
+            <CardDescription>View and manage your stock holdings</CardDescription>
+          </div>
+          <Button variant="default" size="sm" onClick={() => setModalOpen(true)} className="h-8">
+            Add Record
+          </Button>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="holdings" className="w-full">
@@ -260,6 +271,7 @@ export function PortfolioContent() {
                     <thead>
                       <tr className="border-b bg-muted/50">
                         <th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Date</th>
+                        <th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Source</th>
                         <th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
                         <th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Symbol</th>
                         <th className="h-10 px-4 text-right align-middle font-medium text-muted-foreground">Shares</th>
@@ -271,6 +283,7 @@ export function PortfolioContent() {
                       {transactionHistory.map((transaction: any, index: number) => (
                         <tr key={index} className="border-b transition-colors hover:bg-muted/50">
                           <td className="p-4 align-middle">{new Date(transaction.created_at).toLocaleDateString()}</td>
+                          <td className="p-4 align-middle text-left">{transaction.source}</td>
                           <td
                             className={cn(
                               "p-4 align-middle",
@@ -282,7 +295,7 @@ export function PortfolioContent() {
                           <td className="p-4 align-middle font-medium">{transaction.ticker}</td>
                           <td className="p-4 align-middle text-right">{transaction.no_of_shares.toLocaleString()}</td>
                           <td className="p-4 align-middle text-right">₵{transaction.price_per_share.toFixed(2)}</td>
-                          <td className="p-4 align-middle text-right">₵{transaction.total_amount.toLocaleString()}</td>
+                          <td className="p-4 align-middle text-right">₵{transaction.total_amount.toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
