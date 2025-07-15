@@ -24,7 +24,7 @@ const fallbackData: ChartData[] = []
 
 // Function to fetch chart data by ticker and period
 async function fetchChartData(ticker: string, period: string): Promise<ChartData[]> {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
   try {
     const response = await fetch(
       `${url}/fetch_all_by_ticker?ticker=${ticker}&period=${period}`

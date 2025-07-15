@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
 export function useSendOTP() {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor.vercel.app"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
   return useMutation({
     mutationFn: async (email: string) => {
       const response = await axios.post(`${url}/send_otp`, { email })
