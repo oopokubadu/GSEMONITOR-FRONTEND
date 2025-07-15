@@ -10,12 +10,15 @@ import { PieChartComponent } from "@/components/pie-chart"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer } from "recharts";
 // import { usePortfolioData } from "@/hooks/use-portfolio-data"
 import { usePortfolioData } from "@/hooks/use-portfolio-data-new"
+import { useUpdatePortfolio } from "@/hooks/use-update-portfolio"
 import { AddRecordModal } from "@/components/add-record-modal"
+import { toast } from "@/hooks/use-toast"
 
 export function PortfolioContent() {
   const [selectedPeriod, setSelectedPeriod] = useState("1Y")
   const [modalOpen, setModalOpen] = useState(false)
   const { data } = usePortfolioData(localStorage.getItem("userId") || "")
+  const { mutate: updatePortfolio } = useUpdatePortfolio()
   const portfolioSummary = {
     totalValue: data?.summary?.total_portfolio_value || 0,
     dayChange: 0,
@@ -29,8 +32,13 @@ export function PortfolioContent() {
   const transactionHistory = data?.transactions || []
 
   function handleAddRecord(data: any) {
-    console.log("New record submitted:", data)
+    data.userId = localStorage.getItem("userId") || ""
     setModalOpen(false)
+    toast({
+          title: "Record Added",
+          description: `Successfully added ${data.ticker} record to your portfolio.`,
+        })
+    updatePortfolio(data)
   }
 
   return (
