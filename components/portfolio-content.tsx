@@ -34,11 +34,21 @@ export function PortfolioContent() {
   function handleAddRecord(data: any) {
     data.userId = localStorage.getItem("userId") || ""
     setModalOpen(false)
-    toast({
+    updatePortfolio(data, {
+      onSuccess: () => {
+        toast({
           title: "Record Added",
           description: `Successfully added ${data.ticker} record to your portfolio.`,
         })
-    updatePortfolio(data)
+      },
+      onError: (error: any) => {
+        toast({
+          title: "Error",
+          description: error.response?.data?.message || "Failed to update portfolio",
+          variant: "destructive",
+        })
+      }
+    })
   }
 
   return (
@@ -170,7 +180,7 @@ export function PortfolioContent() {
                 }, index: number) => (
                 <div key={index} className="flex justify-between items-center">
                   <div className="flex items-center">
-                    {/* <div //["#10b981", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#6b7280"]
+                    {/* <div //["#10b981", "#3e4e68ff", "#f59e0b", "#ef4444", "#8b5cf6", "#6b7280"]
                       className={`w-3 h-3 rounded-full mr-2 bg-${index % 6 === 0 ? "emerald" : index % 6 === 1 ? "blue" : index % 6 === 2 ? "yellow" : index % 6 === 3 ? "red" : index % 6 === 4 ? "violet" : "grey"}-500`} 
                     ></div> */}
                     <span className={`text-sm text-${index % 6 === 0 ? "emerald" : index % 6 === 1 ? "blue" : index % 6 === 2 ? "yellow" : index % 6 === 3 ? "red" : index % 6 === 4 ? "violet" : "grey"}-500`}>{holding.ticker }</span>
