@@ -3,7 +3,7 @@ import axios from "axios"
 
 export function useUpdatePortfolio() {
   const queryClient = useQueryClient()
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com"
   return useMutation({
     mutationFn: async (portfolioData: any) => {
       const response = await axios.patch(`${url}/portfolio`, portfolioData)
