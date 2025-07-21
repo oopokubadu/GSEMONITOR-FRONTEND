@@ -32,7 +32,7 @@ export function PortfolioContent() {
   const transactionHistory = data?.transactions || []
 
   function handleAddRecord(data: any) {
-    data.userId = localStorage.getItem("userId") || ""
+    data.user_id = localStorage.getItem("userId") || ""
     setModalOpen(false)
     updatePortfolio(data, {
       onSuccess: () => {
