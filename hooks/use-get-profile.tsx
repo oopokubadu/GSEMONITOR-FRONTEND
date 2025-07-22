@@ -5,7 +5,7 @@ import axios from "axios"
 // Function to fetch user profile
 async function fetchUserProfile() {
   const userId = localStorage.getItem("userId")// Get user ID from local storage
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com"
   if (!userId) {
     throw new Error("User ID not found in local storage")
   }

@@ -3,7 +3,7 @@ import axios from "axios"
 
 export function useUpdateProfile() {
   const queryClient = useQueryClient()
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com"
   return useMutation({
     mutationFn: async (profileData: any) => {
       const response = await axios.patch(`${url}/user`, profileData)

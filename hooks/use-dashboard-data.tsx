@@ -17,7 +17,7 @@ export interface DashboardData {
 
 // Function to fetch dashboard data
 async function fetchDashboardData(): Promise<DashboardData[]> {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com"
   try {
     // Fetch data from the provided API route
     const response = await fetch(`${url}/dashboard`)

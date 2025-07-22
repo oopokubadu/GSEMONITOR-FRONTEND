@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
 export function useCheckEmail() {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com"
   return useMutation({
     mutationFn: async (email: string) => {
       const response = await axios.get(`${url}/user`, {

@@ -20,7 +20,7 @@ export interface NewsData {
 
 // Function to fetch News data using POST request
 async function fetchNewsData(): Promise<NewsData[]> {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com/"
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://gsemonitor-engine.onrender.com"
   try {
     // Fetch data from the provided API route using POST
     const response = await fetch(`${url}/news`, {
